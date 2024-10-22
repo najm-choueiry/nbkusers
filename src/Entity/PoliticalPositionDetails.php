@@ -18,6 +18,11 @@ class PoliticalPositionDetails
     private $id;
 
     /**
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $user_id;
+
+    /**
      * @ORM\Column(name="politicalPosition", type="boolean")
      */
     private $politicalPosition;
@@ -62,11 +67,14 @@ class PoliticalPositionDetails
     public function __construct()
     {
         $this->created = new \DateTime();
-
     }
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
     }
 
     public function getPoliticalPosition(): ?bool

@@ -16,7 +16,11 @@ class WorkDetails
      * @ORM\Column(type="integer")
      */
     private $id;
-
+    /**
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $user_id;
+    
     /**
      * @ORM\Column(name="profession", type="string", length=255)
      */
@@ -90,7 +94,7 @@ class WorkDetails
 
     public function getUserId(): ?int
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
     public function getProfession(): ?string

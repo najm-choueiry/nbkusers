@@ -1,19 +1,481 @@
-{% extends 'base.html.twig' %}
-{% block body %}    
+{# editUser.html.twig #}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Edit User</title>
+		<!-- Bootstrap CSS -->
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+		<style>
+			.border-submit {
+				background-color: #4CAF50;
+				color: white;
+				border: none;
+				border-radius: 10px;
+				padding: 10px 20px;
+				width: 150px;
+			}
+			.button-edit {
+				margin: auto auto auto 10px;
+				height: 40px;
+				background-color: #007bff; /* Bootstrap primary color */
+				color: white;
+				border: none;
+				padding: 5px 10px;
+				text-align: right;
+				border: 1px solid transparent;
+			}
+			.button-edit:hover {
+				background-color: #0056b3;
+				border: 1px solid transparent;
+			}
+		</style>
+	</head>
+	<body>
 
-<div style='display: flex'>
+		<div class="container-fluid mt-4 ">
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<tbody>
+						{% for user in user %}
+							<div id="userID" hidden>{{ user.id }}</div>
 
-	<div>
-		<p>Full Name</p>
-		<p>Last Name</p>
-	</div>
+							<div>
+								<h2>National Bank of Kuwait (Lebanon) S.A.L</h2>
+								<h6>{{ user.created|date('F j, Y, g:i a') }}</h6>
+							</div>
+							<div class="d-flex justify-content-between mt-4">
+								<h3 class="mb-2">
+									<p>Edit User</p>
+								</h3>
+								<h3 class="mb-2">
+									<p>Full Name:
+										{{ user.fullName }}</p>
+								</h3>
+							</div>
+							<div class="d-flex justify-content-between mt-1">
+								<h3 class="mb-4">
+									<p>SIM NO</p>
+								</h3>
+								<h3 class="mb-4">
+									<p>Application reference:
+										{{ user.id }}</p>
+								</h3>
+							</div>
+							<div class="pb-4 mx-0">
+								<a href="{{ path('app_nbk_users') }}" class="button-edit mx-0 ">Back to List</a>
+							</div>
 
-	<div>
-		{{ form_start(form) }}
-		<div class="row">
-			{{ form_widget(form) }}  
-		</div>
-		{{ form_end(form) }}
-	</div>
-</div>
-{% endblock %}
+
+							<tr>
+								<th>Existing relationship with NBK Lebanon</th>
+								<td>
+									<input type="text" name="user_id" value="{{ user.id }}" class="form-control" disabled/>
+								</td>
+							</tr>
+						{% endfor %}
+						{{ form_start(form, { 'method': 'POST' }) }}
+						<tr>
+							<th>First Name</th>
+							<td>
+
+								{{ form_row(form.FullName) }}
+
+							</td>
+						</tr>
+						<tr>
+							<th>Mobile Numb</th>
+							<td>
+
+								{{ form_row(form.MobileNumb) }}
+
+							</td>
+						</tr>
+						<tr>
+							<th>Email</th>
+							<td>
+
+								{{ form_row(form.Email) }}
+
+							</td>
+						</tr>
+						<tr>
+							<th>Branch/Unit</th>
+							<td>
+
+								{{ form_row(form.BranchUnit) }}
+
+							</td>
+						</tr>
+					</tbody>
+				</tr>
+				<tr>
+					<th>Mother's Name</th>
+					<td>
+
+						{{ form_row(form.MotherName) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Gender</th>
+					<td>
+
+						{{ form_row(form.Gender) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Date of Birth</th>
+					<td>
+
+						{{ form_row(form.Dob) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Place Of Birth</th>
+					<td>
+
+						{{ form_row(form.PlaceOfBirth) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Nationality</th>
+					<td>
+
+						{{ form_row(form.Nationality) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Country of Origin</th>
+					<td>
+
+						{{ form_row(form.CountryofOrigin) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>National Id</th>
+					<td>
+
+						{{ form_row(form.NationalID) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Expiration Date (National ID)</th>
+					<td>
+
+						{{ form_row(form.ExpirationNationalIDDate ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Register Place and No</th>
+					<td>
+
+						{{ form_row(form.RegisterPlaceNo ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Register Number</th>
+					<td>
+
+						{{ form_row(form.RegisterNumber ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Marital Status</th>
+					<td>
+
+						{{ form_row(form.MaritalStatus ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Passport Number</th>
+					<td>
+
+						{{ form_row(form.PassportNumber ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Place of Issue (Passport)</th>
+					<td>
+
+						{{ form_row(form.PlaceofIssuePassport ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Expiration Date (Passport)</th>
+					<td>
+
+						{{ form_row(form.ExpirationDatePassport ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Other Nationalities</th>
+					<td>
+
+						{{ form_row(form.OtherNationalities ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Status in Lebanon</th>
+					<td>
+
+						{{ form_row(form.StatusinLebanon ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Spouse Name</th>
+					<td>
+
+						{{ form_row(form.SpouseName ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Spouse Profession</th>
+					<td>
+
+						{{ form_row(form.SpouseProfession ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>No. of Children</th>
+					<td>
+
+						{{ form_row(form.NoofChildren ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Address</th>
+					<td>
+
+						{{ form_row(form.city ) }}
+						{{ form_row(form.street ) }}
+						{{ form_row(form.building ) }}
+						{{ form_row(form.floor ) }}
+						{{ form_row(form.apartment ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>HouseTelNO</th>
+					<td>
+
+						{{ form_row(form.HouseTelNO ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>International Address</th>
+					<td>
+
+						{{ form_row(form.InternationalAddress ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Work Info</th>
+					<td>
+
+						{{ form_row(form.profession ) }}
+						{{ form_row(form.jobTitle ) }}
+						{{ form_row(form.activitySector ) }}
+						{{ form_row(form.entityName ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Education Level</th>
+					<td>
+
+						{{ form_row(form.educationLevel ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Work Address</th>
+					<td>
+
+						{{ form_row(form.WorkAddress ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Work Tel No</th>
+					<td>
+
+						{{ form_row(form.WorkTelNo ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>IS Listed</th>
+					<td>
+
+						{{ form_row(form.ISListed ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Grade</th>
+					<td>
+
+						{{ form_row(form.grade ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Customer Same As Beneficiary</th>
+					<td>
+
+						{{ form_row(form.CustomerSameAsBeneficiary ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Bro Nationality</th>
+					<td>
+
+						{{ form_row(form.broNationality ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Beneficiary Name</th>
+					<td>
+
+						{{ form_row(form.BeneficiaryName ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Relationship</th>
+					<td>
+
+						{{ form_row(form.relationship ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>BRO Civil Id Number</th>
+					<td>
+
+						{{ form_row(form.broCivilIdNumber ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>BRO Expiration Date</th>
+					<td>
+
+						{{ form_row(form.broexpirationDate) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Reason Of Bro</th>
+					<td>
+
+						{{ form_row(form.reasonOfBro ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>BRO Address</th>
+					<td>
+
+						{{ form_row(form.broaddress ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>BRO profession</th>
+					<td>
+
+						{{ form_row(form.broprofession ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>BRO Income Wealth Details</th>
+					<td>
+
+						{{ form_row(form.incomeWealthDetails ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>political Position</th>
+					<td>
+
+						{{ form_row(form.politicalPosition ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>current/Previous</th>
+					<td>
+
+						{{ form_row(form.currentPrevious ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>PEP Name</th>
+					<td>
+
+						{{ form_row(form.pepname ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>PEP Relationship</th>
+					<td>
+
+						{{ form_row(form.peprelationship ) }}
+
+					</td>
+				</tr>
+											<tr>
+					<th>PEP Position</th>
+					<td>
+
+						{{ form_row(form.pepposition)}}
+
+					</td>
+				</tr>
+
+
+				<tr>
+
+					<td colspan="2">
+						<div class=" text-center w-100">
+
+							<button type="submit" class="border-submit text-center ">Submit</button>
+						</div>
+
+					</td>
+				</tr>
+
+				{{ form_end(form) }}
+			</tbody>
+		</table>
+	</body>
+</html></div></div></body></html>

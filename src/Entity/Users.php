@@ -272,6 +272,7 @@ class Users
     {
         return $this->countryOfOrigin;
     }
+
     public function getNationality(): ?string
     {
         return $this->nationality;

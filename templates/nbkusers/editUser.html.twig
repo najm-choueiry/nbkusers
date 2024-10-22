@@ -1,0 +1,740 @@
+{# editUser.html.twig #}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Edit User</title>
+		<!-- Bootstrap CSS -->
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+		<style>
+			.border-submit {
+				background-color: #4CAF50;
+				color: white;
+				border: none;
+				border-radius: 10px;
+				padding: 10px 20px;
+				width: 150px;
+			}
+			.button-edit {
+				margin: auto auto auto 10px;
+				height: 40px;
+				background-color: #007bff; /* Bootstrap primary color */
+				color: white;
+				border: none;
+				padding: 5px 10px;
+				text-align: right;
+				border: 1px solid transparent;
+			}
+
+			.button-edit:hover {
+				background-color: #0056b3;
+				border: 1px solid transparent;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="container-fluid mt-4 ">
+			<div class="table-responsive">
+
+				<table class="table table-bordered">
+					<tbody>
+						{% for user in user %}
+							<div id="userID" hidden>{{ user.id }}</div>
+
+
+							<div>
+								<h2>
+									National Bank of Kuwait (Lebanon) S.A.L
+								</h2>
+								<h6>{{ user.created|date('F j, Y, g:i a') }}</h6>
+							</div>
+							<div class="d-flex  justify-content-between mt-4">
+
+								<h3 class="mb-2">
+									<p>Edit User</p>
+								</h3>
+								<h3 class="mb-2">
+
+									<p>Full Name:
+										{{user.fullName}}</p>
+								</h3>
+							</div>
+							<div class="d-flex  justify-content-between mt-1">
+								<h3 class="mb-4">
+									<p>SIM NO</p>
+								</h3>
+								<h3 class="mb-4">
+
+									<p>Application reference :
+										{{user.id}}</p>
+								</h3>
+							</div>
+							<tr>
+								<th>Existing relationship with NBK Lebanon</th>
+								<td>
+									<input type="text" name="user_id" value="{{ user.id }}" class="form-control" disabled/>
+								</td>
+							</tr>
+							<tr>
+								<th>Full Name</th>
+
+								<td>
+									<input type="text" id="user_fullName" value="{{ user.fullName }}" class="form-control" onchange="saveData('fullName', this.value)"/>
+								</td>
+
+							</tr>
+							<tr>
+								<th>Mobile Number</th>
+
+								<td>
+									<input type="text" id="user_mobileNumb" value="{{ user.mobileNumb }}" class="form-control" onchange="saveData('mobileNumb', this.value)"/></td>
+
+							</tr>
+							<tr>
+								<th>Email</th>
+
+								<td>
+									<input type="text" id=" user_email" value="{{ user.email }}" class="form-control" onchange="saveData('email', this.value)"/></td>
+
+							</tr>
+							<tr>
+								<th>Branch/Unit</th>
+								<td>
+									<input type="text" id="user_branchUnit" value="{{ user.branchUnit }}" class="form-control" onchange="saveData('branchUnit', this.value)"/>
+								</td>
+							</tr>
+							{% if user.mothersName is not empty %}
+								<tr>
+									<th>Mother's Name</th>
+									<td>
+										<input type="text" id="user_mothersName'" value="{{ user.mothersName }}" class="form-control" onchange="saveData('mothersName', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.gender is not empty %}
+								<tr>
+									<th>Gender</th>
+									<td>
+										<select id="user_gender" class="form-control" onchange="saveData('gender', this.value)">
+											<option value="male" {% if user.gender == 'male' %} selected {% endif %}>Male</option>
+											<option value="female" {% if user.gender == 'female' %} selected {% endif %}>Female</option>
+											<option value="other" {% if user.gender == 'other' %} selected {% endif %}>Other</option>
+										</select>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.dob is not empty %}
+								<tr>
+									<th>Date of Birth</th>
+									<td>
+										<input type="date" id="user_dob" value="{{ user.dob|date('Y-m-d') }}" class="form-control" onchange="saveData('dob', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.placeOfBirth is not empty %}
+								<tr>
+									<th>Place of Birth</th>
+									<td>
+										<input type="text" id="user_placeOfBirth" value="{{ user.placeOfBirth }}" class="form-control" onchange="saveData('placeOfBirth', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.countryOfOrigin is not empty %}
+								<tr>
+									<th>Country of Origin</th>
+									<td>
+										<input type="text" id="user_countryOfOrigin" value="{{ user.countryOfOrigin }}" class="form-control" onchange="saveData('countryOfOrigin', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.nationality is not empty %}
+								<tr>
+									<th>Nationality</th>
+									<td>
+										<input type="text" id="user_nationality" value="{{ user.nationality }}" class="form-control" onchange="saveData('nationality', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.nationalId is not empty %}
+								<tr>
+									<th>National ID</th>
+									<td>
+										<input type="text" id="user_nationalId" value="{{ user.nationalId }}" class="form-control" onchange="saveData('nationalId', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.expirationDateNationalId is not empty %}
+								<tr>
+									<th>Expiration Date (National ID)</th>
+									<td>
+										<input type="date" id="user_expirationDateNationalId'" value="{{ user.expirationDateNationalId|date('Y-m-d') }}" class="form-control" onchange="saveData('expirationDateNationalId', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.registerPlaceNo is not empty %}
+								<tr>
+									<th>Register Place</th>
+									<td>
+										<input type="text" id="user_registerPlaceAndNo" value="{{ user.registerPlaceNo }}" class="form-control" onchange="saveData('registerPlaceAndNo', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.registerNumber is not empty %}
+								<tr>
+									<th>Register Number</th>
+									<td>
+										<input type="text" id="user_registerNumber" value="{{ user.registerNumber }}" class="form-control" onchange="saveData('registerNumber', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.maritalStatus is not empty %}
+								<tr>
+									<th>Marital Status</th>
+									<td>
+										<select id="user_maritalStatus" class="form-control" onchange="saveData('maritalStatus', this.value)">
+											<option value="single" {% if user.maritalStatus == 'single' %} selected {% endif %}>Single</option>
+											<option value="married" {% if user.maritalStatus == 'married' %} selected {% endif %}>Married</option>
+											<option value="divorced" {% if user.maritalStatus == 'divorced' %} selected {% endif %}>Divorced</option>
+											<option value="widowed" {% if user.maritalStatus == 'widowed' %} selected {% endif %}>Widowed</option>
+										</select>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.passportNumber is not empty %}
+								<tr>
+									<th>Passport Number</th>
+									<td>
+										<input type="text" id="user_passportNumber" value="{{ user.passportNumber }}" class="form-control" onchange="saveData('passportNumber', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.placeOfIssuePassport is not empty %}
+								<tr>
+									<th>Place of Issue (Passport)</th>
+									<td>
+										<input type="text" id="user_placeOfIssuePassport" value="{{ user.placeOfIssuePassport }}" class="form-control" onchange="saveData('placeOfIssuePassport', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.expirationDatePassport is not empty %}
+								<tr>
+									<th>Expiration Date (Passport)</th>
+									<td>
+										<input type="date" id="user_expirationDatePassport" value="{{ user.expirationDatePassport|date('Y-m-d') }}" class="form-control" onchange="saveData('expirationDatePassport', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.getOtherNationalities() is not empty %}
+								<tr>
+									<th>Other Nationalities</th>
+									<td>
+										<input type="text" id="user_otherNationalities" value="{{ user.getOtherNationalities|join(', ') }}" class="form-control" onchange="saveData('otherNationalities', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.statusInLebanon is not empty %}
+								<tr>
+									<th>Status in Lebanon</th>
+									<td>
+										<input type="text" id="user_statusInLebanon" value="{{ user.statusInLebanon }}" class="form-control" onchange="saveData('statusInLebanon', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.getOtherCountriesTaxResidence() is not empty %}
+								<tr>
+									<th>Other Countries of Tax Residence</th>
+									<td>
+										<input type="text" id="user_otherCountriesOfTaxResidence" value="{{ user.getOtherCountriesTaxResidence|join(', ') }}" class="form-control" onchange="saveData('otherCountriesOfTaxResidence', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.taxResidencyIdNumber is not empty %}
+								<tr>
+									<th>Tax Residency ID Number</th>
+									<td>
+										<input type="text" id="user_taxResidencyIdNumber" value="{{ user.taxResidencyIdNumber }}" class="form-control" onchange="saveData('taxResidencyIdNumber', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.spouseName is not empty %}
+								<tr>
+									<th>Spouse Name</th>
+									<td>
+										<input type="text" id="user_spouseName" value="{{ user.spouseName }}" class="form-control" onchange="saveData('spouseName', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.spouseProfession is not empty %}
+								<tr>
+									<th>Spouse Profession</th>
+									<td>
+										<input type="text" id="user_spouseProfession" value="{{ user.spouseProfession }}" class="form-control" onchange="saveData('spouseProfession', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% if user.noOfChildren is not empty %}
+								<tr>
+									<th>No. of Children</th>
+									<td>
+										<input type="number" id="user_noOfChildren" value="{{ user.noOfChildren }}" class="form-control" onchange="saveData('noOfChildren', this.value)"/>
+									</td>
+								</tr>
+							{% endif %}
+							{% for address in user.addresses %}
+								<tr>
+									<th>Address</th>
+									<td>
+										<input type="text" id="address_city" value="{{ address.city }}" placeholder="City" class="form-control" onchange="saveData('city', this.value)"/>
+										<input type="text" id="address_street" value="{{ address.street }}" placeholder="Street" class="form-control" onchange="saveData('street', this.value)"/>
+										<input type="text" id="address_building'" value="{{ address.building }}" placeholder="Building" class="form-control" onchange="saveData('building', this.value)"/>
+										<input type="text" id="address_floor" value="{{ address.floor }}" placeholder="Floor" class="form-control" onchange="saveData('floor', this.value)"/>
+										<input type="text" id="address_apartment" value="{{ address.apartment }}" placeholder="Apartment" class="form-control" onchange="saveData('apartment', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>House Tel NO.</th>
+									<td>
+										<input type="text" id="address_houseTelephoneNumber" value="{{ address.houseTelephoneNumber }}" class="form-control" onchange="saveData('houseTelephoneNumber', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>International Address</th>
+									<td>
+										<input type="text" id="address_internationalAddress" value="{{ address.internationalAddress }}" class="form-control" onchange="saveData('internationalAddress', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>International Tel NO.</th>
+									<td>
+										<input type="text" id="address_internationalHouseTelephoneNumber" value="{{ address.internationalHouseTelephoneNumber }}" class="form-control" onchange="saveData('internationalHouseTelephoneNumber', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>International Mob No.</th>
+									<td>
+										<input type="text" id="address_internationalMobileNumber" value="{{ address.internationalMobileNumber }}" class="form-control" onchange="internationalMobileNumber', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>Alternate Contact Name</th>
+									<td>
+										<input type="text" id="address_alternateContactName" value="{{ address.alternateContactName }}" class="form-control" onchange="saveData('alternateContactName', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>Alternate Phone NO.</th>
+									<td>
+										<input type="text" id="address_alternateTelephoneNumber" value="{{ address.alternateTelephoneNumber }}" class="form-control" onchange="saveData('alternateTelephoneNumber', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>International Address</th>
+									<td>
+										<input type="text" id="address_intArea" value="{{ address.intStreet }}" placeholder="Area" class="form-control" onchange="saveData('intArea', this.value)"/>
+										<input type="text" id="address_intStreet" value="{{ address.intStreet }}" placeholder="Street" class="form-control" onchange="saveData('intStreet', this.value)"/>
+										<input type="text" id="address_intBuilding" value="{{ address.intBuilding }}" placeholder="Building" class="form-control" onchange="saveData('intBuilding', this.value)"/>
+										<input type="text" id="address_intFloor" value="{{ address.intFloor }}" placeholder="Floor" class="form-control" onchange="saveData('intFloor', this.value)"/>
+										<input type="text" id="address_intApartment" value="{{ address.intApartment }}" placeholder="Apartment" class="form-control" onchange="saveData('intApartment', this.value)"/>
+									</td>
+								</tr>
+							{% endfor %}
+
+							{% for work in user.workDetails %}
+								<tr>
+									<th>Work Info</th>
+									<td>
+										<input type="text" id="workDetails_profession" value="{{ work.profession }}" class="form-control" onchange="saveData('profession', this.value)"/>
+										<input type="text" id="workDetails_jobTitle" value="{{ work.jobTitle }}" class="form-control" onchange="saveData('jobTitle', this.value)"/>
+										<input type="text" id="workDetails_publicSector" value="{{ work.publicSector }}" class="form-control" onchange="saveData('publicSector', this.value)"/>
+										<input type="text" id="workDetails_activitySector" value="{{ work.activitySector }}" class="form-control" onchange="saveData('activitySector', this.value)"/>
+										<input type="text" id="workDetails_entityName" value="{{ work.entityName }}" class="form-control" onchange="saveData('entityName', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>Educational lvl</th>
+									<td>
+										<input type="text" id="workDetails_educationLevel" value="{{ work.educationLevel }}" class="form-control" onchange="saveData('educationLevel', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>Work Address</th>
+									<td>
+										<input type="text" id="workDetails_workAddress" value="{{ work.workAddress }}" class="form-control" onchange="saveData('workAddress', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>Work Tel No</th>
+									<td>
+										<input type="text" id="workDetails_workTelephoneNumber" value="{{ work.workTelephoneNumber }}" class="form-control" onchange="saveData('workTelephoneNumber', this.value)"/>
+									</td>
+								</tr>
+								<tr>
+									<th>IS Listed</th>
+									<td>
+										<input type="checkbox" id="workDetails_placeOfWorkListed" {% if work.placeOfWorkListed %} checked {% endif %} class="form-control" onchange="saveData('placeOfWorkListed', this.checked)"/>
+									</td>
+								</tr>
+								{% if work.placeOfWorkListed %}
+									<tr>
+										<th>Grade</th>
+										<td>
+											<input type="text" id="workDetails_grade" value="{{ work.grade }}" class="form-control" onchange="saveData('grade', this.value)"/>
+										</td>
+									</tr>
+								{% endif %}
+
+								{% for beneficiary in user.beneficiaryRightsOwners %}
+									{% if beneficiary.customerSameAsBeneficiary == 0 %}
+										<tr>
+											<th>Customer Same As Beneficiary</th>
+											<td>No</td>
+										</tr>
+										<tr>
+											<th>Bro Nationality</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_broNationality" value="{{ beneficiary.broNationality }}" class="form-control" onchange="saveData('broNationality', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Beneficiary Name</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_beneficiaryName" value="{{ beneficiary.beneficiaryName }}" class="form-control" onchange="saveData('beneficiaryName', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Relationship</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_relationship" value="{{ beneficiary.relationship }}" class="form-control" onchange="saveData('relationship', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Bro Civil Id Number</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_broCivilIdNumber" value="{{ beneficiary.broCivilIdNumber }}" class="form-control" onchange="saveData('broCivilIdNumber', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Expiration Date</th>
+											<td>
+												<input type="date" id="beneficiaryRightsOwner_expirationDate" value="{{ beneficiary.expirationDate|date('Y-m-d') }}" class="form-control" onchange="saveData('expirationDate', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Reason Of Bro</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_reasonOfBro" value="{{ beneficiary.reasonOfBro }}" class="form-control" onchange="saveData('reasonOfBro', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Address</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_address" value="{{ beneficiary.address }}" class="form-control" onchange="saveData('address', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Profession</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_profession" value="{{ beneficiary.profession }}" class="form-control" onchange="saveData('profession', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Income Wealth Details</th>
+											<td>
+												<input type="text" id="beneficiaryRightsOwner_incomeWealthDetails" value="{{ beneficiary.incomeWealthDetails }}" class="form-control" onchange="saveData('incomeWealthDetails', this.value)"/>
+											</td>
+										</tr>
+									{% else %}
+										<tr>
+											<th>Customer Same As Beneficiary</th>
+											<td>Yes</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+
+								{% for political in user.politicalPositionDetails %}
+									<tr>
+										<th>Political Position</th>
+										<td>
+											<input type="checkbox" id="politicalPositionDetails_politicalPosition" {% if political.politicalPosition %} checked {% endif %} class="form-control" onchange="saveData('politicalPosition', this.checked ? 1 : 0)"/>
+										</td>
+									</tr>
+									{% if political.politicalPosition %}
+										<tr>
+											<th>Current Previous</th>
+											<td>
+												<input type="text" id="politicalPositionDetails_currentOrPrevious" value="{{ political.currentPrevious }}" class="form-control" onchange="saveData('currentPrevious', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Year Of Retirement</th>
+											<td>
+												<input type="text" id="politicalPositionDetails_yearOfRetirement" value="{{ political.yearOfRetirement }}" class="form-control" onchange="saveData('yearOfRetirement', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Pep Name</th>
+											<td>
+												<input type="text" id="politicalPositionDetails_pepName" value="{{ political.pepName }}" class="form-control" onchange="saveData('pepName', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Relationship</th>
+											<td>
+												<input type="text" id="politicalPositionDetails_relationship" value="{{ political.relationship }}" class="form-control" onchange="saveData('relationship', this.value)"/>
+											</td>
+										</tr>
+										<tr>
+											<th>Pep Position</th>
+											<td>
+												<input type="text" id="politicalPositionDetails_pepPosition" value="{{ political.pepPosition }}" class="form-control" onchange="saveData('pepPosition', this.value)"/>
+											</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+
+								{% for financialDetail in user.financialDetails %}
+									<tr>
+										<th>Source Of Funds (currency)</th>
+										<td>
+											<input type="text" id="financialDetails_sourceOfFunds" value="{{ financialDetail.sourceOfFunds }}" class="form-control" onchange="saveData('sourceOfFunds', this.value)"/>
+											in
+											<input type="text" id="financialDetails_currency" value="{{ financialDetail.currency }}" class="form-control" onchange="saveData('currency', this.value)"/>
+										</td>
+									</tr>
+									<tr>
+										<th>Monthly Basic Salary</th>
+										<td><input type="text" id="financialDetails_monthlyBasicSalary" value="{{ financialDetail.monthlyBasicSalary}}" onchange="saveData('monthlyBasicSalary', this.value)" class="form-control"/></td>
+									</tr>
+									<tr>
+										<th>Monthly Allowances</th>
+										<td><input type="text" id="financialDetails_monthlyAllowances" value="{{ financialDetail.monthlyAllowances }}" class="form-control" onchange="saveData('monthlyAllowances', this.value)"/></td>
+									</tr>
+									<tr>
+										<th>Additional Income Sources</th>
+										<td>
+											<input class="form-control" type="text" id="financialDetails_additionalIncomeSources" value="{% if financialDetail.getAdditionalIncomeSourcesArray() is not empty %}{{ financialDetail.getAdditionalIncomeSourcesArray()|join(', ') }}{% else %} No additional income sources.{% endif %}" onchange="saveData('additionalIncomeSources', this.value)"/>
+										</td>
+									</tr>
+									<tr></tr>
+									<tr>
+										<th>Others Source Of Funds</th>
+										<td><input class="form-control" type="text" id="financialDetails_othersSourceOfFound" value="{{ financialDetail.othersSourceOfFound }}" onchange="saveData('othersSourceOfFound', this.value)"/></td>
+									</tr>
+									<tr>
+										<th>Total Estimated Monthly Income</th>
+										<td><input class="form-control" type="text" id="financialDetails_totalEstimatedMonthlyIncome" value="{{ financialDetail.totalEstimatedMonthlyIncome }}" onchange="saveData('totalEstimatedMonthlyIncome', this.value)"/></td>
+									</tr>
+									<tr>
+										<th>Estimated Wealth Amount</th>
+										<td><input class="form-control" type="text" id="financialDetails_estimatedWealthAmount" value="{{ financialDetail.estimatedWealthAmount }}" onchange="saveData('estimatedWealthAmount', this.value)"/></td>
+									</tr>
+									<tr>
+										<th>Income Category in $</th>
+										<td><input class="form-control" type="text" id="financialDetails_incomeCategory" value="{{ financialDetail.incomeCategory }}" onchange="saveData('incomeCategory', this.value)"/></td>
+									</tr>
+									<tr>
+										<th>Is Wealth Inherited</th>
+										<td>
+											<input class="form-control" type="checkbox" id="financialDetails_isWealthInherited" {% if financialDetail.isWealthInherited %} checked {% endif %} onchange="saveData('isWealthInherited', this.value)"/>
+										</td>
+									</tr>
+									{% if financialDetail.isWealthInherited %}
+										<tr>
+											<th>Expected No. Of Trans</th>
+											<td><input type="text" id="financialDetails_expectedNumberOfTransactions" class="form-control" value="{{ financialDetail.expectedNumberOfTransactions }}" onchange="saveData('expectedNumberOfTransactions', this.value)"/></td>
+										</tr>
+										<tr>
+											<th>Expected Value Of Trans</th>
+											<td><input type="text" id="financialDetails_expectedValueOfTransactions" class="form-control" value="{{ financialDetail.expectedValueOfTransactions }}" onchange="saveData('expectedValueOfTransactions', this.value)"/></td>
+										</tr>
+										<tr>
+											<th>Frequency</th>
+											<td><input type="text" id="financialDetails_frequency" class="form-control" value="{{ financialDetail.frequency }}" onchange="saveData('frequency', this.value)"/></td>
+										</tr>
+									{% else %}
+										<tr>
+											<th>Sources Of Wealth</th>
+											<td><input type="text" id="financialDetails_sourcesOfWealth" class="form-control" value="{{ financialDetail.sourcesOfWealth }}" onchange="saveData('sourcesOfWealth', this.value)"/></td>
+										</tr>
+									{% endif %}
+									{% if financialDetail.hasOtherAccounts %}
+										<tr>
+											<th>Has Other Accounts</th>
+											<td>Yes</td>
+										</tr>
+										<tr>
+											<th>Bank Name</th>
+											<td><input type="text" id="financialDetails_bankName" class="form-control" value="{{ financialDetail.bankName }}" onchange="saveData('bankName', this.value)"/></td>
+										</tr>
+										<tr>
+											<th>Country</th>
+											<td><input type="text" id="financialDetails_country" class="form-control" value="{{ financialDetail.country }}" onchange="saveData('country', this.value)"/></td>
+										</tr>
+										<tr>
+											<th>Account Balance</th>
+											<td><input type="text" id="financialDetails_accountBalance" class="form-control" value="{{ financialDetail.accountBalance }}" onchange="saveData('accountBalance', this.value)"/></td>
+										</tr>
+										{% if financialDetail.secondBankName %}
+											<tr>
+												<th>Bank Name 2</th>
+												<td><input type="text" id="financialDetails_bankName2" class="form-control" value="{{ financialDetail.secondBankName }}" onchange="saveData('bankName2', this.value)"/></td>
+											</tr>
+											<tr>
+												<th>Country 2</th>
+												<td><input type="text" id="financialDetails_country2" class="form-control" value="{{ financialDetail.secondCountry }}" onchange="saveData('country2', this.value)"/></td>
+											</tr>
+											<tr>
+												<th>Account Balance 2</th>
+												<td><input type="text" id="financialDetails_accountBalance2" class="form-control" value="{{ financialDetail.secondBankBalance }}" onchange="saveData('accountBalance2', this.value)"/></td>
+											</tr>
+										{% endif %}
+										{% if financialDetail.thirdBankName %}
+											<tr>
+												<th>Bank Name 3</th>
+												<td><input type="text" id="financialDetails_bankName3" class="form-control" value="{{ financialDetail.thirdBankName }}" onchange="saveData('bankName3', this.value)"/></td>
+											</tr>
+											<tr>
+												<th>Country 3</th>
+												<td><input type="text" id="financialDetails_country3" class="form-control" value="{{ financialDetail.thirdAccountCountry }}" onchange="saveData('country3', this.value)"/></td>
+											</tr>
+											<tr>
+												<th>Account Balance 3</th>
+												<td><input type="text" id="financialDetails_accountBalance3" class="form-control" value="{{ financialDetail.thirdAccountBalance }}" onchange="saveData('accountBalance3', this.value)"/></td>
+											</tr>
+										{% endif %}
+										<tr>
+											<th>Nature Of Relation</th>
+											<td><input type="text" id="financialDetails_natureOfRelation" class="form-control" value="{{ financialDetail.natureOfRelation }}" onchange="saveData('natureOfRelation', this.value)"/></td>
+										</tr>
+										<tr>
+											<th>Purpose Of Relation</th>
+											<td><input type="text" id="financialDetails_purposeOfRelation" class="form-control" value="{{ financialDetail.purposeOfRelation }}" onchange="saveData('purposeOfRelation', this.value)"/></td>
+										</tr>
+										<tr>
+											<th>Select ID Type</th>
+											<td><input type="text" id="financialDetails_selectIDType" class="form-control" value="{{ financialDetail.selectIDType }}" onchange="saveData('selectIDType', this.value)"/></td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<th>Front Image ID</th>
+											<td>
+												<div class="d-flex ">
+													{% if financialDetail.frontImageID %}
+														<a href="{{ financialDetail.frontImageID }}" target="_blank">
+															<img id="frontImagePreview" src="{{ financialDetail.frontImageID }}" alt="Front Image ID" style="max-width: 300px; max-height: 300px;">
+														</a>
+													{% else %}
+														<img id="frontImagePreview" alt="Front Image ID" style="max-width: 300px; max-height: 300px; display: none;">
+													{% endif %}
+
+													<input type="file" name="frontImageIDFile" accept="image/*" style="display: none;" onchange="previewImage(event, 'frontImagePreview');saveData('financialDetail.backImageID', this.files[0])"/>
+													<button class="button-edit" type="button" onclick="document.querySelector('input[name=frontImageIDFile]').click()">Edit</button>
+												</div>
+											</td>
+										</tr>
+
+
+										<tr>
+											<th>Back Image ID</th>
+											<td>
+												<div class="d-flex">
+													{% if financialDetail.backImageID %}
+														<a href="{{ financialDetail.backImageID }}" target="_blank">
+															<img id="backImagePreview" src="{{ financialDetail.backImageID }}" alt="Back Image ID" style="max-width: 300px; max-height: 300px;">
+														</a>
+													{% else %}
+														<img id="backImagePreview" alt="Back Image ID" style="max-width: 300px; max-height: 300px; display: none;">
+													{% endif %}
+													<input type="file" id="financialDetail.backImageID" name="backImageIDFile" accept="image/*" style="display: none;" onchange="previewImage(event, 'backImagePreview');saveData('financialDetail.backImageID', this.files[0])"/>
+													<button class="button-edit" type="button" onclick="document.querySelector('input[name=backImageIDFile]').click()">Edit</button>
+												</div>
+											</td>
+										</tr>
+
+										{% if financialDetail.accountStatement and financialDetail.accountStatement != '/' %}
+											<tr>
+												<th>Account Statement</th>
+												<td>
+													<div class="d-flex">
+														{% if financialDetail.accountStatement %}
+															<a href="{{ financialDetail.accountStatement }}" target="_blank">
+																<img id="accountStatementPreview" src="{{ financialDetail.accountStatement }}" alt="Account Statement" style="max-width: 300px; max-height: 300px;">
+															</a>
+														{% else %}
+															<img id="accountStatementPreview" alt="Account Statement" style="max-width: 300px; max-height: 300px; display: none;">
+														{% endif %}
+														<input type="file" name="accountStatementFile" accept="image/*" style="display: none;" onchange="previewImage(event, 'accountStatementPreview'); saveData('financialDetail.accountStatement', this.files[0])"/>
+														<button class="button-edit" type="button" onclick="document.querySelector('input[name=accountStatementFile]').click()">Edit</button>
+													</div>
+												</td>
+											</tr>
+										{% endif %}
+
+										{% if financialDetail.otherDocument and financialDetail.otherDocument != '/' %}
+											<tr>
+												<th>Other Document</th>
+												<td>
+													<div class="d-flex">
+														{% if financialDetail.otherDocument %}
+															<a href="{{ financialDetail.otherDocument }}" target="_blank">
+																<img id="otherDocumentPreview" src="{{ financialDetail.otherDocument }}" alt="Other Document" style="max-width: 300px; max-height: 300px;">
+															</a>
+														{% else %}
+															<img id="otherDocumentPreview" alt="Other Document" style="max-width: 300px; max-height: 300px; display: none;">
+														{% endif %}
+														<input type="file" name="otherDocumentFile" accept="image/*" style="display: none;" onchange="previewImage(event, 'otherDocumentPreview'); saveData('financialDetail.otherDocument', this.files[0])"/>
+														<button class="button-edit" type="button" onclick="document.querySelector('input[name=otherDocumentFile]').click()">Edit</button>
+													</div>
+												</td>
+											</tr>
+										{% endif %}
+
+										{% if financialDetail.employerLetter and financialDetail.employerLetter != '/' %}
+											<tr>
+												<th>Employer Letter</th>
+												<td>
+													<div class="d-flex">
+														{% if financialDetail.employerLetter %}
+															<a href="{{ financialDetail.employerLetter }}" target="_blank">
+																<img id="employerLetterPreview" src="{{ financialDetail.employerLetter }}" alt="Employer Letter" style="max-width: 300px; max-height: 300px;">
+															</a>
+
+															<img id="employerLetterPreview" alt="Employer Letter" style="max-width: 300px; max-height: 300px; display: none;">
+														{% endif %}
+														<input type="file" name="employerLetterFile" accept="image/*" style="display: none;" onchange="previewImage(event, 'employerLetterPreview'); saveData('financialDetail.employerLetter', this.files[0])"/>
+														<button class="button-edit" type="button" onclick="document.querySelector('input[name=employerLetterFile]').click()">Edit</button>
+													</div>
+												</td>
+											</tr>
+										{% endif %}
+
+									{% endif %}
+								</tr>
+							{% endfor %}
+
+						{% endfor %}
+					{% endfor %}
+					<tr>
+						<td colspan="2">
+							<div class="text-center mt-3 mb-3">
+								<button class=" text-center mt-3 mb-3 border-submit" id='submitbutton'>
+									Submit</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+
+ 
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    </body>
+
+</html> 
+

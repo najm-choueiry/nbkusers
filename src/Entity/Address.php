@@ -16,10 +16,14 @@ class Address
      * @ORM\Column(type="integer")
      */
     private $id;
-
-        /**
+    /**
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $user_id;
+    /**
      * @ORM\Column(name="city", type="string", length=255)
      */
+    
     private $city;
     /**
      * @ORM\Column(name="street", type="string", length=255)
@@ -51,26 +55,26 @@ class Address
      */
     private $internationalAddress;
 
-       /**
+    /**
      * @ORM\Column(name="intArea", type="string")
      */
     private $intArea;
 
-          /**
+    /**
      * @ORM\Column(name="intStreet", type="string")
      */
     private $intStreet;
-          /**
+    /**
      * @ORM\Column(name="intBuilding", type="string")
      */
     private $intBuilding;
 
-              /**
+    /**
      * @ORM\Column(name="intFloor", type="string")
      */
     private $intFloor;
-        
-              /**
+
+    /**
      * @ORM\Column(name="intApartment", type="string")
      */
     private $intApartment;
@@ -110,7 +114,6 @@ class Address
     public function __construct()
     {
         $this->created = new \DateTime();
-
     }
     public function getId(): ?int
     {
@@ -119,7 +122,7 @@ class Address
 
     public function getUserId(): ?int
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
 

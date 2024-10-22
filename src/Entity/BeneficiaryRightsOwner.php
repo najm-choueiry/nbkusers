@@ -17,6 +17,12 @@ class BeneficiaryRightsOwner
      */
     private $id;
 
+        /**
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $user_id;
+    
+
     /**
      * @ORM\Column(name="customerSameAsBeneficiary", type="boolean")
      */
@@ -86,6 +92,10 @@ class BeneficiaryRightsOwner
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
     }
 
     public function getCustomerSameAsBeneficiary(): ?bool
