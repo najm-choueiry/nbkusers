@@ -37,6 +37,9 @@
 
 								</h3>
 							</div>
+									<div class="pb-4 mx-0">
+							<a href="{{ path('app_nbk_users') }}" class="button-edit mx-0 ">Back to List</a>
+						</div>
 							<tr>
 								<th>Existing relationship with NBK Lebanon</th>
 								<td>{{ user.id }}</td>
@@ -550,7 +553,8 @@
 												{% if financialDetail.frontImageID %}
 
 													<a href="{{financialDetail.frontImageID}}" target="_blank">
-														<img src="{{ financialDetail.frontImageID }}" alt="Front Image ID" style="max-width: 300px; max-height: 300px;">
+														{# <img src="{{ financialDetail.frontImageID }}" alt="Front Image ID" style="max-width: 300px; max-height: 300px;"> #}
+														<img src="http://nbk.lss/{{financialDetail.frontImageID}}" alt="Front Image" style="max-width: 200px; max-height: 200px;"/>
 													</a>
 
 												{% endif %}
@@ -563,8 +567,9 @@
 												{% if financialDetail.backImageID  %}
 
 													<a href="{{financialDetail.backImageID}}" target="_blank">
-														<img src="{{ financialDetail.backImageID }}" alt="Back Image ID" style="max-width: 300px; max-height: 300px;"></a>
-												{% endif %}
+														{# <img src="{{ financialDetail.backImageID }}" alt="Back Image ID" style="max-width: 300px; max-height: 300px;"></a> #}
+							                    	<img src="http://nbk.lss/{{financialDetail.backImageID}}" alt="back Image ID  " style="max-width: 200px; max-height: 200px;"/>	    
+ 												{% endif %}
 											</td>
 										</tr>
 										{% if financialDetail.accountStatement and financialDetail.accountStatement != '/' %}
@@ -574,7 +579,8 @@
 													{% if financialDetail.accountStatement   %}
 
 														<a href="{{financialDetail.accountStatement}}" target="_blank">
-															<img src="{{ financialDetail.accountStatement }}" alt="Account Statement" style="max-width: 300px; max-height: 300px;"></a>
+															{# <img src="{{ financialDetail.accountStatement }}" alt="Account Statement" style="max-width: 300px; max-height: 300px;"></a> #}
+												        	<img src="http://nbk.lss/{{financialDetail.accountStatement}}" alt="account Statement Image" style="max-width: 200px; max-height: 200px;"/>
 													{% endif %}
 												</td>
 											</tr>
@@ -586,8 +592,8 @@
 													{% if financialDetail.otherDocument   %}
 
 														<a href="{{financialDetail.otherDocument}}" target="_blank">
-															<img src="{{financialDetail.otherDocument }}" alt="other Document " style="max-width: 300px; max-height: 300px;"></a>
-
+															{# <img src="{{financialDetail.otherDocument }}" alt="other Document " style="max-width: 300px; max-height: 300px;"></a> #}
+							                      	<img src="http://nbk.lss/{{financialDetail.otherDocument}}" alt=" other Document Image" style="max-width: 200px; max-height: 200px;"/>                                                      
 													{% endif %}
 												</td>
 											</tr>
@@ -600,7 +606,8 @@
 												<td>
 													{% if financialDetail.realEstateTitle  %}
 														<a href="{{financialDetail.realEstateTitle}}" target="_blank">
-															<img src="{{ financialDetail.realEstateTitle }}" alt="Real Estate Title " style="max-width: 300px; max-height: 300px;"></a>
+															{# <img src="{{ financialDetail.realEstateTitle }}" alt="Real Estate Title " style="max-width: 300px; max-height: 300px;"></a> #}
+															<img src="http://nbk.lss/{{financialDetail.realEstateTitle}}" alt="real Estate Title  Image" style="max-width: 200px; max-height: 200px;"/>
 													{% endif %}
 												</td>
 											</tr>
@@ -612,9 +619,9 @@
 													{% if financialDetail.employerLetter  %}
 
 														<a href="{{financialDetail.employerLetter}}" target="_blank">
-															<img src="{{ financialDetail.employerLetter }}" alt="Employer Letter Image" style="max-width: 300px; max-height: 300px;"></a>
-
-
+															{# <img src="{{ financialDetail.employerLetter }}" alt="Employer Letter Image" style="max-width: 300px; max-height: 300px;"></a> #}
+							                         	<img src="http://nbk.lss/{{financialDetail.employerLetter}}" alt="employer Letter Image" style="max-width: 200px; max-height: 200px;"/>
+                                                          
 													{% endif %}
 												</td>
 											</tr>

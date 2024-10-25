@@ -8,31 +8,54 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository; // Correct import statement
 
 class UsersRepository
+
 {
+    private $entityManager;
+    private $usersRepository;
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->usersRepository = $entityManager->getRepository(Users::class);
     }
-    public function createUser(array $userData): ?Users
+    public function createUser(array $userData, ?int $userId,?int $branchId): ?Users
     {
-        $expirationDateNationalIdString = $userData['expirationDateNationalId'] ?? '';
-        $expirationDateNationalId = new \DateTime($expirationDateNationalIdString);
 
         $passportExpirationDateString = $userData['passportExpirationDate'] ?? '';
-        $passportExpirationDate = new \DateTime($passportExpirationDateString);
+        $passportExpirationDate = new \DateTime($passportExpirationDateString->format('Y-m-d'));
 
-        $user = new Users();
+        if (is_null($userId)) {
+            $user = new Users();
+            $expirationDateNationalIdString = $userData['expirationDateNationalId'] ?? '';
+            $expirationDateNationalId = new \DateTime($expirationDateNationalIdString);
+            $dob = !empty($userData['dob']) ? \DateTime::createFromFormat('Y-m-d', $userData['dob']) : false;
+            if ($dob) {
+                $user->setDob($dob);
+            }
+        } else {
+            $user = $this->usersRepository->find($userId);
+            $expirationDateNationalIdString = $userData['expirationDateNationalId'] ?? '';
+            $expirationDateNationalIdString=   $expirationDateNationalIdString->format('Y-m-d');
+            $expirationDateNationalId = (new \DateTime($expirationDateNationalIdString));
+
+            $dob = !empty($userData['dob']->format('Y-m-d')) ? \DateTime::createFromFormat('Y-m-d', $userData['dob']->format('Y-m-d')) : false;
+            if ($dob) {
+                $user->setDob($dob);
+            }
+      
+        }
         $user->setFullName($userData['fullName'] ?? '');
         $user->setMobileNumb($userData['mobileNumb'] ?? '');
         $user->setEmail($userData['email'] ?? '');
-        $user->setBranchUnit($userData['branchUnit'] ?? '');
+        $branchUnits = [
+            1 => 'sanayeh',
+            2 => 'bhamdoun',
+            3 => 'privatebank',
+        ];
+        // Set BranchUnit based on the branch ID, or default to an empty string if no match is found
+        $user->setBranchUnit($branchUnits[$branchId] ?? '');
         $user->setBranchId((int)($userData['branchId'] ?? 0));
         $user->setMothersName($userData['mothersName'] ?? '');
         $user->setGender($userData['gender'] ?? '');
-        $dob = !empty($userData['dob']) ? \DateTime::createFromFormat('Y-m-d', $userData['dob']) : false;
-        if ($dob) {
-            $user->setDob($dob);
-        }
         $user->setPlaceOfBirth($userData['placeOfBirth'] ?? '');
         $user->setCountryOfOrigin($userData['countryOfOrigin'] ?? '');
         $user->setNationality($userData['nationality'] ?? '');
@@ -55,28 +78,28 @@ class UsersRepository
 
         return $user;
     }
-//    public function findAllWithDetails()
-//    {
-//        return $this->entityManager->createQueryBuilder('u')
-//            ->leftJoin('u.addresses', 'a')
-//            ->leftJoin('u.workDetails', 'w')
-//            ->leftJoin('u.financialDetails', 'f')
-//            ->leftJoin('u.politicalPositionDetails', 'p')
-//            ->leftJoin('u.beneficiaryRightsOwners', 'b')
-//            ->getQuery()
-//            ->getResult();
-//    }
+    //    public function findAllWithDetails()
+    //    {
+    //        return $this->entityManager->createQueryBuilder('u')
+    //            ->leftJoin('u.addresses', 'a')
+    //            ->leftJoin('u.workDetails', 'w')
+    //            ->leftJoin('u.financialDetails', 'f')
+    //            ->leftJoin('u.politicalPositionDetails', 'p')
+    //            ->leftJoin('u.beneficiaryRightsOwners', 'b')
+    //            ->getQuery()
+    //            ->getResult();
+    //    }
 
-public function createExistingUser(array $userData): ?Users
-{
-    
-    $user = new Users();
-    $user->setFullName($userData['fullName'] ?? '');
-    $user->setMobileNumb($userData['mobileNumb'] ?? '');
-    $user->setEmail($userData['email'] ?? '');
-    $user->setBranchUnit($userData['branchUnit'] ?? '');
-    $user->setBranchId((int)($userData['branchId'] ?? 0));
+    public function createExistingUser(array $userData): ?Users
+    {
 
-    return $user;
-}
+        $user = new Users();
+        $user->setFullName($userData['fullName'] ?? '');
+        $user->setMobileNumb($userData['mobileNumb'] ?? '');
+        $user->setEmail($userData['email'] ?? '');
+        $user->setBranchUnit($userData['branchUnit'] ?? '');
+        $user->setBranchId((int)($userData['branchId'] ?? 0));
+
+        return $user;
+    }
 }

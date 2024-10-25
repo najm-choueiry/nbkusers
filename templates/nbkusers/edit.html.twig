@@ -38,43 +38,41 @@
 			<div class="table-responsive">
 				<table class="table table-bordered">
 					<tbody>
-						{% for user in user %}
-							<div id="userID" hidden>{{ user.id }}</div>
+						<div id="userID" hidden>{{ user.id }}</div>
 
-							<div>
-								<h2>National Bank of Kuwait (Lebanon) S.A.L</h2>
-								<h6>{{ user.created|date('F j, Y, g:i a') }}</h6>
-							</div>
-							<div class="d-flex justify-content-between mt-4">
-								<h3 class="mb-2">
-									<p>Edit User</p>
-								</h3>
-								<h3 class="mb-2">
-									<p>Full Name:
-										{{ user.fullName }}</p>
-								</h3>
-							</div>
-							<div class="d-flex justify-content-between mt-1">
-								<h3 class="mb-4">
-									<p>SIM NO</p>
-								</h3>
-								<h3 class="mb-4">
-									<p>Application reference:
-										{{ user.id }}</p>
-								</h3>
-							</div>
-							<div class="pb-4 mx-0">
-								<a href="{{ path('app_nbk_users') }}" class="button-edit mx-0 ">Back to List</a>
-							</div>
+						<div>
+							<h2>National Bank of Kuwait (Lebanon) S.A.L</h2>
+							<h6>{{ user.created|date('F j, Y, g:i a') }}</h6>
+						</div>
+						<div class="d-flex justify-content-between mt-4">
+							<h3 class="mb-2">
+								<p>Edit User</p>
+							</h3>
+							<h3 class="mb-2">
+								<p>Full Name:
+									{{ user.fullName }}</p>
+							</h3>
+						</div>
+						<div class="d-flex justify-content-between mt-1">
+							<h3 class="mb-4">
+								<p>SIM NO</p>
+							</h3>
+							<h3 class="mb-4">
+								<p>Application reference:
+									{{ user.id }}</p>
+							</h3>
+						</div>
+						<div class="pb-4 mx-0">
+							<a href="{{ path('app_nbk_users') }}" class="button-edit mx-0 ">Back to List</a>
+						</div>
 
 
-							<tr>
-								<th>Existing relationship with NBK Lebanon</th>
-								<td>
-									<input type="text" name="user_id" value="{{ user.id }}" class="form-control" disabled/>
-								</td>
-							</tr>
-						{% endfor %}
+						<tr>
+							<th>Existing relationship with NBK Lebanon</th>
+							<td>
+								<input type="text" name="user_id" value="{{ user.id }}" class="form-control" disabled/>
+							</td>
+						</tr>
 						{{ form_start(form, { 'method': 'POST' }) }}
 						<tr>
 							<th>First Name</th>
@@ -104,7 +102,7 @@
 							<th>Branch/Unit</th>
 							<td>
 
-								{{ form_row(form.BranchUnit) }}
+								{{ form_row(form.BranchId) }}
 
 							</td>
 						</tr>
@@ -239,6 +237,102 @@
 					</td>
 				</tr>
 				<tr>
+					<th>other Countries Tax Residence</th>
+					<td>
+
+						{{ form_row(form.otherCountriesTaxResidence ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>TaxResidencyIdNumber</th>
+					<td>
+
+						{{ form_row(form.TaxResidencyIdNumber ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>International Address</th>
+					<td>
+
+						{{ form_row(form.InternationalAddress ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>International Area</th>
+					<td>
+
+						{{ form_row(form.intArea ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>International street</th>
+					<td>
+
+						{{ form_row(form.intStreet ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>International building/house</th>
+					<td>
+
+						{{ form_row(form.intBuilding ) }}
+
+					</td>
+				</tr>
+				<tr>
+					<th>International Floor</th>
+					<td>
+
+						{{ form_row(form.intFloor ) }}
+
+					</td>
+				</tr>
+							<tr>
+					<th>International Apartment</th>
+					<td>
+
+						{{ form_row(form.intAppartment ) }}
+
+					</td>
+				</tr>
+										<tr>
+					<th>International House Tele phoneNumber</th>
+					<td>
+
+						{{ form_row(form.internationalHouseTelephoneNumber ) }}
+
+					</td>
+				</tr>
+										<tr>
+					<th>International Mobile Number</th>
+					<td>
+
+						{{ form_row(form.internationalMobileNumber ) }}
+
+					</td>
+				</tr>
+										<tr>
+					<th>alternate Contact Name</th>
+					<td>
+
+						{{ form_row(form.alternateContactName ) }}
+
+					</td>
+				</tr>
+										<tr>
+					<th>alternate Telephone Number</th>
+					<td>
+
+						{{ form_row(form.alternateTelephoneNumber ) }}
+
+					</td>
+				</tr>
+				<tr>
 					<th>Spouse Name</th>
 					<td>
 
@@ -283,86 +377,66 @@
 					</td>
 				</tr>
 				<tr>
-					<th>International Address</th>
-					<td>
-
-						{{ form_row(form.InternationalAddress ) }}
-
-					</td>
-				</tr>
-				<tr>
 					<th>Work Info</th>
 					<td>
-
 						{{ form_row(form.profession ) }}
 						{{ form_row(form.jobTitle ) }}
 						{{ form_row(form.activitySector ) }}
 						{{ form_row(form.entityName ) }}
-
+					</td>
+				</tr>
+				<tr>
+					<th>public Sector</th>
+					<td>
+						{{ form_row(form.publicSector ) }}
 					</td>
 				</tr>
 				<tr>
 					<th>Education Level</th>
 					<td>
-
 						{{ form_row(form.educationLevel ) }}
-
 					</td>
 				</tr>
 				<tr>
 					<th>Work Address</th>
 					<td>
-
 						{{ form_row(form.WorkAddress ) }}
-
 					</td>
 				</tr>
 				<tr>
 					<th>Work Tel No</th>
 					<td>
-
 						{{ form_row(form.WorkTelNo ) }}
-
 					</td>
 				</tr>
 				<tr>
 					<th>IS Listed</th>
 					<td>
-
 						{{ form_row(form.ISListed ) }}
-
 					</td>
 				</tr>
 				<tr>
 					<th>Grade</th>
 					<td>
-
 						{{ form_row(form.grade ) }}
-
 					</td>
 				</tr>
 				<tr>
 					<th>Customer Same As Beneficiary</th>
 					<td>
-
 						{{ form_row(form.CustomerSameAsBeneficiary ) }}
-
 					</td>
 				</tr>
 				<tr>
 					<th>Bro Nationality</th>
 					<td>
-
 						{{ form_row(form.broNationality ) }}
-
 					</td>
 				</tr>
 				<tr>
 					<th>Beneficiary Name</th>
 					<td>
-
 						{{ form_row(form.BeneficiaryName ) }}
-
 					</td>
 				</tr>
 				<tr>
@@ -437,6 +511,14 @@
 
 					</td>
 				</tr>
+								<tr>
+					<th>Year Of Retirement</th>
+					<td>
+
+						{{ form_row(form.yearOfRetirement)}}
+
+					</td>
+				</tr>
 				<tr>
 					<th>PEP Name</th>
 					<td>
@@ -453,7 +535,7 @@
 
 					</td>
 				</tr>
-											<tr>
+				<tr>
 					<th>PEP Position</th>
 					<td>
 
@@ -461,10 +543,356 @@
 
 					</td>
 				</tr>
+				<tr>
+					<th>Source Of Funds</th>
+					<td>
 
+						{{ form_row(form.sourceOfFunds)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>financel currency</th>
+					<td>
+
+						{{ form_row(form.financelcurrency)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>monthly Basic Salary</th>
+					<td>
+
+						{{ form_row(form.monthlyBasicSalary)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>monthly Allowances</th>
+					<td>
+
+						{{ form_row(form.monthlyAllowances)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Additional Income Sources Array</th>
+					<td>
+
+						{{ form_row(form.AdditionalIncomeSourcesArray)}}
+
+					</td>
+				</tr>
+						<tr>
+					<th>others Source Of Found</th>
+					<td>
+
+						{{ form_row(form.othersSourceOfFound)}}
+
+					</td>
+				</tr>
+									<tr>
+					<th>sourcesOfWealth</th>
+					<td>
+
+						{{ form_row(form.sourcesOfWealth)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>Total Estimated Monthly Income</th>
+					<td>
+
+						{{ form_row(form.TotalEstimatedMonthlyIncome)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>estimated Wealth Amount</th>
+					<td>
+
+						{{ form_row(form.estimatedWealthAmount)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Income Category</th>
+					<td>
+
+						{{ form_row(form.IncomeCategory)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Is Wealth Inherited</th>
+					<td>
+
+						{{ form_row(form.isWealthInherited)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						expected Number Of Transactions
+					</th>
+					<td>
+
+						{{ form_row(form.expectedNumberOfTransactions)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						expected Value Of Transactions
+					</th>
+					<td>
+
+						{{ form_row(form.expectedValueOfTransactions)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Frequency
+					</th>
+					<td>
+
+						{{ form_row(form.finanfrequency)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						other Accounts Banks
+					</th>
+					<td>
+
+						{{ form_row(form.otherAccountsAtBanks)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						bank Name
+					</th>
+					<td>
+
+						{{ form_row(form.bankNameone)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Country
+					</th>
+					<td>
+
+						{{ form_row(form.Countryone)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Account Balance
+					</th>
+					<td>
+
+						{{ form_row(form.AccountBalanceOne)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						second bank Name
+					</th>
+					<td>
+
+						{{ form_row(form.secondBankName)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						second Country
+					</th>
+					<td>
+
+						{{ form_row(form.secondCountry)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						second Account Balance
+					</th>
+					<td>
+
+						{{ form_row(form.secondBankBalance)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						third bank Name
+					</th>
+					<td>
+
+						{{ form_row(form.thirdBankName)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Third Country
+					</th>
+					<td>
+
+						{{ form_row(form.thirdAccountCountry)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Third Account Balance
+					</th>
+					<td>
+
+						{{ form_row(form.thirdAccountBalance)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Nature Of Relation
+					</th>
+					<td>
+
+						{{ form_row(form.natureOfRelation)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Purpose Of Relation
+					</th>
+					<td>
+
+						{{ form_row(form.purposeOfRelation)}}
+
+					</td>
+				</tr>
+				<tr>
+					<th>
+						select ID Type
+					</th>
+					<td>
+
+						{{ form_row(form.selectIDType)}}
+
+					</td>
+				</tr>
+				{% for financialDetail in user.financialDetails %}
+					<tr>
+						<th>Front Image ID</th>
+						<td>
+
+							{% if financialDetail.frontImageID %}
+								<img src="http://nbk.lss/{{financialDetail.frontImageID}}" alt="Front Image" style="max-width: 200px; max-height: 200px;"/>
+								{# <img src="{{ financialDetail.frontImageID }}" alt="Front Image" style="max-width: 300px; max-height: 300px;"></a> #}
+
+							{% else %}
+								<p>No front image  ID uploaded.</p>
+							{% endif %}
+
+							{{ form_row(form.frontImageID) }}
+
+						</td>
+					</tr>
+					<tr>
+						<th>Back Image ID</th>
+						<td>
+
+							{% if financialDetail.backImageID %}
+								<img src="http://nbk.lss/{{financialDetail.backImageID}}" alt="back Image ID  " style="max-width: 200px; max-height: 200px;"/>
+								{# <img src="{{ financialDetail.backImageID }}" alt="back Image ID " style="max-width: 300px; max-height: 300px;"></a> #}
+
+							{% else %}
+								<p>No back Image ID uploaded.</p>
+							{% endif %}
+
+							{{ form_row(form.backImageID) }}
+
+						</td>
+					</tr>
+					<tr>
+						<th>Account Statement</th>
+						<td>
+
+							{% if financialDetail.accountStatement %}
+								<img src="http://nbk.lss/{{financialDetail.accountStatement}}" alt="account Statement Image" style="max-width: 200px; max-height: 200px;"/>
+								{# <img src="{{ financialDetail.accountStatement }}" alt="account Statement Image " style="max-width: 300px; max-height: 300px;"></a> #}
+
+							{% else %}
+								<p>No account Statement uploaded.</p>
+							{% endif %}
+
+							{{ form_row(form.accountStatement) }}
+
+						</td>
+					</tr>
+					<tr>
+						<th>Other Document</th>
+						<td>
+
+							{% if financialDetail.otherDocument %}
+								<img src="http://nbk.lss/{{financialDetail.otherDocument}}" alt=" other Document Image" style="max-width: 200px; max-height: 200px;"/>
+								{# <img src="https://fresh.nbk.com.lb/".{{ financialDetail.otherDocument }} alt="other Document Image" style="max-width: 300px; max-height: 300px;"></a> #}
+
+							{% else %}
+								<p>No  other Document uploaded.</p>
+							{% endif %}
+
+							{{ form_row(form.otherDocument) }}
+
+						</td>
+					</tr>
+					<tr>
+						<th>Real Estate Title</th>
+						<td>
+
+							{% if financialDetail.realEstateTitle %}
+								<img src="http://nbk.lss/{{financialDetail.realEstateTitle}}" alt="real Estate Title  Image" style="max-width: 200px; max-height: 200px;"/>
+								{# <img src="{{ financialDetail.realEstateTitle }}" alt="real Estate Title " style="max-width: 300px; max-height: 300px;"></a> #}
+
+							{% else %}
+								<p>No  real Estate Title uploaded.</p>
+							{% endif %}
+
+							{{ form_row(form.realEstateTitle) }}
+
+						</td>
+					</tr>
+					<tr>
+						<th>Employer Letter</th>
+						<td>
+
+							{% if financialDetail.employerLetter %}
+								<img src="http://nbk.lss/{{financialDetail.employerLetter}}" alt="employer Letter Image" style="max-width: 200px; max-height: 200px;"/>
+								{# <img src="{{ financialDetail.employerLetter }}" alt="employer Letter Image " style="max-width: 300px; max-height: 300px;"></a> #}
+
+							{% else %}
+								<p>No employer Letter uploaded.</p>
+							{% endif %}
+
+							{{ form_row(form.employerLetter) }}
+
+						</td>
+					</tr>
+				{% endfor %}
 
 				<tr>
-
 					<td colspan="2">
 						<div class=" text-center w-100">
 
@@ -474,8 +902,11 @@
 					</td>
 				</tr>
 
-				{{ form_end(form) }}
+
 			</tbody>
 		</table>
+		
+				{{ form_end(form) }}
+			
 	</body>
 </html></div></div></body></html>

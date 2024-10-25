@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th,
+			td {
+				border: 1px solid #ddd;
+				padding: 8px;
+			}
+			th {
+				background-color: #f2f2f2;
+				text-align: left;
+			}
+			.title {
+				background-color: #333;
+				color: white;
+				padding: 10px;
+				text-transform: uppercase;
+				text-align: center;
+			}
+
+
+			.customerSignature {
+				position: absolute;
+				right: 0;
+				bottom: 20px;
+				width: 20%;
+				display: flex;
+				justify-content: flex-start;
+				padding: 0 0 30px;
+				margin: 50px auto 0;
+        		border-bottom: 1px solid;
+			}
+
+			.mt {
+				margin-top: 0;
+			}
+
+			body {
+				padding-bottom: 100px;
+				counter-reset: page;
+				position: relative;
+				min-height: 100vh;
+			}
+
+			.paragh-final {
+				margin-top: 2rem;
+			}
+
+			.parent-box{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
+
+			.parent-box{
+				display: table-cell;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
+
+			.signatures-customer {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				gap: 3%;
+			}
+
+			.signature-box {
+				display: flex;
+				align-items: center;
+				margin: 10px 0;
+				width: 40%;
+			}
+
+			.signature {
+				display: flex;
+				align-items: center;
+				width: 40%;
+			}
+
+			.signature-label {
+				flex: 0 0 150px; 
+				font-weight: bold;
+			}
+
+			.signature-line {
+			border-bottom: 1px solid;
+			margin-top: 12px;  
+			width: 100%;
+			}
+
+
+			.headertitle {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.page-number::after {
+				content: "Page " counter(page);
+				position: fixed;
+				bottom: 0;
+				right: 0;
+				width: 100%;
+				text-align: right;
+				padding: 1px;
+				font-size: 12px;
+				color: #333;
+			}
+			.ref-mob {
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+			}
+	
+			.ref-mob div {
+				flex: 1;
+			}
+	
+			.ref-mob div:last-child {
+				text-align: right;
+			}
+	
+			.phone-number {
+				font-weight: bold;
+			}
+	
+			.reference {
+				font-weight: bold;
+			}
+	
+			@media print {
+				body {
+					counter-reset: page;
+				}
+				.page-number {
+					display: block; 
+				}
+				.title {
+					page-break-after: avoid; 
+				}
+				.customerSignature {
+					position: absolute;
+					bottom: 0;
+					right: 0;
+				}
+				.d-flex {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					flex-direction: row;
+					position: absolute;
+					bottom: 100px;
+					width: 100%;
+					page-break-after: always;
+				}
+			}
+		</style>
+
+	</head>
+	<body>
+		<div class="page-number"></div>
+		<div class="headertitle" style="display: flex; flex-direction: column; align-items: center">
+			<h2>National Bank of Kuwait (Lebanon) S.A.L.</h2>
+			<h4>Customer Profile Form – KYC for Individuals</h4>
+			<p>{{ time|date('Y-m-d H:i:s') }}</p>
+			<div class="ref-mob">
+				<div class="phone-number">{{ user.mobileNumb}}</div>
+				<div class="reference" style="magin-right: 1rem">Application reference: {{reference}}</div>
+			</div>
+		</div>
+
+		<h2 class="title">New Relation</h2>
+		<table>
+			<tr>
+				<td>Full Name</td>
+				<td>{{ user.fullName | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td>{{ user.email | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Mobile No</td>
+				<td>{{ user.mobileNumb | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Branch Unit</td>
+				<td>{{ user.branchUnit | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Mother's Name</td>
+				<td>{{ user.mothersName | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Gender</td>
+				<td>{{ user.gender | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Date of birth</td>
+				<td>{{ user.dob | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Place of birth</td>
+				<td>{{ user.placeOfBirth | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Country of Origin</td>
+				<td>{{ user.countryOfOrigin | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Nationality</td>
+				<td>{{ user.nationality | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Nationality Id</td>
+				<td>{{ user.nationalId | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Expiration Date</td>
+				<td>{{ user.expirationDateNationalId | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Register Place </td>
+				<td>{{ user.registerPlaceAndNo | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Register Number</td>
+				<td>{{ user.registerNumber | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Marital Status</td>
+				<td>{{ user.maritalStatus | default('N/A') }}</td>
+			</tr>
+			<p class="customerSignature">Customer Signature: </p>
+	
+			<tr>
+				<td>Passport Number</td>
+				<td>{{ user.passportNumber | default('N/A') }}</td>
+			</tr>
+				
+			<tr>
+				<td>Place of Issuance of Passport</td>
+				<td style=" display:block">{{ user.placeOfIssuePassport | default('N/A') }}</td>
+			</tr>
+			<tr >
+				<tr>
+				<td>Other Nationalities</td>
+					<td colspan="4" style=" display:block">
+						{% if user.otherNationalities is not empty %}
+							{{ user.otherNationalities | join(', ') }}
+						{% else %}
+							N/A
+						{% endif %}
+					</td>
+				</tr>
+
+			</tr>
+			<tr>
+				<td>Status in Lebanon</td>
+				<td>{{ user.statusInLebanon | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Other Countries of Tax Residence</td>
+				<td>{{ user.otherCountriesOfTaxResidence | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Tax Residency Id Number</td>
+				<td>{{ user.taxResidencyIdNumber | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>
+					Spouse Name</td>
+				<td>{{ user.spouseName | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Spouse Profession</td>
+				<td>{{ user.spouseProfession | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Number of Children</td>
+				<td>{{ user.noOfChildren | default('N/A') }}</td>
+			</tr>
+		</table>
+		
+		<div class="page-number"></div>
+		
+
+
+		<p class="customerSignature">Customer Signature: </p>
+
+
+		<h2 class="title">Address</h2>
+		<table>
+			<tr>
+				<h3>
+					Address in Lebanon
+				</h3>
+			</tr>
+			<tr>
+				<td>City</td>
+				<td>{{ address.city | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Street</td>
+				<td>{{ address.street | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Building</td>
+				<td>{{ address.building | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Floor</td>
+				<td>{{ address.floor | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Apartment</td>
+				<td>{{ address.apartment | default('N/A') }}</td>
+			</tr>
+		
+
+
+			<tr>
+				<td>House Telephone Number</td>
+				<td style=" display:block">{{ address.houseTelephoneNumber | default('N/A') }}</td>
+			
+
+			</tr>
+			
+
+
+		<tr> </tr>
+			<tr>
+				<h3>
+					Other International Address
+				</h3>
+			</tr>
+			<tr>
+				<td>Country</td>
+				<td>{{ address.internationalAddress | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>International House Telephone Number</td>
+				<td>{{ address.internationalHouseTelephoneNumber | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>International Mobile Number</td>
+				<td>{{ address.internationalMobileNumber | default('N/A') }}</td>
+			</tr>
+
+
+			<tr>
+				<td>Alternate Contact Name</td>
+				<td>{{ address.alternateContactName | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Alternate Telephone Number</td>
+				<td>{{ address.alternateTelephoneNumber | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>International Area</td>
+				<td>{{ address.intArea | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>International Street</td>
+				<td>{{ address.intStreet | default('N/A') }}</td>
+			</tr>
+
+
+			<tr>
+				<td>International Building/House</td>
+				<td>{{ address.intBuilding | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>International Floor</td>
+				<td>{{ address.intFloor | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>International Apartment</td>
+				<td>{{ address.intApartment | default('N/A') }}</td>
+			</tr>
+
+
+		</table>
+		<div class="page-number"></div>
+
+		<p class="customerSignature mt">Customer Signature: </p>
+
+		<h2 class="title">Work Details</h2>
+		<table>
+
+			<tr>
+				<td>Profession</td>
+				<td>{{ workDetails.profession | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Job Title</td>
+				<td>{{ workDetails.jobTitle | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Public Sector</td>
+				<td>{{ workDetails.publicSector | default('N/A') }}</td>
+			</tr>
+
+
+			<tr>
+				<td>Grade</td>
+				<td>{{ workDetails.grade | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Activity Selector</td>
+				<td>{{ workDetails.activitySector | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Entity Name</td>
+				<td>{{ workDetails.entityName | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Education Level</td>
+				<td>{{ workDetails.educationLevel | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Work Address</td>
+				<td>{{ workDetails.workAddress | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Work Telephone Number</td>
+				<td>{{ workDetails.workTelephoneNumber | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Work listed in stock exchange?</td>
+				<td>{{ workDetails.placeOfWorkListed | default('N/A') }}</td>
+			</tr>
+
+
+		</table>
+		<div class="page-number"></div>
+
+		<p class="customerSignature">Customer Signature: </p>
+
+
+		<h2 class="title">BENEFICIARY RIGHTS OWNER (BRO)</h2>
+		<table>
+
+			<tr>
+				<td>Customer same as BRO</td>
+				<td>{{ beneficiaryRightsOwner.customerSameAsBeneficiary | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>BRO Nationality</td>
+				<td>{{ beneficiaryRightsOwner.broNationality | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Beneficiary Name</td>
+				<td>{{ beneficiaryRightsOwner.beneficiaryName | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Relationship</td>
+				<td>{{ beneficiaryRightsOwner.relationship | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Beneficiary Civil ID No</td>
+				<td>{{ beneficiaryRightsOwner.broCivilIdNumber | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Expiration Date</td>
+				<td>{{ beneficiaryRightsOwner.expirationDate | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Reason of BRO</td>
+				<td>{{ beneficiaryRightsOwner.reasonOfBro | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Address</td>
+				<td>{{ beneficiaryRightsOwner.address | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Profession</td>
+				<td>{{ beneficiaryRightsOwner.profession | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Income & Wealth Details</td>
+				<td>{{ beneficiaryRightsOwner.incomeWealthDetails | default('N/A') }}</td>
+			</tr>
+
+		</table>
+		<div class="page-number"></div>
+
+		<p class="customerSignature">Customer Signature: </p>
+
+		<h2 class="title">Political Position Details</h2>
+		<table>
+
+			<tr>
+				<td>Are you or any of your first or second degree relatives or close associates holding a political position?</td>
+				<td>{{ politicalPositionDetails.politicalPosition == 1 ? 'Yes' : 'No' }}</td>
+			</tr>
+			<tr>
+				<td>If Yes, Current or Previous</td>
+				<td>{{ politicalPositionDetails.currentOrPrevious | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>If Previous, Year of Retirement</td>
+				<td>{{ politicalPositionDetails.yearOfRetirement | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Political Exposed Person Name</td>
+				<td>{{ politicalPositionDetails.pepName | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Relationship with account holder</td>
+				<td>{{ politicalPositionDetails.relationship | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Political Exposed Person Position</td>
+				<td>{{ politicalPositionDetails.pepPosition | default('N/A') }}</td>
+			</tr>
+
+		</table>
+		<div class="page-number"></div>
+
+		<p class="customerSignature">Customer Signature: </p>
+
+
+		<h2 class="title">Financial Details</h2>
+		<table>
+			<tr>
+				<td>Source of Funds</td>
+				<td>{{ financialDetails.sourceOfFunds | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Currency</td>
+				<td>{{ financialDetails.currency | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Monthly Basic Salary</td>
+				<td>{{ financialDetails.monthlyBasicSalary | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Monthly Allowances</td>
+				<td>{{ financialDetails.monthlyAllowances | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Additional Income Sources</td>
+				<td>
+					{% if financialDetails.additionalIncomeSources is not empty %}
+						<ul style="list-style-type: none; padding-left: 0;">
+							{% for source in financialDetails.additionalIncomeSources %}
+								<li>{{ source }}</li>
+							{% endfor %}
+						</ul>
+					{% else %}
+						N/A
+					{% endif %}
+				</td>
+			</tr>
+			
+
+			<tr>
+				<td>If Others, please specify</td>
+				<td>{{ financialDetails.othersSourceOfFound | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Total Estimated Monthly Income</td>
+				<td>{{ financialDetails.totalEstimatedMonthlyIncome | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Estimated Wealth Amount</td>
+				<td>{{ financialDetails.estimatedWealthAmount | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Is your Wealth Inherited?</td>
+				<td>{{ financialDetails.isWealthInherited | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Sources of Wealth</td>
+				<td>{{ financialDetails.sourcesOfWealth | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Income Category</td>
+				<td>{{ financialDetails.incomeCategory | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Expected Number of Transactions</td>
+				<td>{{ financialDetails.expectedNumberOfTransactions | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Expected Value of Transactions</td>
+				<td>{{ financialDetails.expectedValueOfTransactions | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Frequency</td>
+				<td>{{ financialDetails.frequency | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Has Other Accounts</td>
+				<td>{{ financialDetails.hasOtherAccounts | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Bank Name</td>
+				<td>{{ financialDetails.bankName | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Country</td>
+				<td>{{ financialDetails.country | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Account Balance US.Dollars</td>
+				<td>{{ financialDetails.accountBalance | default('N/A') }}</td>
+			</tr>
+
+			<div class="page-number"></div>
+			<tr>
+				<td>Second Bank Name</td>
+				<td>{{ financialDetails.bankName2 | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Second Country</td>
+				<td style="display: block;">{{ financialDetails.country2 | default('N/A') }}</td>
+			</tr>
+			<p class="customerSignature">Customer Signature: </p>
+
+			<tr>
+				<td>Second Account Balance US.Dollars</td>
+				<td>{{ financialDetails.accountBalance2 | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Third Bank Name</td>
+				<td>{{ financialDetails.bankName3 | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Third Country</td>
+				<td>{{ financialDetails.country3 | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Third Account Balance US.Dollars</td>
+				<td>{{ financialDetails.accountBalance3 | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Nature of Relation</td>
+				<td>{{ financialDetails.natureOfRelation | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Purpose of Relation</td>
+				<td>{{ financialDetails.purposeOfRelation | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+				<td>Identification Type</td>
+				<td>{{ financialDetails.selectIDType | default('N/A') }}</td>
+			</tr>
+
+			<tr>
+			<td>Additional Documents</td>
+			<td>
+			    {% if financialDetails.additionalDocuments is defined %}
+				{% if financialDetails.additionalDocuments is not empty %}
+				    <ul>
+					{% for document in financialDetails.additionalDocuments %}
+					    <li>{{ document }}</li>
+					{% endfor %}
+				    </ul>
+				{% else %}
+				    No additional documents available.
+				{% endif %}
+			    {% else %}
+			    	No additional documents available.
+			    {% endif %}
+			</td>
+		    </tr>
+
+		    
+		</table>
+	<h3 style="text-align: center; margin-top: 1rem">Customer Declaration</h3>
+		<p classname="paragh-final">
+			I/We hereby confirm that the information provided herein is accurate, correct and complete and that the documents submitted along with this application form are genuine. I undertake to inform the National Bank of Kuwait (Lebanon) S.A.L. (“the Bank”) in writing of any changes to the information already provided and to update the information on this form whenever requested to do so by the Bank.<br/>
+			I/We also hereby declare that, in the event of my/our being subject to any foreign tax laws requiring information to be shared by the Bank with the foreign government to whose tax laws I am/we are subject, or with its representatives, I/we explicitly agree to the Bank’s full compliance with such foreign government’s instructions and requests for information without the Bank’s need to notify me/us or to seek my/our additional consent. I understand and acknowledge that this declaration is with respect to all of the Bank’s products and account types (including corporate, joint, and/or individual accounts) and covers transactions, balances, supporting information, and any enquiries from the requesting government or its representatives.<br/>
+			To facilitate the Bank’s compliance with the foreign tax laws to which I am/we are subject, I/We hereby undertake to provide the Bank with any documentation requested by the foreign government to whose tax laws I am/ we are subject, or to its representatives. I/We further agree to provide and/or update the above-referenced documents as and when required by the terms and conditions set by the foreign tax authority to which I am/we are subject, and whenever any changes occur to my/our tax situation.
+		</p>
+			<p class="customerSignature">Customer Signature: </p>
+
+		<div class="page-number"></div>
+
+		<p>
+			I/We hereby release the Bank from the stipulations of the Lebanese Bank Secrecy Law issued on 3 September 1956 and its amendments, in particular Article 2 thereof, for the purpose of complying with the US Foreign Account Tax Compliance Act known as FATCA and its amendments and the Tax Exchange Standard known as CRS-Common Reporting Standard and its amendments, and I/We hereby authorize the Bank to provide U.S. Internal Revenue Service “IRS” with the required information as per the provisions of FATCA and authorize the Bank to provide data to Ministry of Finance or any other tax authority related to CRS.<br/>
+
+		</p>
+			{# <p class="customerSignature">Customer Signature: </p> #}
+
+		<p classname="paragh-final">
+			The Client gives the Bank the right to provide the Bank’s Mother Bank (National Bank of Kuwait – Kuwait) or external branches or representative offices or affiliate companies or correspondent banks or service companies and insurance companies in contractual relationship with the Bank, with all the information that may be requested releasing the Bank from the stipulations of the Lebanese Banking Secrecy Law of 1956 and considering the Client’s signature as a written authorization according to article 2 of the Lebanese Banking Secrecy Law of 1956.<br/>
+			I/We understand and agree that this declaration is final and irrevocable, and that it is not subject to cancellation or amendment.
+		</p>
+		<div class="page-number"></div>
+
+		<table style="width: 100%; margin-bottom: 10px; border-collapse: collapse;page-break-before: always;">
+    <tr>
+        <td style="width: 110px; border-bottom: 1px solid #000; border: none">Customer Name:</td>
+        <td style="border-bottom: 1px solid #000; width: 200px; border-top: none; border-left: none; border-right: none"></td>
+        <td style="width: 70px; border-bottom: 1px solid #000; border: none">Signature:</td>
+        <td style="border-bottom: 1px solid #000; width: 200px; border-top: none; border-left: none; border-right: none"></td>
+    </tr>
+</table>
+
+<table style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
+    <tr>
+        <td style="width: 110px; border-bottom: 1px solid #000; border: none">Officer Name:</td>
+        <td style="border-bottom: 1px solid #000; width: 200px; border-top: none; border-left: none; border-right: none"></td>
+        <td style="width: 70px; border-bottom: 1px solid #000; border: none">Signature:</td>
+        <td style="border-bottom: 1px solid #000; width: 200px; border-top: none; border-left: none; border-right: none"></td>
+    </tr>
+</table>
+
+<table style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
+    <tr>
+        <td style="width: 110px; border-bottom: 1px solid #000; border: none">Manager Name:</td>
+        <td style="border-bottom: 1px solid #000; width: 200px; border-top: none; border-left: none; border-right: none"></td>
+        <td style="width: 70px; border-bottom: 1px solid #000; border: none">Signature:</td>
+        <td style="border-bottom: 1px solid #000; width: 200px; border-top: none; border-left: none; border-right: none"></td>
+    </tr>
+</table>
+		<div class="page-number"></div>
+
+
+
+	</body>
+</html>
+

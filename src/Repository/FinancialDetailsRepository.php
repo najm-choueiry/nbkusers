@@ -4,14 +4,31 @@
 namespace App\Repository;
 
 use App\Entity\FinancialDetails;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FinancialDetailsRepository
-{
-	public function createFinancialDetails(array $userData, $imageFront, $imageBack, $imageRealEState = null, $imageFrontaccoountStat = null,  $imageotherdoc  = null, $imageEmployerLetter = null): ?FinancialDetails
+{   
+	 private $entityManager;
+    private $financialDetailsRepository;
+
+	
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        $this->financialDetailsRepository = $entityManager->getRepository(FinancialDetails::class);
+    }
+	public function createFinancialDetails(array $userData , $userId, $imageFrontDB, $imageBackDB, $imageRealEStateDB , $imageFrontaccoountStatDB ,  $imageotherdocDB , $imageEmployerLetterDB ): ?FinancialDetails
 	{
-		$financialDetails = new FinancialDetails();
+		if (is_null($userId)) {
+			$financialDetails = new FinancialDetails();
+		}
+		else{
+            $financialDetail = $this->financialDetailsRepository->findBy(['user_id' => $userId]);
+            $financialDetails = $financialDetail[0]; 
+        }
+
 		$financialDetails->setSourceOfFunds($userData['sourceOfFunds'] ?? '');
 		$financialDetails->setCurrency($userData['currency'] ?? '');
 		$financialDetails->setMonthlyBasicSalary($userData['monthlyBasicSalary'] ?? 0.0);
@@ -42,15 +59,27 @@ class FinancialDetailsRepository
 		$financialDetails->setThirdBankName($userData['bankName3'] ?? '');
 		$financialDetails->setThirdAccountCountry($userData['country3'] ?? '');
 		$financialDetails->setThirdAccountBalance((float)($userData['accountBalance3'] ?? 0.0));
-		$financialDetails->setFrontImageID('/' . $imageFront);
+		if(!is_null($imageFrontDB)){
+			$financialDetails->setFrontImageID('/' . $imageFrontDB);
+		}
 		$financialDetails->setSelectIDType($userData['selectIDType'] ?? '');
-		$financialDetails->setBackImageID('/' . $imageBack);
-		$financialDetails->setRealEstateTitle('/' . $imageRealEState);
-		$financialDetails->setAccountStatement('/' . $imageFrontaccoountStat);
-		$financialDetails->setOtherDocument('/' . $imageotherdoc);
-		$financialDetails->setEmployerLetter('/' . $imageEmployerLetter);
 
+		if(!is_null($imageBackDB)){
+			$financialDetails->setBackImageID('/' . $imageBackDB);
+		}
+		if(!empty($imageRealEStateDB)){
+			$financialDetails->setRealEstateTitle('/' . $imageRealEStateDB); 
+		}
+		if(!empty($imageFrontaccoountStatDB)){
+			$financialDetails->setAccountStatement('/' . $imageFrontaccoountStatDB);
+		}
+		if(!empty($imageotherdocDB)){
+			$financialDetails->setOtherDocument('/' . $imageotherdocDB);
+		}
 
+		if(!empty($imageEmployerLetterDB)){
+			$financialDetails->setEmployerLetter('/' . $imageEmployerLetterDB);
+		}
 
 		return $financialDetails;
 	}

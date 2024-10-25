@@ -4,14 +4,28 @@
 namespace App\Repository;
 
 use App\Entity\Address;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class AddressRepository
 {
-    public function createAddress(array $userData): ?Address
+    private $entityManager;
+    private $AddressRepository;
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $address = new Address();
+        $this->entityManager = $entityManager;
+        $this->AddressRepository = $entityManager->getRepository(Address::class);
+    }
+    public function createAddress(array $userData,?int $userId): ?Address
+    {
+
+        if (is_null($userId)) {
+            $address = new Address();
+        }else{
+            $addresses = $this->AddressRepository->findBy(['user_id' => $userId]);
+            $address = $addresses[0]; 
+        }
         $address->setCity($userData['city'] ?? '');
         $address->setStreet($userData['street'] ?? '');
         $address->setBuilding($userData['building'] ?? '');

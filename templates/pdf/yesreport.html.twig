@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th,
+			td {
+				border: 1px solid #ddd;
+				padding: 8px;
+			}
+			th {
+				background-color: #f2f2f2;
+				text-align: left;
+			}
+			.title {
+				background-color: #333;
+				color: white;
+				padding: 10px;
+				text-transform: uppercase;
+				text-align: center;
+			}
+			h2.title {
+				page-break-before: always;
+			}
+			h2.title:first-of-type {
+				page-break-before: auto;
+			}
+
+			.customerSignature {
+				position: absolute;
+				right: 0;
+				bottom: 20px;
+				width: 20%;
+				display: flex;
+				justify-content: flex-start;
+				padding: 0 0 30px;
+				margin: 50px auto 0;
+        		border-bottom: 1px solid;
+			}
+
+			.mt {
+				margin-top: 0;
+			}
+
+			body {
+				padding-bottom: 100px;
+				counter-reset: page;
+				position: relative;
+				min-height: 100vh;
+			}
+
+			.paragh-final {
+				margin-top: 2rem;
+			}
+
+			.parent-box{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
+
+			.parent-box{
+				display: table-cell;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
+
+			.signatures-customer {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				gap: 3%;
+			}
+
+			.signature-box {
+				display: flex;
+				align-items: center;
+				margin: 10px 0;
+				width: 40%;
+			}
+
+			.signature {
+				display: flex;
+				align-items: center;
+				width: 40%;
+			}
+
+			.signature-label {
+				flex: 0 0 150px; 
+				font-weight: bold;
+			}
+
+			.signature-line {
+			border-bottom: 1px solid;
+			margin-top: 12px;  
+			width: 100%;
+			}
+
+
+			.headertitle {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.page-number::after {
+				content: "Page " counter(page);
+				position: fixed;
+				bottom: 0;
+				right: 0;
+				width: 100%;
+				text-align: right;
+				padding: 1px;
+				font-size: 12px;
+				color: #333;
+			}
+			.ref-mob {
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+			}
+	
+			.ref-mob div {
+				flex: 1;
+			}
+	
+			.ref-mob div:last-child {
+				text-align: right;
+			}
+	
+			.phone-number {
+				font-weight: bold;
+			}
+	
+			.reference {
+				font-weight: bold;
+			}
+	
+			@media print {
+				body {
+					counter-reset: page;
+				}
+				.page-number {
+					display: block; 
+				}
+				.title {
+					page-break-after: avoid; 
+				}
+				.customerSignature {
+					position: absolute;
+					bottom: 0;
+					right: 0;
+				}
+				.d-flex {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					flex-direction: row;
+					position: absolute;
+					bottom: 100px;
+					width: 100%;
+					page-break-after: always;
+				}
+			}
+		</style>
+
+	</head>
+	<body>
+		<div class="page-number"></div>
+		<div class="headertitle" style="display: flex; flex-direction: column; align-items: center">
+			<h1>National Bank of Kuwait (Lebanon) S.A.L.</h1>
+			<p>{{ time|date('Y-m-d H:i:s') }}</p>
+			<div class="ref-mob">
+				<div class="phone-number">{{ user.mobileNumb}}</div>
+				<div class="reference">Application reference: {{reference}}</div>
+			</div>
+		</div>
+
+		<h2 class="title">Existing relationship with NBK Lebanon</h2>
+		<table>
+			<tr>
+				<td>Full Name</td>
+				<td>{{ user.fullName | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td>{{ user.email | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Mobile No</td>
+				<td>{{ user.mobileNumb | default('N/A') }}</td>
+			</tr>
+			<tr>
+				<td>Branch Unit</td>
+				<td>{{ user.branchUnit | default('N/A') }}</td>
+			</tr>
+
+		</table>
+		
+		<div class="page-number"></div>
+
+	</body>
+</html>
+

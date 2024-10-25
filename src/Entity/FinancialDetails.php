@@ -16,7 +16,11 @@ class FinancialDetails
      * @ORM\Column(type="integer")
      */
     private $id;
-
+       /**
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $user_id;
+    
     /**
      * @ORM\Column(name="sourceOfFunds", type="string", length=255)
      */
@@ -195,7 +199,10 @@ class FinancialDetails
     {
         return $this->id;
     }
-
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
     public function getSourceOfFunds(): ?string
     {
         return $this->sourceOfFunds;

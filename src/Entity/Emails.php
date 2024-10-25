@@ -37,6 +37,11 @@ class Emails
      */
     private $content;
 
+        /**
+     * @ORM\Column(type="text")
+     */
+    private $contents;
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -51,16 +56,6 @@ class Emails
      * @ORM\Column(type="string", length=50)
      */
     private $status;
-
-    /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"}, nullable=false)
-     */
-    private $updated;
-
-    /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"}, nullable=false)
-     */
-    private $created;
 
     // Getters and Setters
 
@@ -115,6 +110,18 @@ class Emails
         return $this;
     }
 
+    
+    public function getContents(): ?string
+    {
+        return $this->contents;
+    }
+
+    public function setContents(string $contents): self
+    {
+        $this->contents = $contents;
+        return $this;
+    }
+
     public function getIdentifier(): ?string
     {
         return $this->identifier;
@@ -145,28 +152,6 @@ class Emails
     public function setStatus(string $status): self
     {
         $this->status = $status;
-        return $this;
-    }
-
-    public function getUpdated(): ?\DateTimeInterface
-    {
-        return $this->updated;
-    }
-
-    public function setUpdated(\DateTimeInterface $updated): self
-    {
-        $this->updated = $updated;
-        return $this;
-    }
-
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTimeInterface $created): self
-    {
-        $this->created = $created;
         return $this;
     }
 }
