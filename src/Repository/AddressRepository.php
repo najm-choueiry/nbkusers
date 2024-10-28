@@ -17,14 +17,14 @@ class AddressRepository
         $this->entityManager = $entityManager;
         $this->AddressRepository = $entityManager->getRepository(Address::class);
     }
-    public function createAddress(array $userData,?int $userId): ?Address
+    public function createAddress(array $userData, ?int $userId): ?Address
     {
 
         if (is_null($userId)) {
             $address = new Address();
-        }else{
+        } else {
             $addresses = $this->AddressRepository->findBy(['user_id' => $userId]);
-            $address = $addresses[0]; 
+            $address = $addresses[0];
         }
         $address->setCity($userData['city'] ?? '');
         $address->setStreet($userData['street'] ?? '');

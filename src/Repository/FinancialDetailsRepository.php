@@ -9,26 +9,23 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FinancialDetailsRepository
-{   
-	 private $entityManager;
-    private $financialDetailsRepository;
+{
+	private $entityManager;
+	private $financialDetailsRepository;
 
-	
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-        $this->financialDetailsRepository = $entityManager->getRepository(FinancialDetails::class);
-    }
-	public function createFinancialDetails(array $userData , $userId, $imageFrontDB, $imageBackDB, $imageRealEStateDB , $imageFrontaccoountStatDB ,  $imageotherdocDB , $imageEmployerLetterDB ): ?FinancialDetails
+	public function __construct(EntityManagerInterface $entityManager)
+	{
+		$this->entityManager = $entityManager;
+		$this->financialDetailsRepository = $entityManager->getRepository(FinancialDetails::class);
+	}
+	public function createFinancialDetails(array $userData, $modifiedName, $mobileNumbDB, $mobileNumb, $fullNameDB, $fullName, $frontimageDB, $backimageDB, $realEstateTitleDB, $accountStatementDB, $otherDocumentDB, $employerLetterDB, $userId, $imageFrontDB, $imageBackDB, $imageRealEStateDB, $imageFrontaccoountStatDB, $imageotherdocDB, $imageEmployerLetterDB): ?FinancialDetails
 	{
 		if (is_null($userId)) {
 			$financialDetails = new FinancialDetails();
+		} else {
+			$financialDetail = $this->financialDetailsRepository->findBy(['user_id' => $userId]);
+			$financialDetails = $financialDetail[0];
 		}
-		else{
-            $financialDetail = $this->financialDetailsRepository->findBy(['user_id' => $userId]);
-            $financialDetails = $financialDetail[0]; 
-        }
-
 		$financialDetails->setSourceOfFunds($userData['sourceOfFunds'] ?? '');
 		$financialDetails->setCurrency($userData['currency'] ?? '');
 		$financialDetails->setMonthlyBasicSalary($userData['monthlyBasicSalary'] ?? 0.0);
@@ -59,28 +56,66 @@ class FinancialDetailsRepository
 		$financialDetails->setThirdBankName($userData['bankName3'] ?? '');
 		$financialDetails->setThirdAccountCountry($userData['country3'] ?? '');
 		$financialDetails->setThirdAccountBalance((float)($userData['accountBalance3'] ?? 0.0));
-		if(!is_null($imageFrontDB)){
+
+		if ($fullName !== $fullNameDB || $mobileNumb !== $mobileNumbDB) {
+			$newIdentifier = $modifiedName . "-" .  $mobileNumb;
+			//frontimage
+			if (!is_null($frontimageDB) || !empty($frontimageDB)) {
+				$baseNameFront = basename($frontimageDB);
+				$newImagePathFront = "imageUser/{$newIdentifier}/$baseNameFront";
+				$financialDetails->setFrontImageID('/' . $newImagePathFront);
+			}
+			//backimage
+			if (!is_null($backimageDB) || !empty($backimageDB)) {
+				$baseName = basename($backimageDB);
+				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
+				$financialDetails->setBackImageID('/' . $newImagePath);
+			}
+			//imageRealEStateDB
+			if (!is_null($realEstateTitleDB) || !empty($realEstateTitleDB)) {
+				$baseName = basename($realEstateTitleDB);
+				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
+				$financialDetails->setRealEstateTitle('/' . $newImagePath);
+			}
+			//AccountStatement
+			if (!is_null($accountStatementDB) || !empty($accountStatementDB)) {
+				$baseName = basename($accountStatementDB);
+				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
+				$financialDetails->setAccountStatement('/' . $newImagePath);
+			}
+			//otherDocument
+			if (!is_null($otherDocumentDB) || !empty($otherDocumentDB)) {
+				$baseName = basename($otherDocumentDB);
+				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
+				$financialDetails->setOtherDocument('/' . $newImagePath);
+			}
+			//employerLetterDB
+			if (!is_null($employerLetterDB) || !empty($employerLetterDB)) {
+				$baseName = basename($employerLetterDB);
+				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
+				$financialDetails->setEmployerLetter('/' . $newImagePath);
+			}
+		}
+		if (!is_null($imageFrontDB)) {
 			$financialDetails->setFrontImageID('/' . $imageFrontDB);
 		}
 		$financialDetails->setSelectIDType($userData['selectIDType'] ?? '');
 
-		if(!is_null($imageBackDB)){
+		if (!is_null($imageBackDB)) {
 			$financialDetails->setBackImageID('/' . $imageBackDB);
 		}
-		if(!empty($imageRealEStateDB)){
-			$financialDetails->setRealEstateTitle('/' . $imageRealEStateDB); 
+		if (!empty($imageRealEStateDB)) {
+			$financialDetails->setRealEstateTitle('/' . $imageRealEStateDB);
 		}
-		if(!empty($imageFrontaccoountStatDB)){
+		if (!empty($imageFrontaccoountStatDB)) {
 			$financialDetails->setAccountStatement('/' . $imageFrontaccoountStatDB);
 		}
-		if(!empty($imageotherdocDB)){
+		if (!empty($imageotherdocDB)) {
 			$financialDetails->setOtherDocument('/' . $imageotherdocDB);
 		}
-
-		if(!empty($imageEmployerLetterDB)){
+		if (!empty($imageEmployerLetterDB)) {
 			$financialDetails->setEmployerLetter('/' . $imageEmployerLetterDB);
 		}
-
 		return $financialDetails;
 	}
 }

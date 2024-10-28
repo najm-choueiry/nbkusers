@@ -27,10 +27,9 @@ class PoliticalPositionDetailsRepository
         // Set properties for PoliticalPositionDetails entity
         if (is_null($userId)) {
             $politicalPosition = new PoliticalPositionDetails();
-        }
-        else{
+        } else {
             $politicalPositio = $this->politicalPositionDetailsRepository->findBy(['user_id' => $userId]);
-            $politicalPosition = $politicalPositio[0]; 
+            $politicalPosition = $politicalPositio[0];
         }
         $politicalPosition->setPoliticalPosition($userData['politicalPosition'] ?? '');
         $politicalPosition->setCurrentPrevious($userData['currentOrPrevious'] ?? '');

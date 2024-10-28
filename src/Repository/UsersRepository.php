@@ -1,14 +1,12 @@
 <?php
 // src/Repository/UsersRepository.php
-
 namespace App\Repository;
 
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository; // Correct import statement
+use Doctrine\ORM\EntityRepository;
 
 class UsersRepository
-
 {
     private $entityManager;
     private $usersRepository;
@@ -17,7 +15,7 @@ class UsersRepository
         $this->entityManager = $entityManager;
         $this->usersRepository = $entityManager->getRepository(Users::class);
     }
-    public function createUser(array $userData, ?int $userId,?int $branchId): ?Users
+    public function createUser(array $userData, ?int $userId, ?int $branchId): ?Users
     {
 
         $passportExpirationDateString = $userData['passportExpirationDate'] ?? '';
@@ -34,14 +32,13 @@ class UsersRepository
         } else {
             $user = $this->usersRepository->find($userId);
             $expirationDateNationalIdString = $userData['expirationDateNationalId'] ?? '';
-            $expirationDateNationalIdString=   $expirationDateNationalIdString->format('Y-m-d');
+            $expirationDateNationalIdString =   $expirationDateNationalIdString->format('Y-m-d');
             $expirationDateNationalId = (new \DateTime($expirationDateNationalIdString));
 
             $dob = !empty($userData['dob']->format('Y-m-d')) ? \DateTime::createFromFormat('Y-m-d', $userData['dob']->format('Y-m-d')) : false;
             if ($dob) {
                 $user->setDob($dob);
             }
-      
         }
         $user->setFullName($userData['fullName'] ?? '');
         $user->setMobileNumb($userData['mobileNumb'] ?? '');
@@ -74,32 +71,17 @@ class UsersRepository
         $user->setSpouseProfession($userData['spouseProfession'] ?? '');
         $user->setNoOfChildren((int)($userData['noOfChildren'] ?? 0));
         $user->setRegisterNumber((int)($userData['registerNumber'] ?? 0));
-
-
         return $user;
     }
-    //    public function findAllWithDetails()
-    //    {
-    //        return $this->entityManager->createQueryBuilder('u')
-    //            ->leftJoin('u.addresses', 'a')
-    //            ->leftJoin('u.workDetails', 'w')
-    //            ->leftJoin('u.financialDetails', 'f')
-    //            ->leftJoin('u.politicalPositionDetails', 'p')
-    //            ->leftJoin('u.beneficiaryRightsOwners', 'b')
-    //            ->getQuery()
-    //            ->getResult();
-    //    }
 
     public function createExistingUser(array $userData): ?Users
     {
-
         $user = new Users();
         $user->setFullName($userData['fullName'] ?? '');
         $user->setMobileNumb($userData['mobileNumb'] ?? '');
         $user->setEmail($userData['email'] ?? '');
         $user->setBranchUnit($userData['branchUnit'] ?? '');
         $user->setBranchId((int)($userData['branchId'] ?? 0));
-
         return $user;
     }
 }

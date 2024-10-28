@@ -506,6 +506,7 @@
 											<th>Account Balance</th>
 											<td>{{ financialDetail.accountBalance }}</td>
 										</tr>
+												{% endif %}
 										{% if financialDetail.hasOtherAccounts %}
 											<tr>
 												<th>Bank Name 2</th>
@@ -550,14 +551,13 @@
 										<tr>
 											<th>Front Image ID</th>
 											<td>
-												{% if financialDetail.frontImageID %}
+
 
 													<a href="{{financialDetail.frontImageID}}" target="_blank">
 														{# <img src="{{ financialDetail.frontImageID }}" alt="Front Image ID" style="max-width: 300px; max-height: 300px;"> #}
 														<img src="http://nbk.lss/{{financialDetail.frontImageID}}" alt="Front Image" style="max-width: 200px; max-height: 200px;"/>
 													</a>
 
-												{% endif %}
 											</td>
 										</tr>
 
@@ -634,7 +634,7 @@
 											<th>Has Other Accounts</th>
 											<td>No</td>
 										</tr>
-									{% endif %}
+
 								{% endfor %}
 							{% endfor %}
 						{% endfor %}

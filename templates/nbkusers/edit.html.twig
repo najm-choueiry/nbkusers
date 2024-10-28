@@ -39,7 +39,6 @@
 				<table class="table table-bordered">
 					<tbody>
 						<div id="userID" hidden>{{ user.id }}</div>
-
 						<div>
 							<h2>National Bank of Kuwait (Lebanon) S.A.L</h2>
 							<h6>{{ user.created|date('F j, Y, g:i a') }}</h6>
@@ -800,8 +799,6 @@
 
 							{% if financialDetail.frontImageID %}
 								<img src="http://nbk.lss/{{financialDetail.frontImageID}}" alt="Front Image" style="max-width: 200px; max-height: 200px;"/>
-								{# <img src="{{ financialDetail.frontImageID }}" alt="Front Image" style="max-width: 300px; max-height: 300px;"></a> #}
-
 							{% else %}
 								<p>No front image  ID uploaded.</p>
 							{% endif %}
@@ -816,8 +813,6 @@
 
 							{% if financialDetail.backImageID %}
 								<img src="http://nbk.lss/{{financialDetail.backImageID}}" alt="back Image ID  " style="max-width: 200px; max-height: 200px;"/>
-								{# <img src="{{ financialDetail.backImageID }}" alt="back Image ID " style="max-width: 300px; max-height: 300px;"></a> #}
-
 							{% else %}
 								<p>No back Image ID uploaded.</p>
 							{% endif %}
@@ -832,8 +827,6 @@
 
 							{% if financialDetail.accountStatement %}
 								<img src="http://nbk.lss/{{financialDetail.accountStatement}}" alt="account Statement Image" style="max-width: 200px; max-height: 200px;"/>
-								{# <img src="{{ financialDetail.accountStatement }}" alt="account Statement Image " style="max-width: 300px; max-height: 300px;"></a> #}
-
 							{% else %}
 								<p>No account Statement uploaded.</p>
 							{% endif %}
@@ -848,8 +841,6 @@
 
 							{% if financialDetail.otherDocument %}
 								<img src="http://nbk.lss/{{financialDetail.otherDocument}}" alt=" other Document Image" style="max-width: 200px; max-height: 200px;"/>
-								{# <img src="https://fresh.nbk.com.lb/".{{ financialDetail.otherDocument }} alt="other Document Image" style="max-width: 300px; max-height: 300px;"></a> #}
-
 							{% else %}
 								<p>No  other Document uploaded.</p>
 							{% endif %}
@@ -864,8 +855,6 @@
 
 							{% if financialDetail.realEstateTitle %}
 								<img src="http://nbk.lss/{{financialDetail.realEstateTitle}}" alt="real Estate Title  Image" style="max-width: 200px; max-height: 200px;"/>
-								{# <img src="{{ financialDetail.realEstateTitle }}" alt="real Estate Title " style="max-width: 300px; max-height: 300px;"></a> #}
-
 							{% else %}
 								<p>No  real Estate Title uploaded.</p>
 							{% endif %}
@@ -877,11 +866,9 @@
 					<tr>
 						<th>Employer Letter</th>
 						<td>
-
 							{% if financialDetail.employerLetter %}
+							
 								<img src="http://nbk.lss/{{financialDetail.employerLetter}}" alt="employer Letter Image" style="max-width: 200px; max-height: 200px;"/>
-								{# <img src="{{ financialDetail.employerLetter }}" alt="employer Letter Image " style="max-width: 300px; max-height: 300px;"></a> #}
-
 							{% else %}
 								<p>No employer Letter uploaded.</p>
 							{% endif %}
@@ -907,6 +894,8 @@
 		</table>
 		
 				{{ form_end(form) }}
+				
 			
 	</body>
 </html></div></div></body></html>
+

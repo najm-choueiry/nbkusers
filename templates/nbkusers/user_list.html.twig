@@ -40,7 +40,7 @@
                         <td>
                             <a class="btn btn-primary" href="/userInfo/{{ user.id }}" target="_blank">View User</a>
                             <a   class="btn btn-danger" href="{{ path('submit_form', {'id': user.id}) }}">Resend Email</a>
-                              <a  class="btn btn-secondary" href="{{ path('edit_info', {'id': user.id}) }}" >Edit User </a>
+                              <a  class="btn btn-secondary" href="{{ path('edit_info', {'userId': user.id}) }}" >Edit User </a>
                               <a  class="btn btn-info" href="{{ path('print_pdf', {'id': user.id}) }}" >Print PDF </a>
 
                         </td>

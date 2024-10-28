@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class BeneficiaryRightsOwnerRepository
 {
-
     private $entityManager;
     private $beneficiaryRightsOwnerRepository;
 
@@ -21,18 +20,16 @@ class BeneficiaryRightsOwnerRepository
         $this->beneficiaryRightsOwnerRepository = $entityManager->getRepository(BeneficiaryRightsOwner::class);
     }
 
-    public function createBeneficiary(array $userData,?int $userId): ?BeneficiaryRightsOwner
+    public function createBeneficiary(array $userData, ?int $userId): ?BeneficiaryRightsOwner
     {
-        $expirationDateString = $beneficiaryData['expirationDate'] ?? '';
-        $expirationDate = new \DateTime($expirationDateString);
+        $expirationDateString = $userData['expirationDate'] ?? '';
+        $expirationDate = new \DateTime($expirationDateString->format('Y-m-d'));
         if (is_null($userId)) {
             $beneficiary = new BeneficiaryRightsOwner();
-        }
-        else{
+        } else {
             $beneficiar = $this->beneficiaryRightsOwnerRepository->findBy(['user_id' => $userId]);
-            $beneficiary = $beneficiar[0]; 
+            $beneficiary = $beneficiar[0];
         }
-  
         $beneficiary->setCustomerSameAsBeneficiary($userData['customerSameAsBeneficiary'] ?? false);
         $beneficiary->setBroNationality($userData['broNationality'] ?? '');
         $beneficiary->setBeneficiaryName($userData['beneficiaryName'] ?? '');
@@ -43,8 +40,6 @@ class BeneficiaryRightsOwnerRepository
         $beneficiary->setAddress($userData['address'] ?? '');
         $beneficiary->setProfession($userData['profession'] ?? '');
         $beneficiary->setIncomeWealthDetails($userData['incomeWealthDetails'] ?? '');
-
-
         return $beneficiary;
     }
 }

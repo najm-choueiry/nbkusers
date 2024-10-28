@@ -70,11 +70,7 @@ class EditType extends AbstractType
 		$countryCode = strtolower(array_search($CountryofOrigin, Countries::getNames('en')));
 		$country = CountryLoader::country($countryCode);
 		$countryArray = $country->getAttributes();
-		// $regions = $countryArray['iso_3166_1_alpha2'];
 		$regionChoices = [];
-		// foreach ($regions  as $region) {
-		//    $regionChoices[$region['name']] = $region['name'];
-		// }
 		$RegisterNumber = $user->getRegisterNumber();
 		$MaritalStatus = $user->getMaritalStatus();
 		$PassportNumber = $user->getPassportNumber();
