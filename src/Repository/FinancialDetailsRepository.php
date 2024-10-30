@@ -104,16 +104,16 @@ class FinancialDetailsRepository
 		if (!is_null($imageBackDB)) {
 			$financialDetails->setBackImageID('/' . $imageBackDB);
 		}
-		if (!empty($imageRealEStateDB)) {
+		if (!is_null($imageRealEStateDB)) {
 			$financialDetails->setRealEstateTitle('/' . $imageRealEStateDB);
 		}
-		if (!empty($imageFrontaccoountStatDB)) {
+		if (!is_null($imageFrontaccoountStatDB)) {
 			$financialDetails->setAccountStatement('/' . $imageFrontaccoountStatDB);
 		}
-		if (!empty($imageotherdocDB)) {
+		if (!is_null($imageotherdocDB)) {
 			$financialDetails->setOtherDocument('/' . $imageotherdocDB);
 		}
-		if (!empty($imageEmployerLetterDB)) {
+		if (!is_null($imageEmployerLetterDB)) {
 			$financialDetails->setEmployerLetter('/' . $imageEmployerLetterDB);
 		}
 		return $financialDetails;

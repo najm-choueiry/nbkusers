@@ -1,7 +1,5 @@
 <?php
-
 // src/Form/QuestionType.php
-
 namespace App\Form;
 
 use App\Entity\Question;
@@ -31,7 +29,6 @@ class EditType extends AbstractType
 	{
 		$this->entityManager = $entityManager;
 	}
-
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$id = $options['user_id'];
@@ -134,7 +131,6 @@ class EditType extends AbstractType
 		$sourceOfFunds = $FinancialDet->getSourceOfFunds();
 		$currencyCodes = Currencies::getCurrencyCodes();
 		$financelcurrency = $FinancialDet->getCurrency();
-
 		$currencies = [];
 		foreach ($currencyCodes as $currencyCode) {
 			$currencies[$currencyCode] = $currencyCode;
@@ -221,7 +217,6 @@ class EditType extends AbstractType
 				],
 				'required' => false,
 			])
-
 			->add('MotherName', TextType::class, [
 				'label' => false,
 				'data' => $MotherName,
@@ -263,7 +258,6 @@ class EditType extends AbstractType
 				],
 				'required' => false,
 			])
-
 			->add('CountryofOrigin', ChoiceType::class, [
 				'label' => false,
 				'data' => $CountryofOrigin,
@@ -344,7 +338,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('PlaceofIssuePassport', TextType::class, [
 				'label' => false,
@@ -354,7 +347,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('ExpirationDatePassport', DateType::class, [
 				'label' => false,
@@ -408,7 +400,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('InternationalAddress', ChoiceType::class, [
 				'label' => false,
@@ -419,7 +410,6 @@ class EditType extends AbstractType
 				],
 				'required' => false,
 				'choices' =>  $countryNames,
-
 			])
 			->add('intArea', TextType::class, [
 				'label' => false,
@@ -429,7 +419,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('intStreet', TextType::class, [
 				'label' => false,
@@ -439,7 +428,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('intBuilding', TextType::class, [
 				'label' => false,
@@ -449,7 +437,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('intFloor', TextType::class, [
 				'label' => false,
@@ -459,7 +446,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('intAppartment', TextType::class, [
 				'label' => false,
@@ -469,7 +455,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('internationalHouseTelephoneNumber', TextType::class, [
 				'label' => false,
@@ -479,7 +464,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('internationalMobileNumber', TextType::class, [
 				'label' => false,
@@ -489,7 +473,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('alternateContactName', TextType::class, [
 				'label' => false,
@@ -499,7 +482,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('alternateTelephoneNumber', TextType::class, [
 				'label' => false,
@@ -509,7 +491,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('publicSector', ChoiceType::class, [
 				'label' => false,
@@ -523,7 +504,6 @@ class EditType extends AbstractType
 					'yes' => 'yes',
 					'no' => 'no',
 				],
-
 			])
 			->add('SpouseName', TextType::class, [
 				'label' => false,
@@ -533,7 +513,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('SpouseProfession', TextType::class, [
 				'label' => false,
@@ -543,7 +522,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('NoofChildren', ChoiceType::class, [
 				'label' => false,
@@ -565,8 +543,6 @@ class EditType extends AbstractType
 					'10' => '10',
 				],
 				'required' => false,
-
-
 			])
 			->add('city', TextType::class, [
 				'label' => false,
@@ -576,7 +552,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('street', TextType::class, [
 				'label' => false,
@@ -586,7 +561,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('building', TextType::class, [
 				'label' => false,
@@ -596,7 +570,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('floor', TextType::class, [
 				'label' => false,
@@ -606,7 +579,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('apartment', TextType::class, [
 				'label' => false,
@@ -616,7 +588,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('HouseTelNO', TextType::class, [
 				'label' => false,
@@ -626,9 +597,7 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
-
 			->add('profession', TextType::class, [
 				'label' => false,
 				'data' => $profession,
@@ -637,7 +606,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('jobTitle', TextType::class, [
 				'label' => false,
@@ -647,7 +615,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('activitySector', TextType::class, [
 				'label' => false,
@@ -657,7 +624,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('entityName', TextType::class, [
 				'label' => false,
@@ -667,7 +633,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('educationLevel', TextType::class, [
 				'label' => false,
@@ -677,7 +642,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('WorkAddress', TextType::class, [
 				'label' => false,
@@ -687,7 +651,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('WorkTelNo', TextType::class, [
 				'label' => false,
@@ -697,7 +660,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('ISListed', ChoiceType::class, [
 				'label' => false,
@@ -711,7 +673,6 @@ class EditType extends AbstractType
 					'No' => false,
 				],
 				'required' => false,
-
 			])
 			->add('grade', TextType::class, [
 				'label' => false,
@@ -721,7 +682,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('CustomerSameAsBeneficiary', ChoiceType::class, [
 				'label' => false,
@@ -735,7 +695,6 @@ class EditType extends AbstractType
 					'No' => false,
 				],
 				'required' => false,
-
 			])
 			->add('broNationality', ChoiceType::class, [
 				'label' => false,
@@ -747,7 +706,6 @@ class EditType extends AbstractType
 				'choices' => $countryNames,
 				'required' => false,
 				'placeholder' => 'Select  bro Nationality',
-
 			])
 			->add('BeneficiaryName', TextType::class, [
 				'label' => false,
@@ -757,7 +715,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('relationship', TextType::class, [
 				'label' => false,
@@ -767,7 +724,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('broCivilIdNumber', TextType::class, [
 				'label' => false,
@@ -777,7 +733,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('broexpirationDate', DateType::class, [
 				'label' => false,
@@ -788,7 +743,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('reasonOfBro', TextType::class, [
 				'label' => false,
@@ -798,7 +752,6 @@ class EditType extends AbstractType
 					'class' => 'form-control'
 				],
 				'required' => false,
-
 			])
 			->add('broaddress', TextType::class, [
 				'label' => false,
@@ -1300,8 +1253,7 @@ class EditType extends AbstractType
 					'class' => 'form-control',
 					'accept' => 'image/jpeg,image/png'
 				],
-			])
-		;
+			]);
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
@@ -1317,6 +1269,4 @@ class EditType extends AbstractType
 			'user_id' => null,
 		]);
 	}
-
-
 }

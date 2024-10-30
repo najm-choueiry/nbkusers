@@ -359,129 +359,71 @@ class DefaultController extends AbstractController
 				}
 			}
 			$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
-			$ModifiedNameDB = '';
-			for ($i = 0; $i < strlen($fullNameDB); $i++) {
-				$char = $fullNameDB[$i];
 
-				if (ctype_alpha($char)) {
-					$ModifiedNameDB .= $char;
-				} else {
-					$i++;
-				}
-			}
-			$oldfolderName = $ModifiedNameDB . '-' . $mobileNumbDB;
-			$oldImageFolder = 'imageUser/' . str_replace(' ', '_', $oldfolderName);
+			$ModifiedNameDB = explode('-', explode('/', $frontimageDB)[2])[0];
+
+			$oldPathInDb = explode('/', $frontimageDB)[2];
+			$oldImageFolder = 'imageUser/' . str_replace(' ', '_', $oldPathInDb);
 			$oldFolderPath = $staticBaseDir . $oldImageFolder;
+
 			$mobileNumb = $data['user']['mobileNumb'];
 			$folderName = $modifiedName . '-' . $mobileNumb;
 			$ImageFolder = 'imageUser/' . str_replace(' ', '_', $folderName);
 			$FolderPath = $staticBaseDir . $ImageFolder;
+
 			$filesystem = new Filesystem();
-			if ($filesystem->exists($oldFolderPath)) {
-				if ($FolderPath !== $oldFolderPath) {
-
-					$filesystem->rename($oldFolderPath, $FolderPath);
-					if ($filesystem->exists($oldFolderPath)) {
-						$filesystem->remove($oldFolderPath);
-					}
-				}
+			if ($FolderPath !== $oldFolderPath) {
+				$filesystem->rename($oldFolderPath, $FolderPath);
+				$filesystem->remove($oldFolderPath);
 			}
-			function processImageUpload($image, $staticBaseDir, $folderName, $existingImagePath)
-			{
-				$imagePath = '';
-				$imagePathDB = '';
-				$imageContent = '';
 
-				if (!empty($image)) {
-					if (!empty($existingImagePath)) {
-						$oldImagePath = $staticBaseDir . $existingImagePath;
-						if (file_exists($oldImagePath)) {
-							unlink($oldImagePath);
-						}
-					}
-					$imageType = explode('/', $image->getClientMimeType())[1];
-					$oldimagetype = explode('.', explode('/', $existingImagePath)[3])[1];
-					$imageName = basename($existingImagePath, '.' . $oldimagetype);
-					$imagePath = $staticBaseDir . 'imageUser/' . $folderName . '/' . $imageName . '.' . $imageType;
-					$imagePathDB = 'imageUser/' . $folderName . '/' . $imageName . '.' . $imageType;
-					$imageContent = file_get_contents($image->getPathname());
-				}
+			$images = [
+				'realEstateImage' => [
+					'image' => $realStateImage,
+					'existingImagePath' => $realEstateTitleDB,
+					'imageName' => 'realEstateImageData'
+				],
+				'otherDocumentImage' => [
+					'image' => $otherDocumentImage,
+					'existingImagePath' => $otherDocumentDB,
+					'imageName' => 'imageotherdoc'
+				],
+				'accountStatementImage' => [
+					'image' => $accountStatementImage,
+					'existingImagePath' => $accountStatementDB,
+					'imageName' => 'imageFrontaccoountStat'
+				],
+				'employeeLetterImage' => [
+					'image' => $employeeLetterImage,
+					'existingImagePath' => $employerLetterDB,
+					'imageName' => 'imageEmployerLetter'
+				],
+				'frontImage' => [
+					'image' => $frontImageID,
+					'existingImagePath' => $frontimageDB,
+					'imageName' => 'frontImageID'
+				],
+				'backImage' => [
+					'image' => $backImageID,
+					'existingImagePath' => $backimageDB,
+					'imageName' => 'BackimageID'
+				]
+			];
+			$processedImages = $this->processImages($images, $staticBaseDir, $folderName, $ImageFolder);
 
-				return [
-					'path' => $imagePath,
-					'pathDB' => $imagePathDB,
-					'content' => $imageContent
-				];
-			}
-			//realEstateImageData
-			$realEstateImageData = processImageUpload($realStateImage, $staticBaseDir, $folderName, $realEstateTitleDB);
-			$imageRealEState = $realEstateImageData['path'];
-			$imageRealEStateDB = $realEstateImageData['pathDB'];
-			$imageContentRealState = $realEstateImageData['content'];
-			//otherDocumentImageData
-			$otherDocumentImageData = processImageUpload($otherDocumentImage, $staticBaseDir, $folderName, $otherDocumentDB);
-			$imageotherdoc = $otherDocumentImageData['path'];
-			$imageotherdocDB = $otherDocumentImageData['pathDB'];
-			$imageContentOtherDoc = $otherDocumentImageData['content'];
-			//accountStatementImageData
-			$accountStatementImageData = processImageUpload($accountStatementImage, $staticBaseDir, $folderName, $accountStatementDB);
-			$imageFrontaccoountStat = $accountStatementImageData['path'];
-			$imageFrontaccoountStatDB = $accountStatementImageData['pathDB'];
-			$imageContentFrontAccountStat = $accountStatementImageData['content'];
-			//employeeLetterImageData
-			$employeeLetterImageData = processImageUpload($employeeLetterImage, $staticBaseDir, $folderName, $employerLetterDB);
-			$imageEmployerLetter = $employeeLetterImageData['path'];
-			$imageEmployerLetterDB = $employeeLetterImageData['pathDB'];
-			$imageContentEmployementLetter = $employeeLetterImageData['content'];
+			$imageRealEStateDB = $processedImages['realEstateImage']['pathDB'] ?? null;
+			$imageotherdocDB = $processedImages['otherDocumentImage']['pathDB'] ?? null;
+			$imageFrontaccoountStatDB = $processedImages['accountStatementImage']['pathDB'] ?? null;
+			$imageEmployerLetterDB = $processedImages['employeeLetterImage']['pathDB'] ?? null;
+			$imageFrontDB = $processedImages['frontImage']['pathDB'] ?? null;
+			$imageBackDB = $processedImages['backImage']['pathDB'] ?? null;
+
 			if (!file_exists($FolderPath)) {
 				mkdir($FolderPath, 0777, true);
 			}
-			$imageFront = null;
-			$imageFrontDB = null;
-			$imageBack = null;
-			$imageBackDB = null;
-			if (isset($frontImageID)) {
-				$oldImagePath = $staticBaseDir . $frontimageDB;
-				if (file_exists($oldImagePath)) {
-					unlink($oldImagePath);
-				}
-				$imageFront = $staticBaseDir . 'imageUser/' . $folderName . '/frontImageID.' . $imageType;
-				$imageFrontDB = 'imageUser/' . $folderName . '/frontImageID.' . $imageType;
-				$imageContent = file_get_contents($frontImageID->getPathname());
-				if (file_put_contents($imageFront, $imageContent) === false) {
-					return new JsonResponse(['error' => 'Failed to save image content'], Response::HTTP_INTERNAL_SERVER_ERROR);
-				}
-			}
-			if (isset($backImageID)) {
-				$oldImagePath =  $staticBaseDir . $backimageDB;
-				if (file_exists($oldImagePath)) {
-					unlink($oldImagePath);
-				}
-				$imageBack = $staticBaseDir . 'imageUser/' . $folderName . '/BackimageID.' . $imageTypeBack;
-				$imageBackDB = 'imageUser/' . $folderName . '/BackimageID.' . $imageTypeBack;
-				$imageContentBack = file_get_contents($backImageID->getPathname());
-				if (file_put_contents($imageBack, $imageContentBack) === false) {
-					return new JsonResponse(['error' => 'Failed to save image content'], Response::HTTP_INTERNAL_SERVER_ERROR);
-				}
-			}
-			if (isset($realStateImage)) {
-				file_put_contents($imageRealEState, $imageContentRealState);
-			}
-			if (isset($otherDocumentImage)) {
-				file_put_contents($imageotherdoc, $imageContentOtherDoc);
-			}
-			if (isset($accountStatementImage)) {
-				file_put_contents($imageFrontaccoountStat, $imageContentFrontAccountStat);
-			}
-			if (isset($employeeLetterImage)) {
-				file_put_contents($imageEmployerLetter, $imageContentEmployementLetter);
-			}
-			unset($data['financialDetails']['frontImageID']);
-			unset($data['financialDetails']['backImageID']);
-			unset($data['financialDetails']['employerLetter']);
-			unset($data['financialDetails']['otherDocument']);
-			unset($data['financialDetails']['accountStatement']);
-			unset($data['financialDetails']['realEstateTitle']);
+
+			$this->unsetImagesFromData($data['financialDetails']);
+
 			$address = $addressRepository->createAddress($data['address'] ?? [], $userId);
 			if ($address) {
 				$address->setUser($user);
@@ -525,23 +467,6 @@ class DefaultController extends AbstractController
 			file_put_contents($pdfFilePath, $pdfContent);
 			$images[$i] = $pdfFilePath;
 			if ($userId !== null) {
-				$branchEmailContent = '
-					<p><strong>Application REF:</strong> User-' . htmlspecialchars($reference) . '</p>
-					<p><strong>The customer:</strong> ' . htmlspecialchars($fullName) . '</p>
-					<p><strong>Number:</strong> ' . htmlspecialchars($mobileNumb) . '</p>
-					<p><strong>Email:</strong> ' . htmlspecialchars($data['user']['email']) . '</p>
-					<p><strong>Accessed on:</strong> ' . htmlspecialchars($dateEmailFormatted) . ' the Mobile Banking Application to submit a 						new account opening application.</p>
-					<p>Please contact the customer within 3-5 days since it is a new relation.</p>
-					';
-				$userEmailContent = '
-					<p>Dear ' . htmlspecialchars($fullName) . '</p>
-					</br>
-					</br>
-					<p>Thank you for choosing NBK Lebanon.\nWe will contact you within 3-5 days</p>
-					</br>
-					<p>Regards</p>
-					';
-				$branchId;
 				$branchEmails = [
 					1 => "sanayehbr@nbk.com.lb",
 					2 => "Bhamdounbr@nbk.com.lb",
@@ -559,6 +484,7 @@ class DefaultController extends AbstractController
 					$emailRecord = $queryBuilder->getQuery()->getOneOrNullResult();
 					if ($emailRecord) {
 						$emailRecord->setReceiver($emailToSet);
+						$this->entityManager->persist($emailRecord);
 						$this->entityManager->flush();
 					}
 				}
@@ -603,5 +529,52 @@ class DefaultController extends AbstractController
 		$response->headers->set('Content-Type', 'application/pdf');
 		$response->headers->set('Content-Disposition', 'attachment; filename="' . basename($pdfFilePath) . '"');
 		return $response;
+	}
+
+	public function unsetImagesFromData(&$data)
+	{
+		unset($data['frontImageID']);
+		unset($data['backImageID']);
+		unset($data['employerLetter']);
+		unset($data['otherDocument']);
+		unset($data['accountStatement']);
+		unset($data['realEstateTitle']);
+		return true;
+	}
+	public function processImages($images, $staticBaseDir, $folderName, $ImageFolder)
+	{
+		$processedImages = [];
+
+		foreach ($images as $key => $imageData) {
+			$image = $imageData['image'];
+			$existingImagePath = $imageData['existingImagePath'];
+			$imageName = $imageData['imageName'];
+
+			if ($image) {
+				if (!empty($existingImagePath)) {
+					$existingImagePathImage = explode('/', $existingImagePath)[3];
+					$oldImagePath = $staticBaseDir . $ImageFolder . '/' . $existingImagePathImage;
+					if (file_exists($oldImagePath)) {
+						unlink($oldImagePath);
+					}
+				}
+				// Process new image upload
+				$imageType = explode('/', $image->getClientMimeType())[1];
+				$imagePath = $staticBaseDir . 'imageUser/' . $folderName . '/' . $imageName . '.' . $imageType;
+				$imagePathDB = 'imageUser/' . $folderName . '/' . $imageName . '.' . $imageType;
+				$imageContent = file_get_contents($image->getPathname());
+				if (file_put_contents($imagePath, $imageContent) === false) {
+					return new JsonResponse(['error' => 'Failed to save image content'], Response::HTTP_INTERNAL_SERVER_ERROR);
+				}
+
+				$processedImages[$key] = [
+					'path' => $imagePath,
+					'pathDB' => $imagePathDB,
+					'content' => $imageContent
+				];
+			}
+		}
+
+		return $processedImages;
 	}
 }
