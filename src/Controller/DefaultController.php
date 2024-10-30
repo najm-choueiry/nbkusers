@@ -341,13 +341,8 @@ class DefaultController extends AbstractController
 			$otherDocumentImage = $data['financialDetails']['otherDocument'];
 			$accountStatementImage = $data['financialDetails']['accountStatement'];
 			$employeeLetterImage = $data['financialDetails']['employerLetter'];
-			if (!empty($frontImageID)) {
-				$imageType = explode('/', $frontImageID->getClientMimeType())[1];
-			}
-			if (!empty($backImageID)) {
-				$imageTypeBack = explode('/', $backImageID->getClientMimeType())[1];
-			}
 			$fullName = $data['user']['fullName'];
+			
 			$modifiedName = '';
 			for ($i = 0; $i < strlen($fullName); $i++) {
 				$char = $fullName[$i];
