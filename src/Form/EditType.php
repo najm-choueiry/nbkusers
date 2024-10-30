@@ -363,11 +363,12 @@ class EditType extends AbstractType
 				'data' => $OtherNationalities,
 				'attr' => [
 					'placeholder' => 'Enter Other Nationalities',
-					'class' => 'form-control'
+					'class' => ' custom-checkbox-dropdown'
 				],
 				'choices' => $countryNames,
 				'multiple' => true,
 				'required' => false,
+				'expanded' => true,
 			])
 			->add('StatusinLebanon', ChoiceType::class, [
 				'label' => false,
@@ -905,8 +906,7 @@ class EditType extends AbstractType
 				'label' => false,
 				'data' => $AdditionalIncomeSourcesArray,
 				'attr' => [
-					'placeholder' => 'Enter Additional Income Sources ',
-					'class' => 'form-control'
+					'class' => ' custom-checkbox-dropdown',
 				],
 				'choices' => [
 					'Real Estate/Lands (Rent Income)' => 'real estate lands rent income',
@@ -916,8 +916,10 @@ class EditType extends AbstractType
 				],
 				'multiple' => true,
 				'required' => false,
-				'expanded' => true,
+				'expanded' => true, // renders as checkboxes
 			])
+			
+			
 			->add('othersSourceOfFound', TextType::class, [
 				'label' => false,
 				'data' => $othersSourceOfFound,

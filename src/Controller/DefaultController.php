@@ -8,7 +8,7 @@ use App\Entity\FinancialDetails;
 use App\Entity\PoliticalPositionDetails;
 use App\Entity\Users;
 use App\Entity\WorkDetails;
-use App\Entity\Logs;
+use App\Utils\Helper;
 use App\Entity\Emails;
 use App\Form\EditType;
 use App\Repository\AddressRepository;
@@ -23,71 +23,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use App\Service\GenerallServices;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
 
 class DefaultController extends AbstractController
 {
 	private $entityManager;
-	private $loggerInterface;
-	public function __construct(EntityManagerInterface $entityManager, LoggerInterface $loggerInterface)
+	private $helper;
+
+	public function __construct(EntityManagerInterface $entityManager,Helper $helper)
 	{
 		$this->entityManager = $entityManager;
-		$this->loggerInterface = $loggerInterface;
-	}
-	public function generateReportPdf(array $data, $time = null, $userreference = null): string
-	{
-		if (!$time) {
-			$time = new DateTime();
-		}
-		// Define the utf8EncodeArray function correctly
-		$utf8EncodeArray = function ($input) use (&$utf8EncodeArray) {
-			if (is_array($input)) {
-				return array_map($utf8EncodeArray, $input);
-			}
-			if ($input instanceof DateTime) {
-				return $input->format('Y-m-d H:i:s');
-			}
-			return $input !== null ? utf8_encode($input) : null;
-		};
+		$this->helper = $helper;
 
-		$userreference = $utf8EncodeArray($userreference);
-		$user = $utf8EncodeArray($data['user']);
-		$address = $utf8EncodeArray($data['address']);
-		$workDetails = $utf8EncodeArray($data['workDetails']);
-		$beneficiaryRightsOwner = $utf8EncodeArray($data['beneficiaryRightsOwner']);
-		$politicalPositionDetails = $utf8EncodeArray($data['politicalPositionDetails']);
-		$financialDetails = $utf8EncodeArray($data['financialDetails']);
-		// Generate the HTML for the PDF
-		$html = $this->renderView('pdf/report.html.twig', [
-			'reference' => $userreference,
-			'user' => $user,
-			'address' => $address,
-			'workDetails' => $workDetails,
-			'beneficiaryRightsOwner' => $beneficiaryRightsOwner,
-			'politicalPositionDetails' => $politicalPositionDetails,
-			'financialDetails' => $financialDetails,
-			'time' => $time
-		]);
-		// Set up and render PDF
-		$dompdf = new Dompdf();
-		$dompdf->set_option('defaultFont', 'Helvetica');
-		$dompdf->set_option('isHtml5ParserEnabled', true);
-		$dompdf->set_option('isRemoteEnabled', true);
-		$dompdf->loadHtml($html);
-		$dompdf->render();
-		return $dompdf->output();
 	}
+
 	#[Route('/', name: 'app_nbk_users')]
 	public function index(Request $request, PaginatorInterface $paginator): Response
 	{
@@ -149,22 +101,6 @@ class DefaultController extends AbstractController
 		return $this->render('nbkusers/userInfo.html.twig', [
 			'pagination' => $user,
 		]);
-	}
-	public function getBranchEmail($branchId)
-	{
-		$branchEmails = [1 => "sanayehbr@nbk.com.lb", 2 => "Bhamdounbr@nbk.com.lb", 3 => "PrivateBanking@nbk.com.lb"];
-		// $branchEmails = [1 => "eliaschaaya97@gmail.com", 2 => "eliaschaaya97@gmail.com", 3 => "eliaschaaya97@gmail.com"];
-		//$branchEmails = [1 => "zeina.abdallah@nbk.com.lb ", 2 => "maysaa.nasereddine@nbk.com.lb", 3 => "zeina.abdallah@nbk.com.lb "];
-		if (array_key_exists($branchId, $branchEmails)) {
-			return $branchEmails[$branchId];
-		} else {
-			return null;
-		}
-	}
-	public function isValidEmail(string $email): bool
-	{
-		$pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
-		return preg_match($pattern, $email) === 1;
 	}
 	#[Route('/nbk/editInfo/{userId}', name: 'edit_info')]
 	public function editInfo($userId, UsersRepository $usersRepository, AddressRepository $addressRepository, WorkDetailsRepository $workDetailsRepository, BeneficiaryRightsOwnerRepository $beneficiaryRepository, PoliticalPositionDetailsRepository $politicalPositionRepository, FinancialDetailsRepository $financialRepository, Request $request): Response
@@ -327,7 +263,7 @@ class DefaultController extends AbstractController
 			$otherDocumentDB = $financialDetailDB->getOtherDocument();
 			$accountStatementDB = $financialDetailDB->getAccountStatement();
 			$userEmail = $data['user']['email'];
-			if (!$this->isValidEmail($userEmail)) {
+			if (!$this->helper->isValidEmail($userEmail)) {
 				return new JsonResponse(['error' => 'Invalid email address'], Response::HTTP_BAD_REQUEST);
 			}
 			$user = $usersRepository->createUser($data['user'], $userId, $branchId);
@@ -342,7 +278,7 @@ class DefaultController extends AbstractController
 			$accountStatementImage = $data['financialDetails']['accountStatement'];
 			$employeeLetterImage = $data['financialDetails']['employerLetter'];
 			$fullName = $data['user']['fullName'];
-			
+
 			$modifiedName = '';
 			for ($i = 0; $i < strlen($fullName); $i++) {
 				$char = $fullName[$i];
@@ -404,7 +340,7 @@ class DefaultController extends AbstractController
 					'imageName' => 'BackimageID'
 				]
 			];
-			$processedImages = $this->processImages($images, $staticBaseDir, $folderName, $ImageFolder);
+			$processedImages =Helper::processImages($images, $staticBaseDir, $folderName, $ImageFolder);
 
 			$imageRealEStateDB = $processedImages['realEstateImage']['pathDB'] ?? null;
 			$imageotherdocDB = $processedImages['otherDocumentImage']['pathDB'] ?? null;
@@ -417,7 +353,7 @@ class DefaultController extends AbstractController
 				mkdir($FolderPath, 0777, true);
 			}
 
-			$this->unsetImagesFromData($data['financialDetails']);
+			$this->helper->unsetImagesFromData($data['financialDetails']);
 
 			$address = $addressRepository->createAddress($data['address'] ?? [], $userId);
 			if ($address) {
@@ -451,7 +387,7 @@ class DefaultController extends AbstractController
 			$reference = $user->getId();
 			$dateEmail = new DateTime();
 			$dateEmailFormatted = $dateEmail->format('Y-m-d H:i:s');
-			$pdfContent = $this->generateReportPdf($data, $dateEmailFormatted, $reference);
+			$pdfContent = $this->helper->generateReportPdf($data, $dateEmailFormatted, $reference);
 			$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
 			$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
 			$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
@@ -526,50 +462,6 @@ class DefaultController extends AbstractController
 		return $response;
 	}
 
-	public function unsetImagesFromData(&$data)
-	{
-		unset($data['frontImageID']);
-		unset($data['backImageID']);
-		unset($data['employerLetter']);
-		unset($data['otherDocument']);
-		unset($data['accountStatement']);
-		unset($data['realEstateTitle']);
-		return true;
-	}
-	public function processImages($images, $staticBaseDir, $folderName, $ImageFolder)
-	{
-		$processedImages = [];
 
-		foreach ($images as $key => $imageData) {
-			$image = $imageData['image'];
-			$existingImagePath = $imageData['existingImagePath'];
-			$imageName = $imageData['imageName'];
 
-			if ($image) {
-				if (!empty($existingImagePath)) {
-					$existingImagePathImage = explode('/', $existingImagePath)[3];
-					$oldImagePath = $staticBaseDir . $ImageFolder . '/' . $existingImagePathImage;
-					if (file_exists($oldImagePath)) {
-						unlink($oldImagePath);
-					}
-				}
-				// Process new image upload
-				$imageType = explode('/', $image->getClientMimeType())[1];
-				$imagePath = $staticBaseDir . 'imageUser/' . $folderName . '/' . $imageName . '.' . $imageType;
-				$imagePathDB = 'imageUser/' . $folderName . '/' . $imageName . '.' . $imageType;
-				$imageContent = file_get_contents($image->getPathname());
-				if (file_put_contents($imagePath, $imageContent) === false) {
-					return new JsonResponse(['error' => 'Failed to save image content'], Response::HTTP_INTERNAL_SERVER_ERROR);
-				}
-
-				$processedImages[$key] = [
-					'path' => $imagePath,
-					'pathDB' => $imagePathDB,
-					'content' => $imageContent
-				];
-			}
-		}
-
-		return $processedImages;
-	}
 }
