@@ -450,8 +450,9 @@ class DefaultController extends AbstractController
 		}
 		$pdfname = $modifiedName . '_' . $mobileNumb . '.pdf';
 		$folderName = $modifiedName . '-' . $mobileNumb;
-		$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/imageUser/' . $folderName . '/';
-		$pdfFilePath = $staticBaseDir . $pdfname;
+		$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
+		$path= $staticBaseDir.'imageUser/' . $folderName . '/';
+		$pdfFilePath = $path . $pdfname;
 		if (!file_exists($pdfFilePath)) {
 			$this->addFlash('error', 'PDF file not found.');
 			return $this->redirectToRoute('app_nbk_users');
