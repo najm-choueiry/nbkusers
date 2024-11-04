@@ -444,6 +444,11 @@ class DefaultController extends AbstractController
 				$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
 				$pdfFilePath = $FolderPath . '/' . $pdfFileName;
 				$filesystem = new Filesystem();
+				if (!$filesystem->exists($FolderPathDB)) {
+					$filesystem->mkdir($FolderPathDB, 0777);
+				file_put_contents($pdfFilePathDB, $pdfContent);
+				}
+				else{
 				if ($ModifiedNameDB != $modifiedName) {
 					if ($filesystem->exists($pdfFilePathDB)) {
 						if ($filesystem->exists($FolderPathDB)) {
@@ -458,7 +463,7 @@ class DefaultController extends AbstractController
 				if ($ModifiedNameDB == $modifiedName) {
 					if ($filesystem->exists($pdfFilePathDB)) {
 						file_put_contents($pdfFilePath, $pdfContent);
-					}}
+					}}}
 			}
 			if (file_exists($pdfFilePathDB)) {
 				unlink($pdfFilePathDB);
