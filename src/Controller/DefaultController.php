@@ -133,6 +133,8 @@ class DefaultController extends AbstractController
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$formData = $form->getData();
+			if ($user[0]->getMothersName()) {
+
 			$data = [
 				'user' => [
 					'fullName' => $formData['FullName'],
@@ -247,6 +249,17 @@ class DefaultController extends AbstractController
 					'employerLetter' => $formData['employerLetter'] ?? null,
 				]
 			];
+		}else {
+			$data = [
+				'user' => [
+					'fullName' => $formData['FullName'],
+					'mobileNumb' => $formData['MobileNumb'],
+					'email' => $formData['Email'],
+					'branchId' => $formData['BranchId']
+				]
+			];
+		}
+
 			if ($data === null) {
 				return new JsonResponse(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
 			}
@@ -255,13 +268,16 @@ class DefaultController extends AbstractController
 			$mobileNumbDB = $dataUserDB->getMobileNumb();
 			$fullNameDB =  $dataUserDB->getFullName();
 			$dataFinancialDetailsDB = $this->entityManager->getRepository(FinancialDetails::class)->findBy(['user_id' => $userId]);
-			$financialDetailDB = $dataFinancialDetailsDB[0];
-			$frontimageDB = $financialDetailDB->getFrontImageID();
-			$backimageDB = $financialDetailDB->getBackImageID();
-			$realEstateTitleDB = $financialDetailDB->getRealEstateTitle();
-			$employerLetterDB = $financialDetailDB->getEmployerLetter();
-			$otherDocumentDB = $financialDetailDB->getOtherDocument();
-			$accountStatementDB = $financialDetailDB->getAccountStatement();
+			if ($user[0]->getMothersName())
+			{
+				$financialDetailDB = $dataFinancialDetailsDB[0];
+				$frontimageDB = $financialDetailDB->getFrontImageID();
+				$backimageDB = $financialDetailDB->getBackImageID();
+				$realEstateTitleDB = $financialDetailDB->getRealEstateTitle();
+				$employerLetterDB = $financialDetailDB->getEmployerLetter();
+				$otherDocumentDB = $financialDetailDB->getOtherDocument();
+				$accountStatementDB = $financialDetailDB->getAccountStatement();
+			}
 			$userEmail = $data['user']['email'];
 			if (!$this->helper->isValidEmail($userEmail)) {
 				return new JsonResponse(['error' => 'Invalid email address'], Response::HTTP_BAD_REQUEST);
@@ -270,16 +286,12 @@ class DefaultController extends AbstractController
 			if (!$user) {
 				return new JsonResponse(['error' => 'Failed to create user'], Response::HTTP_BAD_REQUEST);
 			}
-			unset($data['user']['branchId']);
-			$frontImageID = $data['financialDetails']['frontImageID'];
-			$backImageID = $data['financialDetails']['backImageID'];
-			$realStateImage = $data['financialDetails']['realEstateTitle'];
-			$otherDocumentImage = $data['financialDetails']['otherDocument'];
-			$accountStatementImage = $data['financialDetails']['accountStatement'];
-			$employeeLetterImage = $data['financialDetails']['employerLetter'];
-			$fullName = $data['user']['fullName'];
 
+			unset($data['user']['branchId']);
 			$modifiedName = '';
+			$fullName = $data['user']['fullName'];
+			
+			$mobileNumb = $data['user']['mobileNumb'];
 			for ($i = 0; $i < strlen($fullName); $i++) {
 				$char = $fullName[$i];
 
@@ -289,15 +301,21 @@ class DefaultController extends AbstractController
 					$i++;
 				}
 			}
+			if ($user->getMothersName())
+			{
+			$frontImageID = $data['financialDetails']['frontImageID'];
+			$backImageID = $data['financialDetails']['backImageID'];
+			$realStateImage = $data['financialDetails']['realEstateTitle'];
+			$otherDocumentImage = $data['financialDetails']['otherDocument'];
+			$accountStatementImage = $data['financialDetails']['accountStatement'];
+			$employeeLetterImage = $data['financialDetails']['employerLetter'];
 			$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
-
 			$ModifiedNameDB = explode('-', explode('/', $frontimageDB)[2])[0];
 
 			$oldPathInDb = explode('/', $frontimageDB)[2];
 			$oldImageFolder = 'imageUser/' . str_replace(' ', '_', $oldPathInDb);
 			$oldFolderPath = $staticBaseDir . $oldImageFolder;
 
-			$mobileNumb = $data['user']['mobileNumb'];
 			$folderName = $modifiedName . '-' . $mobileNumb;
 			$ImageFolder = 'imageUser/' . str_replace(' ', '_', $folderName);
 			$FolderPath = $staticBaseDir . $ImageFolder;
@@ -376,12 +394,16 @@ class DefaultController extends AbstractController
 			if ($financialDetails) {
 				$financialDetails->setUser($user);
 			}
+		}
 			$this->entityManager->persist($user);
+			if ($user->getMothersName())
+			{
 			$this->entityManager->persist($address);
 			$this->entityManager->persist($workDetails);
 			$this->entityManager->persist($beneficiary);
 			$this->entityManager->persist($politicalPosition);
 			$this->entityManager->persist($financialDetails);
+			}
 			$this->entityManager->flush();
 
 			$reference = $user->getId();
@@ -389,9 +411,35 @@ class DefaultController extends AbstractController
 			$dateEmailFormatted = $dateEmail->format('Y-m-d H:i:s');
 			$pdfContent = $this->helper->generateReportPdf($data, $dateEmailFormatted, $reference);
 			$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
+			if ($user->getMothersName())
+			{
 			$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
 			$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
 			$pdfFilePath = $FolderPath . '/' . $pdfFileName;
+			}
+			else{
+				$mobileNumbDB = $dataUserDB->getMobileNumb();
+			$fullNameDB =  $dataUserDB->getFullName();
+				$ModifiedNameDB = '';
+				for ($i = 0; $i < strlen($fullNameDB); $i++) {
+					$char = $fullName[$i];
+	
+					if (ctype_alpha($char)) {
+						$ModifiedNameDB .= $char;
+					} else {
+						$i++;
+					}
+				}
+		
+			
+				$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
+				$ImageFolder = 'imageUser/' ;
+				$FolderPath = $staticBaseDir . $ImageFolder;
+				$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
+				$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
+				$pdfFilePath = $FolderPath . '/' . $pdfFileName;
+				
+			}
 			if (file_exists($pdfFilePathDB)) {
 				unlink($pdfFilePathDB);
 			}
@@ -431,6 +479,8 @@ class DefaultController extends AbstractController
 		return $this->render('nbkusers/edit.html.twig', [
 			'form' => $form->createView(),
 			'user' => $user[0],
+			'motherNameExists' => $user[0]->getMothersName(),
+
 		]);
 	}
 	#[Route('/print-pdf/{id}', name: 'print_pdf', methods: ['GET'])]

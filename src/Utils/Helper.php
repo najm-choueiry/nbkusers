@@ -98,12 +98,16 @@ class Helper
 
         $userreference = $utf8EncodeArray($userreference);
         $user = $utf8EncodeArray($data['user']);
+        if (isset($data['user']['mothersName']))
+        {
         $address = $utf8EncodeArray($data['address']);
         $workDetails = $utf8EncodeArray($data['workDetails']);
         $beneficiaryRightsOwner = $utf8EncodeArray($data['beneficiaryRightsOwner']);
         $politicalPositionDetails = $utf8EncodeArray($data['politicalPositionDetails']);
         $financialDetails = $utf8EncodeArray($data['financialDetails']);
-
+        }
+        if (isset($data['user']['mothersName']))
+        {
         // Generate the HTML for the PDF using Twig
         $html = $this->twig->render('pdf/report.html.twig', [
             'reference' => $userreference,
@@ -115,6 +119,13 @@ class Helper
             'financialDetails' => $financialDetails,
             'time' => $time
         ]);
+    }else{
+        $html = $this->twig->render('pdf/existingrelationreport.html.twig', [
+            'reference' => $userreference,
+            'user' => $user,
+            'time' => $time
+        ]);
+    }
 
         // PDF rendering logic
         $dompdf = new Dompdf();

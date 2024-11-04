@@ -51,7 +51,7 @@ class EditType extends AbstractType
 		$Email = $user->getEmail();
 		$BranchId = $user->getBranchId();
 
-		$MotherName = $user->getMothersName();
+		$MotherName = $user->getMothersName() ?  $user->getMothersName() : null; 
 		$Gender = $user->getGender();
 		$Dob = $user->getDob();
 		$PlaceOfBirth = $user->getPlaceOfBirth();
@@ -65,8 +65,16 @@ class EditType extends AbstractType
 		$ExpirationNationalIDDate = $user->getExpirationDateNationalId();
 		$RegisterPlaceNo = $user->getRegisterPlaceNo();
 		$countryCode = strtolower(array_search($CountryofOrigin, Countries::getNames('en')));
-		$country = CountryLoader::country($countryCode);
-		$countryArray = $country->getAttributes();
+		if ($countryCode) {
+			// Only load the country if $countryCode is valid
+			$country = CountryLoader::country($countryCode);
+		} else {
+			// Default to null or handle as needed if the country is not found
+			$country = null;
+		}
+		
+		$countryArray = $country ? $country->getAttributes() : []; // Set to empty array if $country is null or not found
+		
 		$regionChoices = [];
 		$RegisterNumber = $user->getRegisterNumber();
 		$MaritalStatus = $user->getMaritalStatus();
@@ -82,65 +90,65 @@ class EditType extends AbstractType
 		$otherCountriesTaxResidence = $user->getOtherCountriesTaxResidence();
 		$TaxResidencyIdNumber = $user->getTaxResidencyIdNumber();
 		//address
-		$city = $Address->getCity();
-		$street = $Address->getStreet();
-		$building = $Address->getBuilding();
-		$floor = $Address->getFloor();
-		$apartment = $Address->getApartment();
-		$HouseTelNO = $Address->getHouseTelephoneNumber();
-		$InternationalAddress = $Address->getInternationalAddress();
-		$intArea = $Address->getIntArea();
-		$intStreet = $Address->getIntStreet();
-		$intBuilding = $Address->getIntBuilding();
-		$intFloor = $Address->getIntFloor();
-		$intAppartment = $Address->getIntApartment();
-		$internationalHouseTelephoneNumber = $Address->getInternationalHouseTelephoneNumber();
-		$internationalMobileNumber = $Address->getInternationalMobileNumber();
-		$alternateContactName = $Address->getAlternateContactName();
-		$alternateTelephoneNumber = $Address->getAlternateTelephoneNumber();
+		$city = $Address ? $Address->getCity() : null;
+		$street = $Address ?  $Address->getStreet() : null;
+		$building = $Address ? $Address->getBuilding()  : null;
+		$floor = $Address ? $Address->getFloor()  : null;
+		$apartment = $Address ? $Address->getApartment()  : null;
+		$HouseTelNO = $Address ? $Address->getHouseTelephoneNumber()  : null;
+		$InternationalAddress = $Address ? $Address->getInternationalAddress()  : null;
+		$intArea = $Address ? $Address->getIntArea()  : null;
+		$intStreet = $Address ? $Address->getIntStreet()  : null;
+		$intBuilding = $Address ? $Address->getIntBuilding()  : null;
+		$intFloor = $Address ? $Address->getIntFloor()  : null;
+		$intAppartment = $Address ? $Address->getIntApartment()  : null;
+		$internationalHouseTelephoneNumber = $Address ? $Address->getInternationalHouseTelephoneNumber() : null ;
+		$internationalMobileNumber = $Address ? $Address->getInternationalMobileNumber() : null;
+		$alternateContactName = $Address ? $Address->getAlternateContactName() : null;
+		$alternateTelephoneNumber = $Address ? $Address->getAlternateTelephoneNumber() : null;
 		//workdeatils
-		$profession = $WorkDetails->getProfession();
-		$entityName = $WorkDetails->getEntityName();
-		$activitySector = $WorkDetails->getActivitySector();
-		$jobTitle = $WorkDetails->getJobTitle();
-		$educationLevel = $WorkDetails->getEducationLevel();
-		$WorkAddress = $WorkDetails->getWorkAddress();
-		$WorkTelNo = $WorkDetails->getWorkTelephoneNumber();
-		$ISListed = $WorkDetails->getPlaceOfWorkListed();
-		$grade = $WorkDetails->getGrade();
-		$publicSector = $WorkDetails->getPublicSector();
+		$profession =  $WorkDetails ?   $WorkDetails->getProfession(): null;
+		$entityName =  $WorkDetails ? $WorkDetails->getEntityName(): null;
+		$activitySector =  $WorkDetails ? $WorkDetails->getActivitySector(): null;
+		$jobTitle =  $WorkDetails ? $WorkDetails->getJobTitle(): null;
+		$educationLevel =  $WorkDetails ? $WorkDetails->getEducationLevel(): null;
+		$WorkAddress =  $WorkDetails ? $WorkDetails->getWorkAddress(): null;
+		$WorkTelNo =  $WorkDetails ? $WorkDetails->getWorkTelephoneNumber(): null;
+		$ISListed =  $WorkDetails ? $WorkDetails->getPlaceOfWorkListed(): null;
+		$grade =  $WorkDetails ? $WorkDetails->getGrade(): null;
+		$publicSector =  $WorkDetails ? $WorkDetails->getPublicSector(): null;
 		//BRO
-		$CustomerSameAsBeneficiary = $broDetails->getCustomerSameAsBeneficiary();
-		$broNationality = $broDetails->getBroNationality();
-		$BeneficiaryName = $broDetails->getBeneficiaryName();
-		$relationship = $broDetails->getRelationship();
-		$broCivilIdNumber = $broDetails->getBroCivilIdNumber();
-		$broexpirationDate = $broDetails->getExpirationDate();
-		$reasonOfBro = $broDetails->getReasonOfBro();
-		$broaddress = $broDetails->getAddress();
-		$broprofession = $broDetails->getProfession();
-		$incomeWealthDetails = $broDetails->getIncomeWealthDetails();
+		$CustomerSameAsBeneficiary =  $broDetails ?  $broDetails->getCustomerSameAsBeneficiary() : null;
+		$broNationality = $broDetails ? $broDetails->getBroNationality() : null;
+		$BeneficiaryName = $broDetails ? $broDetails->getBeneficiaryName() : null;
+		$relationship = $broDetails ? $broDetails->getRelationship() : null;
+		$broCivilIdNumber = $broDetails ? $broDetails->getBroCivilIdNumber() : null;
+		$broexpirationDate = $broDetails ? $broDetails->getExpirationDate() : null;
+		$reasonOfBro = $broDetails ? $broDetails->getReasonOfBro() : null;
+		$broaddress = $broDetails ? $broDetails->getAddress() : null;
+		$broprofession = $broDetails ? $broDetails->getProfession() : null;
+		$incomeWealthDetails = $broDetails ? $broDetails->getIncomeWealthDetails() : null;
 		//pol
-		$politicalPosition = $politicalPos->getPoliticalPosition();
-		$currentPrevious = $politicalPos->getCurrentPrevious();
-		$yearOfRetirement = $politicalPos->getYearOfRetirement();
-		$pepname = $politicalPos->getPepName();
-		$peprelationship = $politicalPos->getRelationship();
-		$pepposition = $politicalPos->getPepPosition();
+		$politicalPosition =$politicalPos ? $politicalPos->getPoliticalPosition() :null;
+		$currentPrevious = $politicalPos ? $politicalPos->getCurrentPrevious() :null;
+		$yearOfRetirement = $politicalPos ? $politicalPos->getYearOfRetirement() :null;
+		$pepname = $politicalPos ? $politicalPos->getPepName() :null;
+		$peprelationship = $politicalPos ? $politicalPos->getRelationship() :null;
+		$pepposition = $politicalPos ? $politicalPos->getPepPosition() :null;
 		//fina
-		$sourceOfFunds = $FinancialDet->getSourceOfFunds();
+		$sourceOfFunds = $FinancialDet ?  $FinancialDet->getSourceOfFunds() :null;
 		$currencyCodes = Currencies::getCurrencyCodes();
-		$financelcurrency = $FinancialDet->getCurrency();
+		$financelcurrency = $FinancialDet ? $FinancialDet->getCurrency() :null;
 		$currencies = [];
 		foreach ($currencyCodes as $currencyCode) {
 			$currencies[$currencyCode] = $currencyCode;
 		}
-		$monthlyBasicSalary = $FinancialDet->getMonthlyBasicSalary();
-		$monthlyAllowances = $FinancialDet->getMonthlyAllowances();
-		$AdditionalIncomeSourcesArray = $FinancialDet->getAdditionalIncomeSourcesArray();
-		$othersSourceOfFound = $FinancialDet->getOthersSourceOfFound();
-		$TotalEstimatedMonthlyIncome = $FinancialDet->getTotalEstimatedMonthlyIncome();
-		$estimatedWealthAmount = $FinancialDet->getEstimatedWealthAmount();
+		$monthlyBasicSalary = $FinancialDet ? $FinancialDet->getMonthlyBasicSalary() :null;
+		$monthlyAllowances = $FinancialDet ? $FinancialDet->getMonthlyAllowances():null;
+		$AdditionalIncomeSourcesArray = $FinancialDet ? $FinancialDet->getAdditionalIncomeSourcesArray():null;
+		$othersSourceOfFound = $FinancialDet ? $FinancialDet->getOthersSourceOfFound():null;
+		$TotalEstimatedMonthlyIncome = $FinancialDet ? $FinancialDet->getTotalEstimatedMonthlyIncome():null;
+		$estimatedWealthAmount = $FinancialDet ? $FinancialDet->getEstimatedWealthAmount():null;
 
 		if ($TotalEstimatedMonthlyIncome <= 2000) {
 			$IncomeCategory = 'micro';
@@ -151,30 +159,33 @@ class EditType extends AbstractType
 		} else {
 			$IncomeCategory = 'large';
 		}
-		$isWealthInherited = $FinancialDet->getIsWealthInherited();
-		$sourcesOfWealth = $FinancialDet->getSourcesOfWealth();
-		$expectedValueOfTransactions = $FinancialDet->getExpectedValueOfTransactions();
-		$expectedNumberOfTransactions = $FinancialDet->getExpectedNumberOfTransactions();
-		$finanfrequency = $FinancialDet->getFrequency();
-		$otherAccountsAtBanks = $FinancialDet->getHasOtherAccounts();
-		$bankNameone = $FinancialDet->getBankName();
-		$Countryone = $FinancialDet->getCountry();
-		$AccountBalanceOne = $FinancialDet->getAccountBalance();
-		$secondBankName = $FinancialDet->getSecondBankName();
-		$secondCountry = $FinancialDet->getSecondCountry();
-		$secondBankBalance = $FinancialDet->getSecondBankBalance();
-		$thirdBankName = $FinancialDet->getThirdBankName();
-		$thirdAccountCountry = $FinancialDet->getThirdAccountCountry();
-		$thirdAccountBalance = $FinancialDet->getThirdAccountBalance();
-		$natureOfRelation = $FinancialDet->getNatureOfRelation();
-		$purposeOfRelation = $FinancialDet->getPurposeOfRelation();
-		$selectIDType = $FinancialDet->getSelectIDType();
-		$frontImageID = $FinancialDet->getFrontImageID();
-		$backImageID = $FinancialDet->getBackImageID();
-		$realEstateTitle = $FinancialDet->getRealEstateTitle();
-		$accountStatement = $FinancialDet->getAccountStatement();
-		$otherDocument = $FinancialDet->getOtherDocument();
-		$employerLetter = $FinancialDet->getEmployerLetter();
+		$isWealthInherited = $FinancialDet ? $FinancialDet->getIsWealthInherited():null;
+		$sourcesOfWealth = $FinancialDet ? $FinancialDet->getSourcesOfWealth():null;
+		$expectedValueOfTransactions = $FinancialDet ? $FinancialDet->getExpectedValueOfTransactions():null;
+		$expectedNumberOfTransactions = $FinancialDet ? $FinancialDet->getExpectedNumberOfTransactions():null;
+		$finanfrequency = $FinancialDet ? $FinancialDet->getFrequency():null;
+		$otherAccountsAtBanks = $FinancialDet ? $FinancialDet->getHasOtherAccounts():null;
+		$bankNameone = $FinancialDet ? $FinancialDet->getBankName():null;
+		$Countryone = $FinancialDet ? $FinancialDet->getCountry():null;
+		$AccountBalanceOne = $FinancialDet ? $FinancialDet->getAccountBalance():null;
+		$secondBankName = $FinancialDet ? $FinancialDet->getSecondBankName():null;
+		$secondCountry = $FinancialDet ? $FinancialDet->getSecondCountry():null;
+		$secondBankBalance = $FinancialDet ? $FinancialDet->getSecondBankBalance():null;
+		$thirdBankName = $FinancialDet ? $FinancialDet->getThirdBankName():null;
+		$thirdAccountCountry = $FinancialDet ? $FinancialDet->getThirdAccountCountry():null;
+		$thirdAccountBalance = $FinancialDet ? $FinancialDet->getThirdAccountBalance():null;
+		$natureOfRelation = $FinancialDet ? $FinancialDet->getNatureOfRelation():null;
+		$purposeOfRelation = $FinancialDet ? $FinancialDet->getPurposeOfRelation():null;
+		$selectIDType = $FinancialDet ? $FinancialDet->getSelectIDType():null;
+		$frontImageID = $FinancialDet ? $FinancialDet->getFrontImageID():null;
+		$backImageID = $FinancialDet ? $FinancialDet->getBackImageID():null;
+		$realEstateTitle = $FinancialDet ? $FinancialDet->getRealEstateTitle():null;
+		$accountStatement = $FinancialDet ? $FinancialDet->getAccountStatement():null;
+		$otherDocument = $FinancialDet ? $FinancialDet->getOtherDocument():null;
+		$employerLetter = $FinancialDet ? $FinancialDet->getEmployerLetter() :null;
+		if ($MotherName)
+		{
+
 		$builder
 			->add('FullName', TextType::class, [
 				'label' => false,
@@ -217,6 +228,8 @@ class EditType extends AbstractType
 				],
 				'required' => false,
 			])
+
+
 			->add('MotherName', TextType::class, [
 				'label' => false,
 				'data' => $MotherName,
@@ -1256,6 +1269,51 @@ class EditType extends AbstractType
 					'accept' => 'image/jpeg,image/png'
 				],
 			]);
+		} else {
+			$builder
+			->add('FullName', TextType::class, [
+				'label' => false,
+				'data' => $fullName,
+				'attr' => [
+					'placeholder' => 'Enter Full Name',
+					'class' => 'form-control'
+				],
+				'required' => false,
+			])
+			->add('MobileNumb', TextType::class, [
+				'label' => false,
+				'data' => $MobileNumb,
+				'attr' => [
+					'placeholder' => 'Enter Mobile Numb',
+					'class' => 'form-control'
+				],
+				'required' => false,
+			])
+			->add('Email', TextType::class, [
+				'label' => false,
+				'data' => $Email,
+				'attr' => [
+					'placeholder' => 'Enter Email',
+					'class' => 'form-control'
+				],
+				'required' => false,
+			])
+			->add('BranchId', ChoiceType::class, [
+				'label' => false,
+				'data' => $BranchId,
+				'attr' => [
+					'placeholder' => 'Enter Branch Unit',
+					'class' => 'form-control',
+				],
+				'choices' => [
+					'sanayeh' => 1,
+					'bhamdoun' => 2,
+					'privatebank' => 3,
+				],
+				'required' => false,
+			]);
+
+		}
 	}
 
 	public function configureOptions(OptionsResolver $resolver)

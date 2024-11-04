@@ -17,10 +17,10 @@ class UsersRepository
     }
     public function createUser(array $userData, ?int $userId, ?int $branchId): ?Users
     {
-
+        if (isset($userData['mothersName'])){
         $passportExpirationDateString = $userData['passportExpirationDate'] ?? '';
         $passportExpirationDate = new \DateTime($passportExpirationDateString->format('Y-m-d'));
-
+        }
         if (is_null($userId)) {
             $user = new Users();
             $expirationDateNationalIdString = $userData['expirationDateNationalId'] ?? '';
@@ -31,14 +31,16 @@ class UsersRepository
             }
         } else {
             $user = $this->usersRepository->find($userId);
+            if (isset($userData['mothersName'])){
             $expirationDateNationalIdString = $userData['expirationDateNationalId'] ?? '';
             $expirationDateNationalIdString =   $expirationDateNationalIdString->format('Y-m-d');
             $expirationDateNationalId = (new \DateTime($expirationDateNationalIdString));
-
             $dob = !empty($userData['dob']->format('Y-m-d')) ? \DateTime::createFromFormat('Y-m-d', $userData['dob']->format('Y-m-d')) : false;
             if ($dob) {
                 $user->setDob($dob);
             }
+        }
+
         }
         $user->setFullName($userData['fullName'] ?? '');
         $user->setMobileNumb($userData['mobileNumb'] ?? '');
@@ -51,6 +53,7 @@ class UsersRepository
         // Set BranchUnit based on the branch ID, or default to an empty string if no match is found
         $user->setBranchUnit($branchUnits[$branchId] ?? '');
         $user->setBranchId((int)($userData['branchId'] ?? 0));
+        if (isset($userData['mothersName'])){
         $user->setMothersName($userData['mothersName'] ?? '');
         $user->setGender($userData['gender'] ?? '');
         $user->setPlaceOfBirth($userData['placeOfBirth'] ?? '');
@@ -71,6 +74,7 @@ class UsersRepository
         $user->setSpouseProfession($userData['spouseProfession'] ?? '');
         $user->setNoOfChildren((int)($userData['noOfChildren'] ?? 0));
         $user->setRegisterNumber((int)($userData['registerNumber'] ?? 0));
+        }
         return $user;
     }
 
