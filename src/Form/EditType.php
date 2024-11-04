@@ -50,6 +50,7 @@ class EditType extends AbstractType
 		$MobileNumb = $user->getMobileNumb();
 		$Email = $user->getEmail();
 		$BranchId = $user->getBranchId();
+		
 
 		$MotherName = $user->getMothersName() ?  $user->getMothersName() : null; 
 		$Gender = $user->getGender();

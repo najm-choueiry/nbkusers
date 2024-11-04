@@ -131,7 +131,8 @@ class DefaultController extends AbstractController
 			'user_id' => $userId,
 		]);
 		$form->handleRequest($request);
-		if ($form->isSubmitted() && $form->isValid()) {
+		if ($form->isSubmitted() && $form->isValid()) 
+		{
 			$formData = $form->getData();
 			if ($user[0]->getMothersName()) {
 
@@ -278,6 +279,7 @@ class DefaultController extends AbstractController
 				$otherDocumentDB = $financialDetailDB->getOtherDocument();
 				$accountStatementDB = $financialDetailDB->getAccountStatement();
 			}
+	
 			$userEmail = $data['user']['email'];
 			if (!$this->helper->isValidEmail($userEmail)) {
 				return new JsonResponse(['error' => 'Invalid email address'], Response::HTTP_BAD_REQUEST);
@@ -287,7 +289,7 @@ class DefaultController extends AbstractController
 				return new JsonResponse(['error' => 'Failed to create user'], Response::HTTP_BAD_REQUEST);
 			}
 
-			unset($data['user']['branchId']);
+	
 			$modifiedName = '';
 			$fullName = $data['user']['fullName'];
 			
@@ -302,7 +304,7 @@ class DefaultController extends AbstractController
 				}
 			}
 			if ($user->getMothersName())
-			{
+            {
 			$frontImageID = $data['financialDetails']['frontImageID'];
 			$backImageID = $data['financialDetails']['backImageID'];
 			$realStateImage = $data['financialDetails']['realEstateTitle'];
@@ -394,10 +396,10 @@ class DefaultController extends AbstractController
 			if ($financialDetails) {
 				$financialDetails->setUser($user);
 			}
-		}
+           }
 			$this->entityManager->persist($user);
 			if ($user->getMothersName())
-			{
+		{
 			$this->entityManager->persist($address);
 			$this->entityManager->persist($workDetails);
 			$this->entityManager->persist($beneficiary);
@@ -416,13 +418,12 @@ class DefaultController extends AbstractController
 			$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
 			$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
 			$pdfFilePath = $FolderPath . '/' . $pdfFileName;
-			}
-			else{
-				$mobileNumbDB = $dataUserDB->getMobileNumb();
-			$fullNameDB =  $dataUserDB->getFullName();
+		}
+			else
+			{
 				$ModifiedNameDB = '';
 				for ($i = 0; $i < strlen($fullNameDB); $i++) {
-					$char = $fullName[$i];
+					$char = $fullNameDB[$i];
 	
 					if (ctype_alpha($char)) {
 						$ModifiedNameDB .= $char;
@@ -430,15 +431,34 @@ class DefaultController extends AbstractController
 						$i++;
 					}
 				}
-		
-			
 				$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
-				$ImageFolder = 'imageUser/' ;
+				$folderName = $modifiedName . '-' . $mobileNumb;
+				$folderNameDB = $ModifiedNameDB . '-' . $mobileNumbDB;
+				$ImageFolder = 'imageUser/' . $folderName;
+				$ImageFolderDB = 'imageUser/' . $folderNameDB;
 				$FolderPath = $staticBaseDir . $ImageFolder;
-				$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
-				$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
-				$pdfFilePath = $FolderPath . '/' . $pdfFileName;
+				$FolderPathDB = $staticBaseDir . $ImageFolderDB;
 				
+				$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
+				$pdfFilePathDB = $FolderPathDB . '/' . $pdfFileNameDB;
+				$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
+				$pdfFilePath = $FolderPath . '/' . $pdfFileName;
+				$filesystem = new Filesystem();
+				if ($ModifiedNameDB != $modifiedName) {
+					if ($filesystem->exists($pdfFilePathDB)) {
+						if ($filesystem->exists($FolderPathDB)) {
+							$filesystem->remove($FolderPathDB);
+						}
+					}
+					if (!$filesystem->exists($FolderPath)) {
+						$filesystem->mkdir($FolderPath, 0777, true); 
+					}
+					file_put_contents($pdfFilePath, $pdfContent);
+				}
+				if ($ModifiedNameDB == $modifiedName) {
+					if ($filesystem->exists($pdfFilePathDB)) {
+						file_put_contents($pdfFilePath, $pdfContent);
+					}}
 			}
 			if (file_exists($pdfFilePathDB)) {
 				unlink($pdfFilePathDB);
