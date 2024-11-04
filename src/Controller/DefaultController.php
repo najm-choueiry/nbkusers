@@ -449,7 +449,7 @@ class DefaultController extends AbstractController
 				file_put_contents($pdfFilePathDB, $pdfContent);
 				}
 				else{
-				if ($ModifiedNameDB != $modifiedName) {
+				if ($folderName != $folderNameDB) {
 					if ($filesystem->exists($pdfFilePathDB)) {
 						if ($filesystem->exists($FolderPathDB)) {
 							$filesystem->remove($FolderPathDB);
@@ -460,10 +460,11 @@ class DefaultController extends AbstractController
 					}
 					file_put_contents($pdfFilePath, $pdfContent);
 				}
-				if ($ModifiedNameDB == $modifiedName) {
+				if ($folderName == $folderNameDB) {
 					if ($filesystem->exists($pdfFilePathDB)) {
 						file_put_contents($pdfFilePath, $pdfContent);
-					}}}
+					}}
+				}
 			}
 			if (file_exists($pdfFilePathDB)) {
 				unlink($pdfFilePathDB);
