@@ -27,6 +27,7 @@
 		"symfony/monolog-bundle": "^3.10",
 		"symfony/property-access": "6.0.*",
 		"symfony/runtime": "6.0.*",
+		"symfony/security-bundle": "6.0.*",
 		"symfony/translation": "6.0.*",
 		"symfony/twig-bundle": "6.0.*",
 		"symfony/ux-react": "^2.8",

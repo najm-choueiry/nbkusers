@@ -30,8 +30,6 @@
 				color: #0056b3;
 				border: 1px solid transparent;
 			}
-
-
 			.custom-checkbox-dropdown-container {
 				border: 1px solid #ccc;
 				border-radius: 4px;
@@ -42,13 +40,11 @@
 				background-color: #f9f9f9;
 
 			}
-
 			.custom-checkbox-dropdown-container label {
 				display: flex;
 				padding: 5px 21px;
 				margin-top: -30px;
 			}
-
 			.custom-checkbox-dropdown-container label:hover {
 				background-color: #f0f0f0;
 			}
@@ -61,12 +57,14 @@
 					<tbody>
 						<div id="userID" hidden>{{ user.id }}</div>
 						<div>
+							<div class="text-right mx-3"><a href="{{ path('app_logout') }}" class="btn btn-danger">Logout</a></div>
 							<h2>National Bank of Kuwait (Lebanon) S.A.L</h2>
 							<h6>{{ user.created|date('F j, Y, g:i a') }}</h6>
 						</div>
 						<div class="d-flex justify-content-between mt-4">
 							<h3 class="mb-2">
 								<p>Edit User</p>
+
 							</h3>
 							<h3 class="mb-2">
 								<p>Full Name:

@@ -11,12 +11,19 @@
 			.thead-dark th a {
 				color: white;
 			}
+			.logout{
+				margin-top: -65px;
+			    margin-bottom: 45px;
+				margin-right: 10px;
+			}
 		</style>
 
 	</head>
 	<body>
 		<div class="container-fluid mt-4">
-			<h1 class="mb-4">Users List</h1>
+		
+			<h1 class="mb-4">Users List </h1>
+			<div class="text-right logout" ><a href="{{ path('app_logout') }}" class="btn btn-danger">Logout</a></div> 
 			{% if app.session.flashBag.has('error') %}
 				<div class="alert alert-danger">
 					{% for message in app.session.flashBag.get('error') %}
@@ -24,7 +31,6 @@
 					{% endfor %}
 				</div>
 			{% endif %}
-
 			<div class="table-responsive">
 				<table class="table table-bordered">
 					<thead class="thead-dark">

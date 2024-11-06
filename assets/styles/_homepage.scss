@@ -1,0 +1,31 @@
+/* public/scss/login.scss */
+
+$primary-color: #007bff; // Define a primary color variable
+$primary-color-hover: #0056b3; // Define a hover color variable
+
+.card {
+    border: 2px solid $primary-color; // Use variable for border color
+    border-radius: 10px; // Rounded corners for the card
+
+    .card-header {
+        border-top-left-radius: 10px; // Rounded corners for the header
+        border-top-right-radius: 10px;
+    }
+}
+
+.btn-primary {
+    background-color: $primary-color; // Use variable for background color
+    transition: background-color 0.3s; // Add transition effect
+
+    &:hover {
+        background-color: $primary-color-hover; // Use variable for hover color
+    }
+}
+
+.text-muted {
+    text-decoration: none; // Remove underline from the link
+
+    &:hover {
+        text-decoration: underline; // Underline on hover for the link
+    }
+}

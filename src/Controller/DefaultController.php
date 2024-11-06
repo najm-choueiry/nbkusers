@@ -33,14 +33,13 @@ class DefaultController extends AbstractController
 	private $entityManager;
 	private $helper;
 
-	public function __construct(EntityManagerInterface $entityManager,Helper $helper)
+	public function __construct(EntityManagerInterface $entityManager, Helper $helper)
 	{
 		$this->entityManager = $entityManager;
 		$this->helper = $helper;
-
 	}
 
-	#[Route('/', name: 'app_nbk_users')]
+	#[Route('/home', name: 'app_nbk_users')]
 	public function index(Request $request, PaginatorInterface $paginator): Response
 	{
 		$sortField = $request->query->get('sort', 'u.id');
@@ -131,136 +130,134 @@ class DefaultController extends AbstractController
 			'user_id' => $userId,
 		]);
 		$form->handleRequest($request);
-		if ($form->isSubmitted() && $form->isValid()) 
-		{
+		if ($form->isSubmitted() && $form->isValid()) {
 			$formData = $form->getData();
 			if ($user[0]->getMothersName()) {
 
-			$data = [
-				'user' => [
-					'fullName' => $formData['FullName'],
-					'mobileNumb' => $formData['MobileNumb'],
-					'email' => $formData['Email'],
-					'branchId' => $formData['BranchId'],
-					'mothersName' => $formData['MotherName'],
-					'gender' => $formData['Gender'],
-					'dob' => $formData['Dob'],
-					'placeOfBirth' => $formData['PlaceOfBirth'],
-					'countryOfOrigin' => $formData['CountryofOrigin'],
-					'nationality' => $formData['Nationality'],
-					'nationalId' => $formData['NationalID'],
-					'expirationDateNationalId' => $formData['ExpirationNationalIDDate'],
-					'registerPlaceAndNo' => $formData['RegisterPlaceNo'],
-					'registerNumber' => $formData['RegisterNumber'],
-					'maritalStatus' => $formData['MaritalStatus'],
-					'passportNumber' => $formData['PassportNumber'],
-					'placeOfIssuePassport' => $formData['PlaceofIssuePassport'],
-					'passportExpirationDate' => $formData['ExpirationDatePassport'],
-					'otherNationalities' => $formData['OtherNationalities'],
-					'statusInLebanon' => $formData['StatusinLebanon'],
-					'otherCountriesOfTaxResidence' => $formData['otherCountriesTaxResidence'],
-					'taxResidencyIdNumber' => $formData['TaxResidencyIdNumber'],
-					'spouseName' => $formData['SpouseName'],
-					'spouseProfession' => $formData['SpouseProfession'],
-					'noOfChildren' => $formData['NoofChildren'],
-				],
-				'address' => [
-					'city' => $formData['city'],
-					'street' => $formData['street'],
-					'building' => $formData['building'],
-					'floor' => $formData['floor'],
-					'apartment' => $formData['apartment'],
-					'houseTelephoneNumber' => $formData['HouseTelNO'],
-					'internationalAddress' => $formData['InternationalAddress'],
-					'internationalHouseTelephoneNumber' => $formData['internationalHouseTelephoneNumber'],
-					'internationalMobileNumber' => $formData['internationalMobileNumber'],
-					'alternateContactName' => $formData['alternateContactName'],
-					'alternateTelephoneNumber' => $formData['alternateTelephoneNumber'],
-					'intArea' => $formData['intArea'],
-					'intStreet' => $formData['intStreet'],
-					'intBuilding' => $formData['intBuilding'],
-					'intFloor' => $formData['intFloor'],
-					'intApartment' => $formData['intAppartment'],
-				],
-				'workDetails' => [
-					'profession' => $formData['profession'],
-					'jobTitle' => $formData['jobTitle'],
-					'publicSector' => $formData['publicSector'],
-					'activitySector' => $formData['activitySector'],
-					'entityName' => $formData['entityName'],
-					'educationLevel' => $formData['educationLevel'],
-					'workAddress' => $formData['WorkAddress'],
-					'workTelephoneNumber' => $formData['WorkTelNo'],
-					'placeOfWorkListed' => $formData['ISListed'],
-					'grade' => $formData['grade'],
-				],
-				'beneficiaryRightsOwner' => [
-					'customerSameAsBeneficiary' => $formData['CustomerSameAsBeneficiary'],
-					'broNationality' => $formData['broNationality'],
-					'beneficiaryName' => $formData['BeneficiaryName'],
-					'relationship' => $formData['relationship'],
-					'broCivilIdNumber' => $formData['broCivilIdNumber'],
-					'expirationDate' => $formData['broexpirationDate'],
-					'reasonOfBro' => $formData['reasonOfBro'],
-					'address' => $formData['broaddress'],
-					'profession' => $formData['broprofession'],
-					'incomeWealthDetails' => $formData['incomeWealthDetails'],
-				],
-				'politicalPositionDetails' => [
-					'politicalPosition' => $formData['politicalPosition'],
-					'currentOrPrevious' => $formData['currentPrevious'],
-					'yearOfRetirement' => $formData['yearOfRetirement'],
-					'pepName' => $formData['pepname'],
-					'relationship' => $formData['peprelationship'],
-					'pepPosition' => $formData['pepposition'],
-				],
-				'financialDetails' => [
-					'sourceOfFunds' => $formData['sourceOfFunds'],
-					'currency' => $formData['financelcurrency'],
-					'monthlyBasicSalary' => $formData['monthlyBasicSalary'],
-					'monthlyAllowances' => $formData['monthlyAllowances'],
-					'additionalIncomeSources' => $formData['AdditionalIncomeSourcesArray'],
-					'othersSourceOfFound' => $formData['othersSourceOfFound'],
-					'totalEstimatedMonthlyIncome' => $formData['TotalEstimatedMonthlyIncome'],
-					'estimatedWealthAmount' => $formData['estimatedWealthAmount'],
-					'isWealthInherited' => $formData['isWealthInherited'],
-					'sourcesOfWealth' => $formData['sourcesOfWealth'],
-					'incomeCategory' => $formData['IncomeCategory'],
-					'expectedNumberOfTransactions' => $formData['expectedNumberOfTransactions'],
-					'expectedValueOfTransactions' => $formData['expectedValueOfTransactions'],
-					'frequency' => $formData['finanfrequency'],
-					'hasOtherAccounts' => $formData['otherAccountsAtBanks'],
-					'bankName' => $formData['bankNameone'],
-					'country' => $formData['Countryone'],
-					'accountBalance' => $formData['AccountBalanceOne'],
-					'bankName2' => $formData['secondBankName'],
-					'country2' => $formData['secondCountry'],
-					'accountBalance2' => $formData['secondBankBalance'],
-					'bankName3' => $formData['thirdBankName'],
-					'country3' => $formData['thirdAccountCountry'],
-					'accountBalance3' => $formData['thirdAccountBalance'],
-					'natureOfRelation' => $formData['natureOfRelation'],
-					'purposeOfRelation' => $formData['purposeOfRelation'],
-					'selectIDType' => $formData['selectIDType'],
-					'frontImageID' => $formData['frontImageID'] ?? null,
-					'backImageID' => $formData['backImageID'] ?? null,
-					'realEstateTitle' => $formData['realEstateTitle'] ?? null,
-					'accountStatement' => $formData['accountStatement'] ?? null,
-					'otherDocument' => $formData['otherDocument'] ?? null,
-					'employerLetter' => $formData['employerLetter'] ?? null,
-				]
-			];
-		}else {
-			$data = [
-				'user' => [
-					'fullName' => $formData['FullName'],
-					'mobileNumb' => $formData['MobileNumb'],
-					'email' => $formData['Email'],
-					'branchId' => $formData['BranchId']
-				]
-			];
-		}
-
+				$data = [
+					'user' => [
+						'fullName' => $formData['FullName'],
+						'mobileNumb' => $formData['MobileNumb'],
+						'email' => $formData['Email'],
+						'branchId' => $formData['BranchId'],
+						'mothersName' => $formData['MotherName'],
+						'gender' => $formData['Gender'],
+						'dob' => $formData['Dob'],
+						'placeOfBirth' => $formData['PlaceOfBirth'],
+						'countryOfOrigin' => $formData['CountryofOrigin'],
+						'nationality' => $formData['Nationality'],
+						'nationalId' => $formData['NationalID'],
+						'expirationDateNationalId' => $formData['ExpirationNationalIDDate'],
+						'registerPlaceAndNo' => $formData['RegisterPlaceNo'],
+						'registerNumber' => $formData['RegisterNumber'],
+						'maritalStatus' => $formData['MaritalStatus'],
+						'passportNumber' => $formData['PassportNumber'],
+						'placeOfIssuePassport' => $formData['PlaceofIssuePassport'],
+						'passportExpirationDate' => $formData['ExpirationDatePassport'],
+						'otherNationalities' => $formData['OtherNationalities'],
+						'statusInLebanon' => $formData['StatusinLebanon'],
+						'otherCountriesOfTaxResidence' => $formData['otherCountriesTaxResidence'],
+						'taxResidencyIdNumber' => $formData['TaxResidencyIdNumber'],
+						'spouseName' => $formData['SpouseName'],
+						'spouseProfession' => $formData['SpouseProfession'],
+						'noOfChildren' => $formData['NoofChildren'],
+					],
+					'address' => [
+						'city' => $formData['city'],
+						'street' => $formData['street'],
+						'building' => $formData['building'],
+						'floor' => $formData['floor'],
+						'apartment' => $formData['apartment'],
+						'houseTelephoneNumber' => $formData['HouseTelNO'],
+						'internationalAddress' => $formData['InternationalAddress'],
+						'internationalHouseTelephoneNumber' => $formData['internationalHouseTelephoneNumber'],
+						'internationalMobileNumber' => $formData['internationalMobileNumber'],
+						'alternateContactName' => $formData['alternateContactName'],
+						'alternateTelephoneNumber' => $formData['alternateTelephoneNumber'],
+						'intArea' => $formData['intArea'],
+						'intStreet' => $formData['intStreet'],
+						'intBuilding' => $formData['intBuilding'],
+						'intFloor' => $formData['intFloor'],
+						'intApartment' => $formData['intAppartment'],
+					],
+					'workDetails' => [
+						'profession' => $formData['profession'],
+						'jobTitle' => $formData['jobTitle'],
+						'publicSector' => $formData['publicSector'],
+						'activitySector' => $formData['activitySector'],
+						'entityName' => $formData['entityName'],
+						'educationLevel' => $formData['educationLevel'],
+						'workAddress' => $formData['WorkAddress'],
+						'workTelephoneNumber' => $formData['WorkTelNo'],
+						'placeOfWorkListed' => $formData['ISListed'],
+						'grade' => $formData['grade'],
+					],
+					'beneficiaryRightsOwner' => [
+						'customerSameAsBeneficiary' => $formData['CustomerSameAsBeneficiary'],
+						'broNationality' => $formData['broNationality'],
+						'beneficiaryName' => $formData['BeneficiaryName'],
+						'relationship' => $formData['relationship'],
+						'broCivilIdNumber' => $formData['broCivilIdNumber'],
+						'expirationDate' => $formData['broexpirationDate'],
+						'reasonOfBro' => $formData['reasonOfBro'],
+						'address' => $formData['broaddress'],
+						'profession' => $formData['broprofession'],
+						'incomeWealthDetails' => $formData['incomeWealthDetails'],
+					],
+					'politicalPositionDetails' => [
+						'politicalPosition' => $formData['politicalPosition'],
+						'currentOrPrevious' => $formData['currentPrevious'],
+						'yearOfRetirement' => $formData['yearOfRetirement'],
+						'pepName' => $formData['pepname'],
+						'relationship' => $formData['peprelationship'],
+						'pepPosition' => $formData['pepposition'],
+					],
+					'financialDetails' => [
+						'sourceOfFunds' => $formData['sourceOfFunds'],
+						'currency' => $formData['financelcurrency'],
+						'monthlyBasicSalary' => $formData['monthlyBasicSalary'],
+						'monthlyAllowances' => $formData['monthlyAllowances'],
+						'additionalIncomeSources' => $formData['AdditionalIncomeSourcesArray'],
+						'othersSourceOfFound' => $formData['othersSourceOfFound'],
+						'totalEstimatedMonthlyIncome' => $formData['TotalEstimatedMonthlyIncome'],
+						'estimatedWealthAmount' => $formData['estimatedWealthAmount'],
+						'isWealthInherited' => $formData['isWealthInherited'],
+						'sourcesOfWealth' => $formData['sourcesOfWealth'],
+						'incomeCategory' => $formData['IncomeCategory'],
+						'expectedNumberOfTransactions' => $formData['expectedNumberOfTransactions'],
+						'expectedValueOfTransactions' => $formData['expectedValueOfTransactions'],
+						'frequency' => $formData['finanfrequency'],
+						'hasOtherAccounts' => $formData['otherAccountsAtBanks'],
+						'bankName' => $formData['bankNameone'],
+						'country' => $formData['Countryone'],
+						'accountBalance' => $formData['AccountBalanceOne'],
+						'bankName2' => $formData['secondBankName'],
+						'country2' => $formData['secondCountry'],
+						'accountBalance2' => $formData['secondBankBalance'],
+						'bankName3' => $formData['thirdBankName'],
+						'country3' => $formData['thirdAccountCountry'],
+						'accountBalance3' => $formData['thirdAccountBalance'],
+						'natureOfRelation' => $formData['natureOfRelation'],
+						'purposeOfRelation' => $formData['purposeOfRelation'],
+						'selectIDType' => $formData['selectIDType'],
+						'frontImageID' => $formData['frontImageID'] ?? null,
+						'backImageID' => $formData['backImageID'] ?? null,
+						'realEstateTitle' => $formData['realEstateTitle'] ?? null,
+						'accountStatement' => $formData['accountStatement'] ?? null,
+						'otherDocument' => $formData['otherDocument'] ?? null,
+						'employerLetter' => $formData['employerLetter'] ?? null,
+					]
+				];
+			} else {
+				$data = [
+					'user' => [
+						'fullName' => $formData['FullName'],
+						'mobileNumb' => $formData['MobileNumb'],
+						'email' => $formData['Email'],
+						'branchId' => $formData['BranchId']
+					]
+				];
+			}
 			if ($data === null) {
 				return new JsonResponse(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
 			}
@@ -269,8 +266,7 @@ class DefaultController extends AbstractController
 			$mobileNumbDB = $dataUserDB->getMobileNumb();
 			$fullNameDB =  $dataUserDB->getFullName();
 			$dataFinancialDetailsDB = $this->entityManager->getRepository(FinancialDetails::class)->findBy(['user_id' => $userId]);
-			if ($user[0]->getMothersName())
-			{
+			if ($user[0]->getMothersName()) {
 				$financialDetailDB = $dataFinancialDetailsDB[0];
 				$frontimageDB = $financialDetailDB->getFrontImageID();
 				$backimageDB = $financialDetailDB->getBackImageID();
@@ -279,7 +275,6 @@ class DefaultController extends AbstractController
 				$otherDocumentDB = $financialDetailDB->getOtherDocument();
 				$accountStatementDB = $financialDetailDB->getAccountStatement();
 			}
-	
 			$userEmail = $data['user']['email'];
 			if (!$this->helper->isValidEmail($userEmail)) {
 				return new JsonResponse(['error' => 'Invalid email address'], Response::HTTP_BAD_REQUEST);
@@ -288,11 +283,8 @@ class DefaultController extends AbstractController
 			if (!$user) {
 				return new JsonResponse(['error' => 'Failed to create user'], Response::HTTP_BAD_REQUEST);
 			}
-
-	
 			$modifiedName = '';
 			$fullName = $data['user']['fullName'];
-			
 			$mobileNumb = $data['user']['mobileNumb'];
 			for ($i = 0; $i < strlen($fullName); $i++) {
 				$char = $fullName[$i];
@@ -303,108 +295,106 @@ class DefaultController extends AbstractController
 					$i++;
 				}
 			}
-			if ($user->getMothersName())
-            {
-			$frontImageID = $data['financialDetails']['frontImageID'];
-			$backImageID = $data['financialDetails']['backImageID'];
-			$realStateImage = $data['financialDetails']['realEstateTitle'];
-			$otherDocumentImage = $data['financialDetails']['otherDocument'];
-			$accountStatementImage = $data['financialDetails']['accountStatement'];
-			$employeeLetterImage = $data['financialDetails']['employerLetter'];
-			$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
-			$ModifiedNameDB = explode('-', explode('/', $frontimageDB)[2])[0];
+			if ($user->getMothersName()) {
+				$frontImageID = $data['financialDetails']['frontImageID'];
+				$backImageID = $data['financialDetails']['backImageID'];
+				$realStateImage = $data['financialDetails']['realEstateTitle'];
+				$otherDocumentImage = $data['financialDetails']['otherDocument'];
+				$accountStatementImage = $data['financialDetails']['accountStatement'];
+				$employeeLetterImage = $data['financialDetails']['employerLetter'];
+				$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
+				$ModifiedNameDB = explode('-', explode('/', $frontimageDB)[2])[0];
 
-			$oldPathInDb = explode('/', $frontimageDB)[2];
-			$oldImageFolder = 'imageUser/' . str_replace(' ', '_', $oldPathInDb);
-			$oldFolderPath = $staticBaseDir . $oldImageFolder;
+				$oldPathInDb = explode('/', $frontimageDB)[2];
+				$oldImageFolder = 'imageUser/' . str_replace(' ', '_', $oldPathInDb);
+				$oldFolderPath = $staticBaseDir . $oldImageFolder;
 
-			$folderName = $modifiedName . '-' . $mobileNumb;
-			$ImageFolder = 'imageUser/' . str_replace(' ', '_', $folderName);
-			$FolderPath = $staticBaseDir . $ImageFolder;
+				$folderName = $modifiedName . '-' . $mobileNumb;
+				$ImageFolder = 'imageUser/' . str_replace(' ', '_', $folderName);
+				$FolderPath = $staticBaseDir . $ImageFolder;
 
-			$filesystem = new Filesystem();
-			if ($FolderPath !== $oldFolderPath) {
-				$filesystem->rename($oldFolderPath, $FolderPath);
-				$filesystem->remove($oldFolderPath);
+				$filesystem = new Filesystem();
+				if ($FolderPath !== $oldFolderPath) {
+					$filesystem->rename($oldFolderPath, $FolderPath);
+					$filesystem->remove($oldFolderPath);
+				}
+
+				$images = [
+					'realEstateImage' => [
+						'image' => $realStateImage,
+						'existingImagePath' => $realEstateTitleDB,
+						'imageName' => 'realEstateImageData'
+					],
+					'otherDocumentImage' => [
+						'image' => $otherDocumentImage,
+						'existingImagePath' => $otherDocumentDB,
+						'imageName' => 'imageotherdoc'
+					],
+					'accountStatementImage' => [
+						'image' => $accountStatementImage,
+						'existingImagePath' => $accountStatementDB,
+						'imageName' => 'imageFrontaccoountStat'
+					],
+					'employeeLetterImage' => [
+						'image' => $employeeLetterImage,
+						'existingImagePath' => $employerLetterDB,
+						'imageName' => 'imageEmployerLetter'
+					],
+					'frontImage' => [
+						'image' => $frontImageID,
+						'existingImagePath' => $frontimageDB,
+						'imageName' => 'frontImageID'
+					],
+					'backImage' => [
+						'image' => $backImageID,
+						'existingImagePath' => $backimageDB,
+						'imageName' => 'BackimageID'
+					]
+				];
+				$processedImages = Helper::processImages($images, $staticBaseDir, $folderName, $ImageFolder);
+
+				$imageRealEStateDB = $processedImages['realEstateImage']['pathDB'] ?? null;
+				$imageotherdocDB = $processedImages['otherDocumentImage']['pathDB'] ?? null;
+				$imageFrontaccoountStatDB = $processedImages['accountStatementImage']['pathDB'] ?? null;
+				$imageEmployerLetterDB = $processedImages['employeeLetterImage']['pathDB'] ?? null;
+				$imageFrontDB = $processedImages['frontImage']['pathDB'] ?? null;
+				$imageBackDB = $processedImages['backImage']['pathDB'] ?? null;
+
+				if (!file_exists($FolderPath)) {
+					mkdir($FolderPath, 0777, true);
+				}
+
+				$this->helper->unsetImagesFromData($data['financialDetails']);
+
+				$address = $addressRepository->createAddress($data['address'] ?? [], $userId);
+				if ($address) {
+					$address->setUser($user);
+				}
+				$workDetails = $workDetailsRepository->createWorkDetails($data['workDetails'] ?? [], $userId);
+				if ($workDetails) {
+					$workDetails->setUser($user);
+				}
+				$beneficiary = $beneficiaryRepository->createBeneficiary($data['beneficiaryRightsOwner'] ?? [], $userId);
+				if ($beneficiary) {
+					$beneficiary->setUser($user);
+				}
+				$politicalPosition = $politicalPositionRepository->createPoliticalPosition($data['politicalPositionDetails'] ?? [], $userId);
+				if ($politicalPosition) {
+					$politicalPosition->setUser($user);
+				}
+				$financialDetails = $financialRepository->createFinancialDetails($data['financialDetails'] ?? [], $modifiedName, $mobileNumbDB, $mobileNumb, $fullNameDB, $fullName, $frontimageDB, $backimageDB, $realEstateTitleDB, $accountStatementDB, $otherDocumentDB, $employerLetterDB, $userId, $imageFrontDB, $imageBackDB, $imageRealEStateDB, $imageFrontaccoountStatDB,  $imageotherdocDB, $imageEmployerLetterDB);
+
+				if ($financialDetails) {
+					$financialDetails->setUser($user);
+				}
 			}
-
-			$images = [
-				'realEstateImage' => [
-					'image' => $realStateImage,
-					'existingImagePath' => $realEstateTitleDB,
-					'imageName' => 'realEstateImageData'
-				],
-				'otherDocumentImage' => [
-					'image' => $otherDocumentImage,
-					'existingImagePath' => $otherDocumentDB,
-					'imageName' => 'imageotherdoc'
-				],
-				'accountStatementImage' => [
-					'image' => $accountStatementImage,
-					'existingImagePath' => $accountStatementDB,
-					'imageName' => 'imageFrontaccoountStat'
-				],
-				'employeeLetterImage' => [
-					'image' => $employeeLetterImage,
-					'existingImagePath' => $employerLetterDB,
-					'imageName' => 'imageEmployerLetter'
-				],
-				'frontImage' => [
-					'image' => $frontImageID,
-					'existingImagePath' => $frontimageDB,
-					'imageName' => 'frontImageID'
-				],
-				'backImage' => [
-					'image' => $backImageID,
-					'existingImagePath' => $backimageDB,
-					'imageName' => 'BackimageID'
-				]
-			];
-			$processedImages =Helper::processImages($images, $staticBaseDir, $folderName, $ImageFolder);
-
-			$imageRealEStateDB = $processedImages['realEstateImage']['pathDB'] ?? null;
-			$imageotherdocDB = $processedImages['otherDocumentImage']['pathDB'] ?? null;
-			$imageFrontaccoountStatDB = $processedImages['accountStatementImage']['pathDB'] ?? null;
-			$imageEmployerLetterDB = $processedImages['employeeLetterImage']['pathDB'] ?? null;
-			$imageFrontDB = $processedImages['frontImage']['pathDB'] ?? null;
-			$imageBackDB = $processedImages['backImage']['pathDB'] ?? null;
-
-			if (!file_exists($FolderPath)) {
-				mkdir($FolderPath, 0777, true);
-			}
-
-			$this->helper->unsetImagesFromData($data['financialDetails']);
-
-			$address = $addressRepository->createAddress($data['address'] ?? [], $userId);
-			if ($address) {
-				$address->setUser($user);
-			}
-			$workDetails = $workDetailsRepository->createWorkDetails($data['workDetails'] ?? [], $userId);
-			if ($workDetails) {
-				$workDetails->setUser($user);
-			}
-			$beneficiary = $beneficiaryRepository->createBeneficiary($data['beneficiaryRightsOwner'] ?? [], $userId);
-			if ($beneficiary) {
-				$beneficiary->setUser($user);
-			}
-			$politicalPosition = $politicalPositionRepository->createPoliticalPosition($data['politicalPositionDetails'] ?? [], $userId);
-			if ($politicalPosition) {
-				$politicalPosition->setUser($user);
-			}
-			$financialDetails = $financialRepository->createFinancialDetails($data['financialDetails'] ?? [], $modifiedName, $mobileNumbDB, $mobileNumb, $fullNameDB, $fullName, $frontimageDB, $backimageDB, $realEstateTitleDB, $accountStatementDB, $otherDocumentDB, $employerLetterDB, $userId, $imageFrontDB, $imageBackDB, $imageRealEStateDB, $imageFrontaccoountStatDB,  $imageotherdocDB, $imageEmployerLetterDB);
-
-			if ($financialDetails) {
-				$financialDetails->setUser($user);
-			}
-           }
 			$this->entityManager->persist($user);
-			if ($user->getMothersName())
-		{
-			$this->entityManager->persist($address);
-			$this->entityManager->persist($workDetails);
-			$this->entityManager->persist($beneficiary);
-			$this->entityManager->persist($politicalPosition);
-			$this->entityManager->persist($financialDetails);
+			if ($user->getMothersName()) {
+				$this->entityManager->persist($address);
+				$this->entityManager->persist($workDetails);
+				$this->entityManager->persist($beneficiary);
+				$this->entityManager->persist($politicalPosition);
+				$this->entityManager->persist($financialDetails);
 			}
 			$this->entityManager->flush();
 
@@ -413,18 +403,15 @@ class DefaultController extends AbstractController
 			$dateEmailFormatted = $dateEmail->format('Y-m-d H:i:s');
 			$pdfContent = $this->helper->generateReportPdf($data, $dateEmailFormatted, $reference);
 			$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
-			if ($user->getMothersName())
-			{
-			$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
-			$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
-			$pdfFilePath = $FolderPath . '/' . $pdfFileName;
-		}
-			else
-			{
+			if ($user->getMothersName()) {
+				$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
+				$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
+				$pdfFilePath = $FolderPath . '/' . $pdfFileName;
+			} else {
 				$ModifiedNameDB = '';
 				for ($i = 0; $i < strlen($fullNameDB); $i++) {
 					$char = $fullNameDB[$i];
-	
+
 					if (ctype_alpha($char)) {
 						$ModifiedNameDB .= $char;
 					} else {
@@ -438,7 +425,7 @@ class DefaultController extends AbstractController
 				$ImageFolderDB = 'imageUser/' . $folderNameDB;
 				$FolderPath = $staticBaseDir . $ImageFolder;
 				$FolderPathDB = $staticBaseDir . $ImageFolderDB;
-				
+
 				$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
 				$pdfFilePathDB = $FolderPathDB . '/' . $pdfFileNameDB;
 				$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
@@ -446,24 +433,24 @@ class DefaultController extends AbstractController
 				$filesystem = new Filesystem();
 				if (!$filesystem->exists($FolderPathDB)) {
 					$filesystem->mkdir($FolderPathDB, 0777);
-				file_put_contents($pdfFilePathDB, $pdfContent);
-				}
-				else{
-				if ($folderName != $folderNameDB) {
-					if ($filesystem->exists($pdfFilePathDB)) {
-						if ($filesystem->exists($FolderPathDB)) {
-							$filesystem->remove($FolderPathDB);
+					file_put_contents($pdfFilePathDB, $pdfContent);
+				} else {
+					if ($folderName != $folderNameDB) {
+						if ($filesystem->exists($pdfFilePathDB)) {
+							if ($filesystem->exists($FolderPathDB)) {
+								$filesystem->remove($FolderPathDB);
+							}
+						}
+						if (!$filesystem->exists($FolderPath)) {
+							$filesystem->mkdir($FolderPath, 0777, true);
+						}
+						file_put_contents($pdfFilePath, $pdfContent);
+					}
+					if ($folderName == $folderNameDB) {
+						if ($filesystem->exists($pdfFilePathDB)) {
+							file_put_contents($pdfFilePath, $pdfContent);
 						}
 					}
-					if (!$filesystem->exists($FolderPath)) {
-						$filesystem->mkdir($FolderPath, 0777, true); 
-					}
-					file_put_contents($pdfFilePath, $pdfContent);
-				}
-				if ($folderName == $folderNameDB) {
-					if ($filesystem->exists($pdfFilePathDB)) {
-						file_put_contents($pdfFilePath, $pdfContent);
-					}}
 				}
 			}
 			if (file_exists($pdfFilePathDB)) {
@@ -527,7 +514,7 @@ class DefaultController extends AbstractController
 		$pdfname = $modifiedName . '_' . $mobileNumb . '.pdf';
 		$folderName = $modifiedName . '-' . $mobileNumb;
 		$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
-		$path= $staticBaseDir.'imageUser/' . $folderName . '/';
+		$path = $staticBaseDir . 'imageUser/' . $folderName . '/';
 		$pdfFilePath = $path . $pdfname;
 		if (!file_exists($pdfFilePath)) {
 			$this->addFlash('error', 'PDF file not found.');
@@ -538,7 +525,5 @@ class DefaultController extends AbstractController
 		$response->headers->set('Content-Disposition', 'attachment; filename="' . basename($pdfFilePath) . '"');
 		return $response;
 	}
-
-
 
 }
