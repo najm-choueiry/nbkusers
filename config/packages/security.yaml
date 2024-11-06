@@ -1,31 +1,31 @@
-security:
-    enable_authenticator_manager: true
+# security:
+#     enable_authenticator_manager: true
     
-    password_hashers:
-        App\Entity\Accounts:
-            algorithm: 'bcrypt'
+#     password_hashers:
+#         App\Entity\Accounts:
+#             algorithm: 'bcrypt'
             
-    providers:
-        app_user_provider:
-            entity:
-                class: App\Entity\Accounts
-                property: username
+#     providers:
+#         app_user_provider:
+#             entity:
+#                 class: App\Entity\Accounts
+#                 property: username
 
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            lazy: true
-            provider: app_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
-            logout:
-                path: app_logout
-                target: app_login
+#     firewalls:
+#         dev:
+#             pattern: ^/(_(profiler|wdt)|css|images|js)/
+#             security: false
+#         main:
+#             lazy: true
+#             provider: app_user_provider
+#             form_login:
+#                 login_path: app_login
+#                 check_path: app_login
+#                 enable_csrf: true
+#             logout:
+#                 path: app_logout
+#                 target: app_login
 
-    access_control:
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: ROLE_USER }
+#     access_control:
+#         - { path: ^/login, roles: PUBLIC_ACCESS }
+#         - { path: ^/, roles: ROLE_USER }

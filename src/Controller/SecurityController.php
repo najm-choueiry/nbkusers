@@ -22,7 +22,7 @@ class SecurityController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(Request $request): Response
     {    
-        dd($request);
+
         if ($request->isMethod('POST')) {
             $username = $request->request->get('_username');
             $password = $request->request->get('_password');
