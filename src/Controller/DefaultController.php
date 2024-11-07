@@ -39,7 +39,7 @@ class DefaultController extends AbstractController
 		$this->helper = $helper;
 	}
 
-	#[Route('/home', name: 'app_nbk_users')]
+	#[Route('/', name: 'app_nbk_users')]
 	public function index(Request $request, PaginatorInterface $paginator): Response
 	{
 		$sortField = $request->query->get('sort', 'u.id');
@@ -302,7 +302,7 @@ class DefaultController extends AbstractController
 				$otherDocumentImage = $data['financialDetails']['otherDocument'];
 				$accountStatementImage = $data['financialDetails']['accountStatement'];
 				$employeeLetterImage = $data['financialDetails']['employerLetter'];
-				$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
+				$staticBaseDir = 'https://fresh.nbk.com.lb/';
 				$ModifiedNameDB = explode('-', explode('/', $frontimageDB)[2])[0];
 
 				$oldPathInDb = explode('/', $frontimageDB)[2];
@@ -418,7 +418,7 @@ class DefaultController extends AbstractController
 						$i++;
 					}
 				}
-				$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
+				$staticBaseDir = 'https://fresh.nbk.com.lb/';
 				$folderName = $modifiedName . '-' . $mobileNumb;
 				$folderNameDB = $ModifiedNameDB . '-' . $mobileNumbDB;
 				$ImageFolder = 'imageUser/' . $folderName;
@@ -513,7 +513,7 @@ class DefaultController extends AbstractController
 		}
 		$pdfname = $modifiedName . '_' . $mobileNumb . '.pdf';
 		$folderName = $modifiedName . '-' . $mobileNumb;
-		$staticBaseDir = 'C:/xampp/htdocs/AlWatany-NBK/public/';
+		$staticBaseDir = 'https://fresh.nbk.com.lb/';
 		$path = $staticBaseDir . 'imageUser/' . $folderName . '/';
 		$pdfFilePath = $path . $pdfname;
 		if (!file_exists($pdfFilePath)) {
