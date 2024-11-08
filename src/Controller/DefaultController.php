@@ -26,17 +26,22 @@ use Symfony\Component\HttpFoundation\Response;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
-
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use GuzzleHttp\Client;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class DefaultController extends AbstractController
 {
 	private $entityManager;
 	private $helper;
+	private $client;
 
-	public function __construct(EntityManagerInterface $entityManager, Helper $helper)
+	public function __construct(EntityManagerInterface $entityManager, Helper $helper, HttpClientInterface $client)
 	{
 		$this->entityManager = $entityManager;
 		$this->helper = $helper;
+		$this->client = $client;
 	}
 
 	#[Route('/', name: 'app_nbk_users')]
@@ -269,11 +274,6 @@ class DefaultController extends AbstractController
 			if ($user[0]->getMothersName()) {
 				$financialDetailDB = $dataFinancialDetailsDB[0];
 				$frontimageDB = $financialDetailDB->getFrontImageID();
-				$backimageDB = $financialDetailDB->getBackImageID();
-				$realEstateTitleDB = $financialDetailDB->getRealEstateTitle();
-				$employerLetterDB = $financialDetailDB->getEmployerLetter();
-				$otherDocumentDB = $financialDetailDB->getOtherDocument();
-				$accountStatementDB = $financialDetailDB->getAccountStatement();
 			}
 			$userEmail = $data['user']['email'];
 			if (!$this->helper->isValidEmail($userEmail)) {
@@ -302,67 +302,8 @@ class DefaultController extends AbstractController
 				$otherDocumentImage = $data['financialDetails']['otherDocument'];
 				$accountStatementImage = $data['financialDetails']['accountStatement'];
 				$employeeLetterImage = $data['financialDetails']['employerLetter'];
-				$staticBaseDir = 'https://fresh.nbk.com.lb/';
+
 				$ModifiedNameDB = explode('-', explode('/', $frontimageDB)[2])[0];
-
-				$oldPathInDb = explode('/', $frontimageDB)[2];
-				$oldImageFolder = 'imageUser/' . str_replace(' ', '_', $oldPathInDb);
-				$oldFolderPath = $staticBaseDir . $oldImageFolder;
-
-				$folderName = $modifiedName . '-' . $mobileNumb;
-				$ImageFolder = 'imageUser/' . str_replace(' ', '_', $folderName);
-				$FolderPath = $staticBaseDir . $ImageFolder;
-
-				$filesystem = new Filesystem();
-				if ($FolderPath !== $oldFolderPath) {
-					$filesystem->rename($oldFolderPath, $FolderPath);
-					$filesystem->remove($oldFolderPath);
-				}
-
-				$images = [
-					'realEstateImage' => [
-						'image' => $realStateImage,
-						'existingImagePath' => $realEstateTitleDB,
-						'imageName' => 'realEstateImageData'
-					],
-					'otherDocumentImage' => [
-						'image' => $otherDocumentImage,
-						'existingImagePath' => $otherDocumentDB,
-						'imageName' => 'imageotherdoc'
-					],
-					'accountStatementImage' => [
-						'image' => $accountStatementImage,
-						'existingImagePath' => $accountStatementDB,
-						'imageName' => 'imageFrontaccoountStat'
-					],
-					'employeeLetterImage' => [
-						'image' => $employeeLetterImage,
-						'existingImagePath' => $employerLetterDB,
-						'imageName' => 'imageEmployerLetter'
-					],
-					'frontImage' => [
-						'image' => $frontImageID,
-						'existingImagePath' => $frontimageDB,
-						'imageName' => 'frontImageID'
-					],
-					'backImage' => [
-						'image' => $backImageID,
-						'existingImagePath' => $backimageDB,
-						'imageName' => 'BackimageID'
-					]
-				];
-				$processedImages = Helper::processImages($images, $staticBaseDir, $folderName, $ImageFolder);
-
-				$imageRealEStateDB = $processedImages['realEstateImage']['pathDB'] ?? null;
-				$imageotherdocDB = $processedImages['otherDocumentImage']['pathDB'] ?? null;
-				$imageFrontaccoountStatDB = $processedImages['accountStatementImage']['pathDB'] ?? null;
-				$imageEmployerLetterDB = $processedImages['employeeLetterImage']['pathDB'] ?? null;
-				$imageFrontDB = $processedImages['frontImage']['pathDB'] ?? null;
-				$imageBackDB = $processedImages['backImage']['pathDB'] ?? null;
-
-				if (!file_exists($FolderPath)) {
-					mkdir($FolderPath, 0777, true);
-				}
 
 				$this->helper->unsetImagesFromData($data['financialDetails']);
 
@@ -382,7 +323,7 @@ class DefaultController extends AbstractController
 				if ($politicalPosition) {
 					$politicalPosition->setUser($user);
 				}
-				$financialDetails = $financialRepository->createFinancialDetails($data['financialDetails'] ?? [], $modifiedName, $mobileNumbDB, $mobileNumb, $fullNameDB, $fullName, $frontimageDB, $backimageDB, $realEstateTitleDB, $accountStatementDB, $otherDocumentDB, $employerLetterDB, $userId, $imageFrontDB, $imageBackDB, $imageRealEStateDB, $imageFrontaccoountStatDB,  $imageotherdocDB, $imageEmployerLetterDB);
+				$financialDetails = $financialRepository->createFinancialDetails($data['financialDetails'] ?? [], $userId);
 
 				if ($financialDetails) {
 					$financialDetails->setUser($user);
@@ -397,68 +338,78 @@ class DefaultController extends AbstractController
 				$this->entityManager->persist($financialDetails);
 			}
 			$this->entityManager->flush();
-
 			$reference = $user->getId();
 			$dateEmail = new DateTime();
 			$dateEmailFormatted = $dateEmail->format('Y-m-d H:i:s');
+
 			$pdfContent = $this->helper->generateReportPdf($data, $dateEmailFormatted, $reference);
 			$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
-			if ($user->getMothersName()) {
-				$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
-				$pdfFilePathDB = $FolderPath . '/' . $pdfFileNameDB;
-				$pdfFilePath = $FolderPath . '/' . $pdfFileName;
-			} else {
-				$ModifiedNameDB = '';
-				for ($i = 0; $i < strlen($fullNameDB); $i++) {
-					$char = $fullNameDB[$i];
 
-					if (ctype_alpha($char)) {
-						$ModifiedNameDB .= $char;
-					} else {
-						$i++;
-					}
-				}
-				$staticBaseDir = 'https://fresh.nbk.com.lb/';
-				$folderName = $modifiedName . '-' . $mobileNumb;
-				$folderNameDB = $ModifiedNameDB . '-' . $mobileNumbDB;
-				$ImageFolder = 'imageUser/' . $folderName;
-				$ImageFolderDB = 'imageUser/' . $folderNameDB;
-				$FolderPath = $staticBaseDir . $ImageFolder;
-				$FolderPathDB = $staticBaseDir . $ImageFolderDB;
+			$ModifiedNameDB = '';
+			for ($i = 0; $i < strlen($fullNameDB); $i++) {
+				$char = $fullNameDB[$i];
 
-				$pdfFileNameDB = sprintf('%s_%s.pdf', $ModifiedNameDB, $mobileNumbDB);
-				$pdfFilePathDB = $FolderPathDB . '/' . $pdfFileNameDB;
-				$pdfFileName = sprintf('%s_%s.pdf', $modifiedName, $mobileNumb);
-				$pdfFilePath = $FolderPath . '/' . $pdfFileName;
-				$filesystem = new Filesystem();
-				if (!$filesystem->exists($FolderPathDB)) {
-					$filesystem->mkdir($FolderPathDB, 0777);
-					file_put_contents($pdfFilePathDB, $pdfContent);
+				if (ctype_alpha($char)) {
+					$ModifiedNameDB .= $char;
 				} else {
-					if ($folderName != $folderNameDB) {
-						if ($filesystem->exists($pdfFilePathDB)) {
-							if ($filesystem->exists($FolderPathDB)) {
-								$filesystem->remove($FolderPathDB);
-							}
-						}
-						if (!$filesystem->exists($FolderPath)) {
-							$filesystem->mkdir($FolderPath, 0777, true);
-						}
-						file_put_contents($pdfFilePath, $pdfContent);
-					}
-					if ($folderName == $folderNameDB) {
-						if ($filesystem->exists($pdfFilePathDB)) {
-							file_put_contents($pdfFilePath, $pdfContent);
-						}
+					$i++;
+				}
+			}
+			$folderName = $modifiedName . '-' . $mobileNumb;
+			$folderNameDB = $ModifiedNameDB . '-' . $mobileNumbDB;
+
+			$editdata = [
+				'userId' => $userId,
+				'oldFolderName' => $folderNameDB,
+				'modifiedFolderName' => $folderName,
+			];
+
+			$pdfFile = tempnam(sys_get_temp_dir(), 'pdf');
+			file_put_contents($pdfFile, $pdfContent);
+
+			$client = new \GuzzleHttp\Client();
+			$payload = [
+				'multipart' => [
+					[
+						'name' => 'data',
+						'contents' => json_encode($editdata),
+						'headers' => ['Content-Type' => 'application/json'],
+					],
+					[
+						'name' => 'pdf',
+						'contents' => fopen($pdfFile, 'r'),
+						'filename' => $pdfFileName,
+						'headers' => ['Content-Type' => 'application/pdf'],
+					],
+				],
+			];
+			if ($user->getMothersName()) {
+				$editdataImagesOnly =  [
+					"frontImageID" => $frontImageID ? $frontImageID : null,
+					"BackimageID" => $backImageID ? $backImageID : null,
+					"imageRealEState" => $realStateImage ? $realStateImage : null,
+					"imageotherdoc" => $otherDocumentImage ? $otherDocumentImage : null,
+					"imageFrontaccoountStat" => $accountStatementImage ? $accountStatementImage : null,
+					"imageEmployerLetter" => $employeeLetterImage ? $employeeLetterImage : null,
+				];
+
+				foreach ($editdataImagesOnly as $property => $image) {
+					if ($image instanceof UploadedFile) {
+						$extension = pathinfo($image->getClientOriginalName(), PATHINFO_EXTENSION);
+						$payload['multipart'][] = [
+							'name' => 'images[' . $property . ']',
+							'contents' => fopen($image->getPathname(), 'r'),
+							'filename' => $property . '.' . $extension,
+							'headers' => ['Content-Type' => $image->getMimeType()],
+						];
 					}
 				}
 			}
-			if (file_exists($pdfFilePathDB)) {
-				unlink($pdfFilePathDB);
-			}
-			file_put_contents($pdfFilePath, $pdfContent);
-			$images[$i] = $pdfFilePath;
-			if ($userId !== null) {
+
+			$response = $client->request('POST', 'http://nbk.lss/edituserapi', $payload);
+
+			$responseData = json_decode($response->getBody()->getContents(), true);
+
 				$branchEmails = [
 					1 => "sanayehbr@nbk.com.lb",
 					2 => "Bhamdounbr@nbk.com.lb",
@@ -466,7 +417,7 @@ class DefaultController extends AbstractController
 				];
 				if (isset($branchEmails[$branchId])) {
 					$emailToSet = $branchEmails[$branchId];
-					$queryBuilder = 	$this->entityManager->createQueryBuilder();
+					$queryBuilder = $this->entityManager->createQueryBuilder();
 					$queryBuilder->select('e')
 						->from('App\Entity\Emails', 'e')
 						->where('e.user_id = :reference')
@@ -480,13 +431,7 @@ class DefaultController extends AbstractController
 						$this->entityManager->flush();
 					}
 				}
-				return $this->redirectToRoute('user_info', ['id' => $userId]);
-			} else {
-				$email = $this->entityManager->getRepository(Emails::class)->findOne(['user_id' => $userId]);
-				$email->setContents(json_encode($images));
-				$this->entityManager->persist($email);
-				$this->entityManager->flush();
-			}
+	
 			return $this->redirectToRoute('user_info', ['id' => $userId]);
 		}
 		return $this->render('nbkusers/edit.html.twig', [
@@ -496,34 +441,42 @@ class DefaultController extends AbstractController
 
 		]);
 	}
+
 	#[Route('/print-pdf/{id}', name: 'print_pdf', methods: ['GET'])]
 	public function printpdf($id)
 	{
-		$data = $this->entityManager->getRepository(Users::class)->find($id);
-		$mobileNumb = $data->getMobileNumb();
-		$fullName =  $data->getFullName();
-		$modifiedName = '';
-		for ($i = 0; $i < strlen($fullName); $i++) {
-			$char = $fullName[$i];
-			if (ctype_alpha($char)) {
-				$modifiedName .= $char;
-			} else {
-				$i++;
-			}
-		}
-		$pdfname = $modifiedName . '_' . $mobileNumb . '.pdf';
-		$folderName = $modifiedName . '-' . $mobileNumb;
-		$staticBaseDir = 'https://fresh.nbk.com.lb/';
-		$path = $staticBaseDir . 'imageUser/' . $folderName . '/';
-		$pdfFilePath = $path . $pdfname;
-		if (!file_exists($pdfFilePath)) {
-			$this->addFlash('error', 'PDF file not found.');
-			return $this->redirectToRoute('app_nbk_users');
-		}
-		$response = new Response(file_get_contents($pdfFilePath));
-		$response->headers->set('Content-Type', 'application/pdf');
-		$response->headers->set('Content-Disposition', 'attachment; filename="' . basename($pdfFilePath) . '"');
-		return $response;
-	}
+		$client = new \GuzzleHttp\Client();
+		$response = $client->request('GET', 'http://nbk.lss/print-pdf/' . $id);
 
+		if ($response->getStatusCode() === 200) {
+
+
+			$data = $this->entityManager->getRepository(Users::class)->find($id);
+			$mobileNumb = $data->getMobileNumb();
+			$fullName =  $data->getFullName();
+			$modifiedName = '';
+			for ($i = 0; $i < strlen($fullName); $i++) {
+				$char = $fullName[$i];
+				if (ctype_alpha($char)) {
+					$modifiedName .= $char;
+				} else {
+					$i++;
+				}
+			}
+			$pdfname = $modifiedName . '_' . $mobileNumb . '.pdf';
+			$folderName = $modifiedName . '-' . $mobileNumb;
+
+
+			return new Response(
+				$response->getBody()->getContents(),
+				200,
+				[
+					'Content-Type' => 'application/pdf',
+					'Content-Disposition' => "attachment; filename= $pdfname",
+				]
+			);
+		}
+		$this->addFlash('error', 'Failed to download the PDF file.');
+		return $this->redirectToRoute('user_info', ['id' => $id]);
+	}
 }

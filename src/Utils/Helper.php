@@ -56,7 +56,6 @@ class Helper
     public function getBranchEmail($branchId)
 	{
 		$branchEmails = [1 => "sanayehbr@nbk.com.lb", 2 => "Bhamdounbr@nbk.com.lb", 3 => "PrivateBanking@nbk.com.lb"];
-		// $branchEmails = [1 => "eliaschaaya97@gmail.com", 2 => "eliaschaaya97@gmail.com", 3 => "eliaschaaya97@gmail.com"];
 		//$branchEmails = [1 => "zeina.abdallah@nbk.com.lb ", 2 => "maysaa.nasereddine@nbk.com.lb", 3 => "zeina.abdallah@nbk.com.lb "];
 		if (array_key_exists($branchId, $branchEmails)) {
 			return $branchEmails[$branchId];
@@ -98,6 +97,7 @@ class Helper
 
         $userreference = $utf8EncodeArray($userreference);
         $user = $utf8EncodeArray($data['user']);
+
         if (isset($data['user']['mothersName']))
         {
         $address = $utf8EncodeArray($data['address']);

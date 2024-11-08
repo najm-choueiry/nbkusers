@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="UTF-8">
+
 		<style>
 			table {
 				width: 100%;
@@ -199,18 +201,17 @@
 				<td>Mobile No</td>
 				<td>{{ user.mobileNumb | default('N/A') }}</td>
 			</tr>
-<tr>
-    <td>Branch Unit</td>
-    <td>
-        {% set branchMapping = {
+			<tr>
+				<td>Branch Unit</td>
+				<td>
+					{% set branchMapping = {
             1: 'sanayeh',
             2: 'bhamdoun',
             3: 'privatebank'
         } %}
-        {{ branchMapping[user.branchId] | default('N/A') }}
-    </td>
-</tr>
-
+					{{ branchMapping[user.branchId] | default('N/A') }}
+				</td>
+			</tr>
 
 
 		</table>

@@ -20,7 +20,7 @@ class LogsService {
 
     public function pushLogs($identifier,$request,$response,$url = null,$status = null)
     {
-        // dd($identifier,$request,$response);
+
         try{
             $logs = new Logs();
             
@@ -31,7 +31,7 @@ class LogsService {
             $logs->setresponseStatusCode($status);
             $this->entityManager->persist($logs);
             $this->entityManager->flush();
-            // dd('helo');
+
             return true;
         }catch(Exception $e){
             if ($this->loggerInterface) {

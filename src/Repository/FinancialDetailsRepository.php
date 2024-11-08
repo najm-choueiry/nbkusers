@@ -18,7 +18,7 @@ class FinancialDetailsRepository
 		$this->entityManager = $entityManager;
 		$this->financialDetailsRepository = $entityManager->getRepository(FinancialDetails::class);
 	}
-	public function createFinancialDetails(array $userData, $modifiedName, $mobileNumbDB, $mobileNumb, $fullNameDB, $fullName, $frontimageDB, $backimageDB, $realEstateTitleDB, $accountStatementDB, $otherDocumentDB, $employerLetterDB, $userId, $imageFrontDB, $imageBackDB, $imageRealEStateDB, $imageFrontaccoountStatDB, $imageotherdocDB, $imageEmployerLetterDB): ?FinancialDetails
+	public function createFinancialDetails(array $userData,?int $userId): ?FinancialDetails
 	{
 		if (is_null($userId)) {
 			$financialDetails = new FinancialDetails();
@@ -57,65 +57,8 @@ class FinancialDetailsRepository
 		$financialDetails->setThirdAccountCountry($userData['country3'] ?? '');
 		$financialDetails->setThirdAccountBalance((float)($userData['accountBalance3'] ?? 0.0));
 
-		if ($fullName !== $fullNameDB || $mobileNumb !== $mobileNumbDB) {
-			$newIdentifier = $modifiedName . "-" .  $mobileNumb;
-			//frontimage
-			if (!is_null($frontimageDB) || !empty($frontimageDB)) {
-				$baseNameFront = basename($frontimageDB);
-				$newImagePathFront = "imageUser/{$newIdentifier}/$baseNameFront";
-				$financialDetails->setFrontImageID('/' . $newImagePathFront);
-			}
-			//backimage
-			if (!is_null($backimageDB) || !empty($backimageDB)) {
-				$baseName = basename($backimageDB);
-				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
-				$financialDetails->setBackImageID('/' . $newImagePath);
-			}
-			//imageRealEStateDB
-			if (!is_null($realEstateTitleDB) || !empty($realEstateTitleDB)) {
-				$baseName = basename($realEstateTitleDB);
-				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
-				$financialDetails->setRealEstateTitle('/' . $newImagePath);
-			}
-			//AccountStatement
-			if (!is_null($accountStatementDB) || !empty($accountStatementDB)) {
-				$baseName = basename($accountStatementDB);
-				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
-				$financialDetails->setAccountStatement('/' . $newImagePath);
-			}
-			//otherDocument
-			if (!is_null($otherDocumentDB) || !empty($otherDocumentDB)) {
-				$baseName = basename($otherDocumentDB);
-				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
-				$financialDetails->setOtherDocument('/' . $newImagePath);
-			}
-			//employerLetterDB
-			if (!is_null($employerLetterDB) || !empty($employerLetterDB)) {
-				$baseName = basename($employerLetterDB);
-				$newImagePath = "imageUser/{$newIdentifier}/$baseName";
-				$financialDetails->setEmployerLetter('/' . $newImagePath);
-			}
-		}
-		if (!is_null($imageFrontDB)) {
-			$financialDetails->setFrontImageID('/' . $imageFrontDB);
-		}
 		$financialDetails->setSelectIDType($userData['selectIDType'] ?? '');
 
-		if (!is_null($imageBackDB)) {
-			$financialDetails->setBackImageID('/' . $imageBackDB);
-		}
-		if (!is_null($imageRealEStateDB)) {
-			$financialDetails->setRealEstateTitle('/' . $imageRealEStateDB);
-		}
-		if (!is_null($imageFrontaccoountStatDB)) {
-			$financialDetails->setAccountStatement('/' . $imageFrontaccoountStatDB);
-		}
-		if (!is_null($imageotherdocDB)) {
-			$financialDetails->setOtherDocument('/' . $imageotherdocDB);
-		}
-		if (!is_null($imageEmployerLetterDB)) {
-			$financialDetails->setEmployerLetter('/' . $imageEmployerLetterDB);
-		}
 		return $financialDetails;
 	}
 }
