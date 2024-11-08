@@ -11,9 +11,9 @@
 			.thead-dark th a {
 				color: white;
 			}
-			.logout{
+			.logout {
 				margin-top: -65px;
-			    margin-bottom: 45px;
+				margin-bottom: 45px;
 				margin-right: 10px;
 			}
 		</style>
@@ -21,75 +21,84 @@
 	</head>
 	<body>
 		<div class="container-fluid mt-4">
-		
-			<h1 class="mb-4">Users List </h1>
-			{# <div class="text-right logout" ><a href="{{ path('app_logout') }}" class="btn btn-danger">Logout</a></div>  #}
-			{% if app.session.flashBag.has('error') %}
-				<div class="alert alert-danger">
-					{% for message in app.session.flashBag.get('error') %}
-						{{ message }}
-					{% endfor %}
-				</div>
-			{% endif %}
-			<div class="table-responsive">
-				<table class="table table-bordered">
-					<thead class="thead-dark">
-						<tr>
-							<th>
-								{{ knp_pagination_sortable(pagination, 'ID', 'u.id') }}
-								{% if pagination.isSorted('u.id') %}
-									{{ pagination.direction == 'desc' ? '↓' : '↑' }}
-								{% endif %}
-							</th>
-							<th>
-								{{ knp_pagination_sortable(pagination, 'Full Name', 'u.fullName') }}
-								{% if pagination.isSorted('u.fullName') %}
-									{{ pagination.direction == 'desc' ? '↓' : '↑' }}
-								{% endif %}
-							</th>
-							<th>
-								{{ knp_pagination_sortable(pagination, 'Mobile Numb', 'u.mobileNumb') }}
-								{% if pagination.isSorted('u.mobileNumb') %}
-									{{ pagination.direction == 'desc' ? '↓' : '↑' }}
-								{% endif %}
-							</th>
-							<th>
-								{{ knp_pagination_sortable(pagination, 'Email', 'u.email') }}
-								{% if pagination.isSorted('u.email') %}
-									{{ pagination.direction == 'desc' ? '↓' : '↑' }}
-								{% endif %}
-							</th>
-							<th>Actions</th>
-						</tr>
-					</thead>
 
-					<tbody>
-						{% for user in pagination  %}
-							<tr>
-								<td>
-									<a href="/userInfo/{{ user.id }}" target="_blank">{{ user.id }}</a>
-								</td>
-								<td>{{ user.fullName }}</td>
-								<td>{{ user.mobileNumb }}</td>
-								<td>{{ user.email }}</td>
-								<td>
-									<a class="btn btn-primary" href="/userInfo/{{ user.id }}">👤 View User</a>
-									<a class="btn btn-danger" href="{{ path('submit_form', {'id': user.id}) }}">✉️ Resend Email</a>
-									<a class="btn btn-secondary" href="{{ path('edit_info', {'userId': user.id}) }}">✏️ Edit User</a>
-									<a class="btn btn-info" href="{{ path('print_pdf', {'id': user.id}) }}">🖨️ Print PDF</a>
+			<h1 class="mb-4">Users List
+			</h1>
 
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+			<div class="text-right logout">
+				<a href="{{ path('app_logout') }}" class="btn btn-danger">Logout</a>
 			</div>
-			<div class="mt-4">{{ knp_pagination_render(pagination, 'nbkusers/_pagination.html.twig') }}</div>
-
-		</div>
-		<!-- Bootstrap JS and dependencies -->
-	 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-		 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-		 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+			<div class="text-right register" style='margin-top: -2rem;'>
+				<a href="{{ path('app_register') }}" class="btn-danger btn" style=' background-color: grey'>Create new user</a>
+			</body>
+		</html>
 	</body>
-</html>
+</html></div>{% if app.session.flashBag.has('error') %}
+<div class="alert alert-danger">
+	{% for message in app.session.flashBag.get('error') %}
+		{{ message }}
+	{% endfor %}
+</div>{% endif %}<div class="table-responsive">
+<table class="table table-bordered">
+	<thead class="thead-dark">
+		<tr>
+			<th>
+				{{ knp_pagination_sortable(pagination, 'ID', 'u.id') }}
+				{% if pagination.isSorted('u.id') %}
+					{{ pagination.direction == 'desc' ? '↓' : '↑' }}
+				{% endif %}
+			</th>
+			<th>
+				{{ knp_pagination_sortable(pagination, 'Full Name', 'u.fullName') }}
+				{% if pagination.isSorted('u.fullName') %}
+					{{ pagination.direction == 'desc' ? '↓' : '↑' }}
+				{% endif %}
+			</th>
+			<th>
+				{{ knp_pagination_sortable(pagination, 'Mobile Numb', 'u.mobileNumb') }}
+				{% if pagination.isSorted('u.mobileNumb') %}
+					{{ pagination.direction == 'desc' ? '↓' : '↑' }}
+				{% endif %}
+			</th>
+			<th>
+				{{ knp_pagination_sortable(pagination, 'Email', 'u.email') }}
+				{% if pagination.isSorted('u.email') %}
+					{{ pagination.direction == 'desc' ? '↓' : '↑' }}
+				{% endif %}
+			</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for user in pagination  %}
+			<tr>
+				<td>
+					<a href="/userInfo/{{ user.id }}" target="_blank">{{ user.id }}</a>
+				</td>
+				<td>{{ user.fullName }}</td>
+				<td>{{ user.mobileNumb }}</td>
+				<td>{{ user.email }}</td>
+				<td>
+					<a class="btn btn-primary" href="/userInfo/{{ user.id }}">👤 View User</a>
+					<a class="btn btn-danger" href="{{ path('submit_form', {'id': user.id}) }}">✉️ Resend Email</a>
+					<a class="btn btn-secondary" href="{{ path('edit_info', {'userId': user.id}) }}">✏️ Edit User</a>
+					<a class="btn btn-info" href="{{ path('print_pdf', {'id': user.id}) }}">🖨️ Print PDF</a>
+
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table></div><div class="mt-4">{{ knp_pagination_render(pagination, 'nbkusers/_pagination.html.twig') }}</div></div><!-- Bootstrap JS and dependencies --><script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () { 
+	    {% if user is null %}
+		alert('You are not logged in. Redirecting to the login page...');
+		window.location.href = "{{ path('app_login') }}"; 
+	    {% endif %}
+	});
+    </script>
+
+</body></html>

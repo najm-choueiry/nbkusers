@@ -26,22 +26,27 @@ use Symfony\Component\HttpFoundation\Response;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
-
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class DefaultController extends AbstractController
 {
 	private $entityManager;
 	private $helper;
+	private $requestStack;
 
-	public function __construct(EntityManagerInterface $entityManager, Helper $helper)
+	public function __construct(EntityManagerInterface $entityManager, Helper $helper, RequestStack $requestStack)
 	{
 		$this->entityManager = $entityManager;
 		$this->helper = $helper;
+		$this->requestStack = $requestStack;
 	}
 
-	#[Route('/', name: 'app_nbk_users')]
+	#[Route('/home', name: 'app_nbk_users')]
 	public function index(Request $request, PaginatorInterface $paginator): Response
 	{
+		if (!($this->requestStack->getCurrentRequest()->getSession()->get('user'))) {
+			return $this->redirectToRoute('app_login');
+		}
 		$sortField = $request->query->get('sort', 'u.id');
 		$sortDirection = $request->query->get('direction', 'DESC');
 		$userRepository = $this->entityManager->getRepository(Users::class);
@@ -62,6 +67,7 @@ class DefaultController extends AbstractController
 		);
 		return $this->render('nbkusers/user_list.html.twig', [
 			'pagination' => $pagination,
+			'user' => $this->requestStack->getCurrentRequest()->getSession()->get('user')
 		]);
 	}
 	#[Route('/submit-form/{id}', name: 'submit_form', methods: ['GET'])]
@@ -81,6 +87,9 @@ class DefaultController extends AbstractController
 	#[Route('/userInfo/{id}', name: 'user_info', methods: ['GET'])]
 	public function userInfo(int $id): Response
 	{
+		if (!($this->requestStack->getCurrentRequest()->getSession()->get('user'))) {
+			return $this->redirectToRoute('app_login');
+		}
 		$userRepository = $this->entityManager->getRepository(Users::class);
 		$user = $userRepository->createQueryBuilder('u')
 			->leftJoin('u.addresses', 'a')
@@ -104,6 +113,9 @@ class DefaultController extends AbstractController
 	#[Route('/nbk/editInfo/{userId}', name: 'edit_info')]
 	public function editInfo($userId, UsersRepository $usersRepository, AddressRepository $addressRepository, WorkDetailsRepository $workDetailsRepository, BeneficiaryRightsOwnerRepository $beneficiaryRepository, PoliticalPositionDetailsRepository $politicalPositionRepository, FinancialDetailsRepository $financialRepository, Request $request): Response
 	{
+		if (!($this->requestStack->getCurrentRequest()->getSession()->get('user'))) {
+			return $this->redirectToRoute('app_login');
+		}
 		$userRepository = $this->entityManager->getRepository(Users::class);
 		$user = $userRepository->createQueryBuilder('u')
 			->leftJoin('u.addresses', 'a')
@@ -499,6 +511,9 @@ class DefaultController extends AbstractController
 	#[Route('/print-pdf/{id}', name: 'print_pdf', methods: ['GET'])]
 	public function printpdf($id)
 	{
+		if (!($this->requestStack->getCurrentRequest()->getSession()->get('user'))) {
+			return $this->redirectToRoute('app_login');
+		}
 		$data = $this->entityManager->getRepository(Users::class)->find($id);
 		$mobileNumb = $data->getMobileNumb();
 		$fullName =  $data->getFullName();
@@ -525,5 +540,4 @@ class DefaultController extends AbstractController
 		$response->headers->set('Content-Disposition', 'attachment; filename="' . basename($pdfFilePath) . '"');
 		return $response;
 	}
-
 }
